@@ -19,5 +19,12 @@ def gaussianConvolution(sigmaX,sigmaY,hsize,wsize,im):
     practica0.pintaI(smoothed)
 
 
-img = cv2.imread("../Images/lena.jpg",-1)
-gaussianConvolution(1,10,7,7,img)
+def main():
+    #Leo la imagen
+    img = cv2.imread("../Images/lena.jpg",-1)
+    #Ejercicio 1 Apartado A
+    print("Ejecutando el apartado A con varios parámetros.")
+    for sigmaX,sigmaY,hsize,wsize in zip([0,1,3,5],[0,3,1,5],[1,3,5,7,11],[1,3,7,5,11]):
+        gaussianConvolution(sigmaX,sigmaY,hsize,wsize,img)
+
+main()
