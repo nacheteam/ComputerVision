@@ -35,6 +35,19 @@ def printDerivKernel(sigma,ksize):
     kernel = cv2.getGaussianKernel(ksize,sigma)
     practica0.pintaI(kernel)
 
+
+################################################################################
+## Apartado C: Usar la función Laplacian para el cálculo de la convolución    ##
+## 2D con una máscara de Laplaciana-de-Gaussiana de tamaño variable. Mostrar  ##
+## ejemplos de funcionamiento usando dos tipos de bordes y dos valores de     ##
+## sigma: 1 y 3.                                                              ##
+################################################################################
+
+def convolutionLaplacian(img,ksize,borderType,sigma,depth=1,scale=1,delta=0):
+    gaussian = cv2.GaussianBlur(img,(ksize,ksize),sigma)
+    laplacian = cv2.Laplacian(gaussian,depth,ksize,scale,delta,borderType)
+    practica0.pintaI(laplacian)
+
 ################################################################################
 ##                                 MAIN                                       ##
 ################################################################################
@@ -51,5 +64,13 @@ def main():
     print("Ejecutando el apartado B con varios parámetros de sigma. Se pinta con tamaño 100 para poder ver bien el resultado.")
     for sigma in [0.1,1,2,3,4,5,6,7,8,9,10]:
         printDerivKernel(sigma,KERNEL1D_SIZE)
+
+    #Ejercicio 1 Apartado C
+    print("Ejecutando el apartado C con varios parámetros de ksize y borderType.")
+    ksizes = [1,3,5,1,3,5,1,3,5,1,3,5]
+    borders = [cv2.BORDER_REFLECT,cv2.BORDER_REFLECT,cv2.BORDER_REFLECT,cv2.BORDER_REPLICATE,cv2.BORDER_REPLICATE,cv2.BORDER_REPLICATE,cv2.BORDER_REFLECT,cv2.BORDER_REFLECT,cv2.BORDER_REFLECT,cv2.BORDER_REPLICATE,cv2.BORDER_REPLICATE,cv2.BORDER_REPLICATE]
+    sigma = [1,1,1,3,3,3,3,3,3,1,1,1]
+    for ksize,borderType,sigma in zip(ksizes,borders,sigma):
+        convolutionLaplacian(img,ksize,borderType,sigma)
 
 main()
