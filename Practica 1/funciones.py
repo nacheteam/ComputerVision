@@ -43,11 +43,26 @@ def printDerivKernel(sigma,ksize):
 ## sigma: 1 y 3.                                                              ##
 ################################################################################
 
+# NO FUNCIONA MUESTRA TODO NEGRO
+
 def convolutionLaplacian(img,ksize,borderType,sigma,depth=cv2.CV_16S,scale=1,delta=0):
-    gaussian = cv2.GaussianBlur(img,(ksize,ksize),sigma,sigma,borderType)
-    gaussian_gray = cv2.cvtColor(gaussian,cv2.COLOR_BGR2GRAY)
+    #gaussian = cv2.GaussianBlur(img,(ksize,ksize),sigma,sigma,borderType)
+    gaussian_gray = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
     laplacian = cv2.convertScaleAbs(cv2.Laplacian(gaussian_gray,depth,ksize,scale,delta,borderType))
     practica0.pintaI(laplacian)
+
+
+################################################################################
+#### PUNTO 2: implementar, apoyándose en las funciones getDerivKernels,     ####
+#### getGaussianKernel, pyrUp,pyrDown, los siguientes puntos.               ####
+################################################################################
+
+################################################################################
+## Apartado A: El cálculo de la convolución 2D con una máscara separable de   ##
+## tamaño variable. Usar bordes reflejados. Mostrar resultados.               ##
+################################################################################
+
+
 
 ################################################################################
 ##                                 MAIN                                       ##
@@ -72,6 +87,6 @@ def main():
     borders = [cv2.BORDER_REFLECT,cv2.BORDER_REFLECT,cv2.BORDER_REFLECT,cv2.BORDER_REPLICATE,cv2.BORDER_REPLICATE,cv2.BORDER_REPLICATE,cv2.BORDER_REFLECT,cv2.BORDER_REFLECT,cv2.BORDER_REFLECT,cv2.BORDER_REPLICATE,cv2.BORDER_REPLICATE,cv2.BORDER_REPLICATE]
     sigma = [1,1,1,3,3,3,3,3,3,1,1,1]
     for ksize,borderType,sigma in zip(ksizes,borders,sigma):
-        convolutionLaplacian(img,3,cv2.BORDER_DEFAULT,0)
+        convolutionLaplacian(img,ksize,borderType,sigma)
 
 main()
