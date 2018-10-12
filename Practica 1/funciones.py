@@ -71,24 +71,20 @@ def main():
     #Leo la imagen
     img = cv2.imread("../Images/lena.jpg",-1)
     #Ejercicio 1 Apartado A
-    '''
     print("Ejecutando el apartado A con varios parámetros.")
     for sigmaX,sigmaY,hsize,wsize in zip([0,1,3,5],[0,3,1,5],[1,3,5,7,11],[1,3,7,5,11]):
         gaussianConvolution(sigmaX,sigmaY,hsize,wsize,img)
-    '''
 
     #Ejercicio 1 Apartado B
-    '''
     print("Ejecutando el apartado B con varios parámetros de sigma. Se pinta con tamaño 100 para poder ver bien el resultado.")
     for sigma in [0.1,1,2,3,4,5,6,7,8,9,10]:
         printDerivKernel(sigma,KERNEL1D_SIZE)
-    '''
 
     #Ejercicio 1 Apartado C
     print("Ejecutando el apartado C con varios parámetros de ksize y borderType.")
     ksizes = [3,5,9,3,5,9,3,5,9,3,5,9]
-    borders = [cv2.BORDER_REFLECT,cv2.BORDER_REFLECT,cv2.BORDER_REFLECT,cv2.BORDER_REPLICATE,cv2.BORDER_REPLICATE,cv2.BORDER_REPLICATE,cv2.BORDER_REFLECT,cv2.BORDER_REFLECT,cv2.BORDER_REFLECT,cv2.BORDER_REPLICATE,cv2.BORDER_REPLICATE,cv2.BORDER_REPLICATE]
-    sigma = [1,1,1,3,3,3,3,3,3,1,1,1]
+    borders = [cv2.BORDER_REFLECT,cv2.BORDER_REFLECT,cv2.BORDER_REFLECT,cv2.BORDER_REFLECT,cv2.BORDER_REFLECT,cv2.BORDER_REFLECT,cv2.BORDER_REPLICATE,cv2.BORDER_REPLICATE,cv2.BORDER_REPLICATE,cv2.BORDER_REPLICATE,cv2.BORDER_REPLICATE,cv2.BORDER_REPLICATE]
+    sigma = [1,1,1,1,1,1,3,3,3,3,3,3]
     for ksize,borderType,sigma in zip(ksizes,borders,sigma):
         convolutionLaplacian(img,ksize,borderType,sigma)
 
