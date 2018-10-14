@@ -1,5 +1,6 @@
 import practica0
 import cv2
+import numpy as np
 
 ################################################################################
 ##                             CONSTANTES                                     ##
@@ -61,6 +62,33 @@ def convolutionLaplacian(img,ksize,borderType,sigma,depth=-1):
 ## tamaño variable. Usar bordes reflejados. Mostrar resultados.               ##
 ################################################################################
 
+def convolution2dSeparableMaskReflected(img,kernelRow,kernelCol):
+    # Primero hacemos una imagen que nos permita encuadrar el kernel en la matriz de la imagen.
+    offsetCol = int(np.floor(len(kernelCol)/2))
+    offsetRow = int(np.floor(len(kernelRow)/2))
+
+    img_conv = cv2.copyMakeBorder(img,offsetRow,offsetRow,offsetCol,offsetCol,borderType=cv2.BORDER_REFLECT)
+    img_conv_copy = np.copy(img_conv)
+
+    # Convolución por filas
+    for i in range(offsetRow,len(img)-offsetRow):
+        for j in range(offsetCol,len(img[0])-offsetCol):
+            coord = 0
+            for k in range(-offsetCol,offsetCol+1):
+                coord += kernelRow[k+offsetCol]*img_conv_copy[i][j]
+            img_conv[i][j] = coord
+
+    img_conv_copy = np.copy(img_conv)
+
+    # Convolución por columnas
+    for i in range(offsetRow,len(img)-offsetRow):
+        for j in range(offsetCol,len(img[0])-offsetCol):
+            coord = 0
+            for k in range(-offsetRow,offsetRow+1):
+                coord += kernelRow[k+offsetCol]*img_conv_copy[i][j]
+            img_conv[i][j] = coord
+
+    return img_conv
 
 
 ################################################################################
@@ -70,7 +98,8 @@ def convolutionLaplacian(img,ksize,borderType,sigma,depth=-1):
 def main():
     #Leo la imagen
     img = cv2.imread("../Images/lena.jpg",-1)
-    #Ejercicio 1 Apartado A
+
+    #Ejercicio 1 Apartado Acv2.copyMakeBorder(img,offsetRow,offsetRow,offsetCol,offsetCol,borderType=cv2.BORDER_R
     print("Ejecutando el apartado A con varios parámetros.")
     for sigmaX,sigmaY,hsize,wsize in zip([0,1,3,5],[0,3,1,5],[1,3,5,7,11],[1,3,7,5,11]):
         gaussianConvolution(sigmaX,sigmaY,hsize,wsize,img)
@@ -87,5 +116,9 @@ def main():
     sigma = [1,1,1,1,1,1,3,3,3,3,3,3]
     for ksize,borderType,sigma in zip(ksizes,borders,sigma):
         convolutionLaplacian(img,ksize,borderType,sigma)
+
+    # Ejercicio 2 Apartado A
+    print("Ejecutando el apartado A del segundo ejercicio")
+    practica0.pintaI(convolution2dSeparableMaskReflected(img,[0,1,0],[0,1,0]))
 
 main()
