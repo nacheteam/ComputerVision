@@ -63,6 +63,11 @@ def convolutionLaplacian(img,ksize,borderType,sigma,depth=-1):
 ################################################################################
 
 def convolution2dSeparableMaskReflected(img,kernelRow,kernelCol):
+    # El kernel debe estar normalizado.
+    return cv2.sepFilter2D(img,-1,kernelRow,kernelCol,borderType=cv2.BORDER_REFLECT)
+
+'''
+def convolution2dSeparableMaskReflected(img,kernelRow,kernelCol):
     # Primero hacemos una imagen que nos permita encuadrar el kernel en la matriz de la imagen.
     offsetCol = int(np.floor(len(kernelCol)/2))
     offsetRow = int(np.floor(len(kernelRow)/2))
@@ -75,7 +80,7 @@ def convolution2dSeparableMaskReflected(img,kernelRow,kernelCol):
         for j in range(offsetCol,len(img[0])-offsetCol):
             coord = 0
             for k in range(-offsetCol,offsetCol+1):
-                coord += kernelRow[k+offsetCol]*img_conv_copy[i][j]
+                coord += kernelRow[k+offsetCol]*img_conv_copy[i-k][j]
             img_conv[i][j] = coord
 
     img_conv_copy = np.copy(img_conv)
@@ -85,11 +90,11 @@ def convolution2dSeparableMaskReflected(img,kernelRow,kernelCol):
         for j in range(offsetCol,len(img[0])-offsetCol):
             coord = 0
             for k in range(-offsetRow,offsetRow+1):
-                coord += kernelRow[k+offsetCol]*img_conv_copy[i][j]
+                coord += kernelRow[k+offsetCol]*img_conv_copy[i][j-k]
             img_conv[i][j] = coord
 
     return img_conv
-
+'''
 
 ################################################################################
 ##                                 MAIN                                       ##
@@ -98,7 +103,7 @@ def convolution2dSeparableMaskReflected(img,kernelRow,kernelCol):
 def main():
     #Leo la imagen
     img = cv2.imread("../Images/lena.jpg",-1)
-
+    '''
     #Ejercicio 1 Apartado Acv2.copyMakeBorder(img,offsetRow,offsetRow,offsetCol,offsetCol,borderType=cv2.BORDER_R
     print("Ejecutando el apartado A con varios parámetros.")
     for sigmaX,sigmaY,hsize,wsize in zip([0,1,3,5],[0,3,1,5],[1,3,5,7,11],[1,3,7,5,11]):
@@ -116,9 +121,10 @@ def main():
     sigma = [1,1,1,1,1,1,3,3,3,3,3,3]
     for ksize,borderType,sigma in zip(ksizes,borders,sigma):
         convolutionLaplacian(img,ksize,borderType,sigma)
+    '''
 
     # Ejercicio 2 Apartado A
     print("Ejecutando el apartado A del segundo ejercicio")
-    practica0.pintaI(convolution2dSeparableMaskReflected(img,[0,1,0],[0,1,0]))
+    practica0.pintaI(convolution2dSeparableMaskReflected(img,np.array([1,2,1])/np.sum([1,2,1]),np.array([1,2,1])/np.sum([1,2,1])))
 
 main()
