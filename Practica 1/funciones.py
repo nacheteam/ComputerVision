@@ -135,6 +135,7 @@ def main():
     for ksize,borderType,sigma in zip(ksizes,borders,sigma):
         convolutionLaplacian(img,ksize,borderType,sigma)
 
+
     # Cargo la imagen en blanco y negro
     img2 = cv2.imread("../Images/lena.jpg",0)
 
@@ -145,5 +146,10 @@ def main():
     # Ejercicio 2 Apartado B
     for ksize in [3,5,7,11]:
         practica0.pintaI(convolution2dDerivMask(img2,ksize))
+
+
+    # Ejercicio 2 Apartado C
+    for ksize in [3,5,7,11]:
+        practica0.pintaI(convolution2dDerivMaskSecOr(img2,ksize))
 
 main()
