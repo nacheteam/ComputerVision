@@ -11,4 +11,4 @@ geometry: margin=1.4in
 
 # Práctica 1: Filtrado y Muestreo
 
-##
+## Ejercicio 1
