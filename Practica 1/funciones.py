@@ -110,6 +110,22 @@ def convolution2dDerivMaskSecOr(img,ksize):
     return cv2.sepFilter2D(img,-1,kernel[0],kernel[1])
 
 ################################################################################
+## Apartado D: Una función que genere una representación en pirámide          ##
+## Gaussiana de 4 niveles de una imagen. Mostrar ejemplos de funcionamiento   ##
+## usando bordes ¿reflejados?                                                 ##
+################################################################################
+
+def gaussianPyramid(img,levels=4):
+    pyr = []
+    img_pyr = cv2.pyrDown(img)
+    pyr.append(img)
+    pyr.append(img_pyr)
+    for i in range(levels-1):
+        img_pyr = cv2.pyrDown(img_pyr)
+        pyr.append(img_pyr)
+    return pyr
+
+################################################################################
 ##                                 MAIN                                       ##
 ################################################################################
 
@@ -147,9 +163,12 @@ def main():
     for ksize in [3,5,7,11]:
         practica0.pintaI(convolution2dDerivMask(img2,ksize))
 
-
     # Ejercicio 2 Apartado C
     for ksize in [3,5,7,11]:
         practica0.pintaI(convolution2dDerivMaskSecOr(img2,ksize))
+
+    # Ejercicio 2 Apartado D
+    pyr = gaussianPyramid(img2)
+    practica0.pintaMI(pyr)
 
 main()
