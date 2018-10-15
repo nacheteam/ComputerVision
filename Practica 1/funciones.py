@@ -117,19 +117,37 @@ def convolution2dDerivMaskSecOr(img,ksize):
 
 def gaussianPyramid(img,levels=4):
     pyr = []
-    img_pyr = cv2.pyrDown(img)
+    img_pyr = cv2.pyrDown(img,borderType=cv2.BORDER_REFLECT)
     pyr.append(img)
     pyr.append(img_pyr)
-    for i in range(levels-1):
+    for i in range(levels-2):
         img_pyr = cv2.pyrDown(img_pyr)
         pyr.append(img_pyr)
     return pyr
+
+################################################################################
+## Apartado E: Una función que genere una representación en pirámide          ##
+## Laplaciana de 4 niveles de una imagen. Mostrar ejemplos de funcionamiento  ##
+## usando bordes ¿reflejados?                                                 ##
+################################################################################
+
+def laplacianPyramid(img,levels=4):
+    pyr = gaussianPyramid(img,levels)
+    res = []
+    for i in range(levels-1,0,-1):
+        GE = cv2.pyrUp(pyr[i],dstsize=(len(pyr[i-1][0]),len(pyr[i-1])))
+        L = cv2.subtract(GE,pyr[i-1]) + 45
+        res.append(L)
+    res = res[::-1]
+    res.append(pyr[-1])
+    return res
 
 ################################################################################
 ##                                 MAIN                                       ##
 ################################################################################
 
 def main():
+    '''
     #Leo la imagen
     img = cv2.imread("../Images/lena.jpg",-1)
     #Ejercicio 1 Apartado Acv2.copyMakeBorder(img,offsetRow,offsetRow,offsetCol,offsetCol,borderType=cv2.BORDER_R
@@ -151,10 +169,11 @@ def main():
     for ksize,borderType,sigma in zip(ksizes,borders,sigma):
         convolutionLaplacian(img,ksize,borderType,sigma)
 
-
+    '''
     # Cargo la imagen en blanco y negro
-    img2 = cv2.imread("../Images/lena.jpg",0)
+    img2 = cv2.imread("../Images/bicycle.bmp",0)
 
+    '''
     # Ejercicio 2 Apartado A
     print("Ejecutando el apartado A del segundo ejercicio")
     practica0.pintaI(convolution2dSeparableMaskReflected(img2,np.array([1,2,1])/np.sum([1,2,1]),np.array([1,2,1])/np.sum([1,2,1])))
@@ -166,9 +185,14 @@ def main():
     # Ejercicio 2 Apartado C
     for ksize in [3,5,7,11]:
         practica0.pintaI(convolution2dDerivMaskSecOr(img2,ksize))
-
+    '''
     # Ejercicio 2 Apartado D
     pyr = gaussianPyramid(img2)
     practica0.pintaMI(pyr)
+
+
+    # Ejercicio 2 Apartado E
+    pyr2 = laplacianPyramid(img2)
+    practica0.pintaMI(pyr2)
 
 main()
