@@ -63,7 +63,7 @@ def gaussianConvolution(sigmaX,sigmaY,hsize,wsize,im):
     # sigmaY puede ser 0, con lo que se toma sigmaY como sigmaX.
     # En caso de ser los dos 0 se calcula con wsize y hsize.
     smoothed = cv2.GaussianBlur(im,(wsize,hsize),sigmaX,sigmaY)
-    practica0.pintaI(smoothed)
+    pintaI(smoothed)
 
 
 ################################################################################
@@ -89,7 +89,7 @@ def DerivKernel(ksize,dx,dy):
 def convolutionLaplacian(img,ksize,borderType,sigma,depth=-1):
     img_gray = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
     laplacian = cv2.Laplacian(img_gray,depth,ksize,borderType=borderType)
-    practica0.pintaI(laplacian)
+    pintaI(laplacian)
 
 
 ################################################################################
@@ -204,7 +204,7 @@ def showHibrid(img1,img2,hsize,wsize,sigmaX,sigmaY):
     low_freq2 = np.absolute(cv2.GaussianBlur(img2,(hsize,wsize),sigmaX,sigmaY))
     high_freq2 = cv2.subtract(img2,low_freq2)
     hibrid = cv2.add(low_freq1,high_freq2)
-    practica0.pintaMI([low_freq1,high_freq2,hibrid])
+    pintaMI([low_freq1,high_freq2,hibrid])
 
 ################################################################################
 ##                                 MAIN                                       ##
@@ -223,7 +223,7 @@ def main():
     print("Ejecutando el apartado B con varios parámetros de sigma. Se pinta con tamaño 100 para poder ver bien el resultado.")
     for ksize in [3,5,7,11]:
         kx,ky = DerivKernel(ksize,1,1)
-        practica0.pintaMI([kx,ky])
+        pintaMI([kx,ky])
 
     #Ejercicio 1 Apartado C
     print("Ejecutando el apartado C con varios parámetros de ksize y borderType.")
@@ -240,24 +240,24 @@ def main():
     '''
     # Ejercicio 2 Apartado A
     print("Ejecutando el apartado A del segundo ejercicio")
-    practica0.pintaI(convolution2dSeparableMaskReflected(img2,np.array([1,2,1])/np.sum([1,2,1]),np.array([1,2,1])/np.sum([1,2,1])))
+    pintaI(convolution2dSeparableMaskReflected(img2,np.array([1,2,1])/np.sum([1,2,1]),np.array([1,2,1])/np.sum([1,2,1])))
 
     # Ejercicio 2 Apartado B
     for ksize in [3,5,7,11]:
-        practica0.pintaI(convolution2dDerivMask(img2,ksize))
+        pintaI(convolution2dDerivMask(img2,ksize))
 
     # Ejercicio 2 Apartado C
     for ksize in [3,5,7,11]:
-        practica0.pintaI(convolution2dDerivMaskSecOr(img2,ksize))
+        pintaI(convolution2dDerivMaskSecOr(img2,ksize))
 
     # Ejercicio 2 Apartado D
     pyr = gaussianPyramid(img2)
-    practica0.pintaMI(pyr)
+    pintaMI(pyr)
 
 
     # Ejercicio 2 Apartado E
     pyr2 = laplacianPyramid(img2)
-    practica0.pintaMI(pyr2)
+    pintaMI(pyr2)
     '''
 
     bird = cv2.imread("imagenes/bird.bmp",0)
