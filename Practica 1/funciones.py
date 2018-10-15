@@ -135,12 +135,30 @@ def laplacianPyramid(img,levels=4):
     pyr = gaussianPyramid(img,levels)
     res = []
     for i in range(levels-1,0,-1):
-        GE = cv2.pyrUp(pyr[i],dstsize=(len(pyr[i-1][0]),len(pyr[i-1])))
-        L = cv2.subtract(GE,pyr[i-1]) + 45
-        res.append(L)
+        gauss_up = cv2.pyrUp(pyr[i],dstsize=(len(pyr[i-1][0]),len(pyr[i-1])))
+        sub = cv2.subtract(gauss_up,pyr[i-1]) + 45
+        res.append(sub)
     res = res[::-1]
     res.append(pyr[-1])
     return res
+
+################################################################################
+#### PUNTO 3: imágenes híbridas                                             ####
+################################################################################
+
+################################################################################
+## Apartado 1: Escribir una función que muestre las tres imágenes (alta,baja  ##
+## e híbrida) en una misma ventana. (Recordar que las imágenes después de     ##
+## una convolución contienen números flotantes que pueden ser positivos y     ##
+## negativos).                                                                ##
+################################################################################
+
+def showHibrid(img1,img2,hsize,wsize,sigmaX,sigmaY):
+    low_freq1 = cv2.GaussianBlur(img1,(hsize,wsize),sigmaX,sigmaY)
+    low_freq2 = cv2.GaussianBlur(img2,(hsize,wsize),sigmaX,sigmaY)
+    high_freq2 = cv2.subtract(img2,low_freq2)
+    hibrid = cv2.add(low_freq1,high_freq2)
+    practica0.pintaMI([low_freq1,high_freq2,hibrid])
 
 ################################################################################
 ##                                 MAIN                                       ##
@@ -171,7 +189,8 @@ def main():
 
     '''
     # Cargo la imagen en blanco y negro
-    img2 = cv2.imread("../Images/bicycle.bmp",0)
+    img1 = cv2.imread("../Images/plane.bmp",0)
+    img2 = cv2.imread("../Images/bird.bmp",0)
 
     '''
     # Ejercicio 2 Apartado A
@@ -185,7 +204,7 @@ def main():
     # Ejercicio 2 Apartado C
     for ksize in [3,5,7,11]:
         practica0.pintaI(convolution2dDerivMaskSecOr(img2,ksize))
-    '''
+
     # Ejercicio 2 Apartado D
     pyr = gaussianPyramid(img2)
     practica0.pintaMI(pyr)
@@ -194,5 +213,7 @@ def main():
     # Ejercicio 2 Apartado E
     pyr2 = laplacianPyramid(img2)
     practica0.pintaMI(pyr2)
+    '''
+    showHibrid(img1,img2,13,13,7,7)
 
 main()
