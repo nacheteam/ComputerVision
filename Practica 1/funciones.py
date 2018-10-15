@@ -189,8 +189,7 @@ def main():
 
     '''
     # Cargo la imagen en blanco y negro
-    img1 = cv2.imread("../Images/plane.bmp",0)
-    img2 = cv2.imread("../Images/bird.bmp",0)
+    img2 = cv2.imread("../Images/bicycle.bmp",0)
 
     '''
     # Ejercicio 2 Apartado A
@@ -214,6 +213,20 @@ def main():
     pyr2 = laplacianPyramid(img2)
     practica0.pintaMI(pyr2)
     '''
-    showHibrid(img1,img2,13,13,7,7)
+
+    bird = cv2.imread("../Images/bird.bmp",0)
+    plane = cv2.imread("../Images/plane.bmp",0)
+    print("Avión y pájaro.")
+    showHibrid(plane,bird,13,13,7,7)
+
+    submarine = cv2.imread("../Images/submarine.bmp",0)
+    fish = cv2.imread("../Images/fish.bmp",0)
+    print("Submarino y pez.")
+    showHibrid(submarine,fish,17,17,2,2)
+
+    bicycle = cv2.imread("../Images/bicycle.bmp",0)
+    motorcycle = cv2.imread("../Images/motorcycle.bmp",0)
+    print("Bicicleta y moto.")
+    showHibrid(bicycle,motorcycle,23,23,8,8)
 
 main()
