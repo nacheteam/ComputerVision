@@ -167,7 +167,7 @@ def showHibrid(img1,img2,hsize,wsize,sigmaX,sigmaY):
 def main():
     '''
     #Leo la imagen
-    img = cv2.imread("../Images/lena.jpg",-1)
+    img = cv2.imread("imagenes/lena.jpg",-1)
     #Ejercicio 1 Apartado Acv2.copyMakeBorder(img,offsetRow,offsetRow,offsetCol,offsetCol,borderType=cv2.BORDER_R
     print("Ejecutando el apartado A con varios parámetros.")
     for sigmaX,sigmaY,hsize,wsize in zip([0,1,3,5],[0,3,1,5],[1,3,5,7,11],[1,3,7,5,11]):
@@ -189,7 +189,7 @@ def main():
 
     '''
     # Cargo la imagen en blanco y negro
-    img2 = cv2.imread("../Images/bicycle.bmp",0)
+    img2 = cv2.imread("imagenes/bicycle.bmp",0)
 
     '''
     # Ejercicio 2 Apartado A
@@ -214,18 +214,18 @@ def main():
     practica0.pintaMI(pyr2)
     '''
 
-    bird = cv2.imread("../Images/bird.bmp",0)
-    plane = cv2.imread("../Images/plane.bmp",0)
+    bird = cv2.imread("imagenes/bird.bmp",0)
+    plane = cv2.imread("imagenes/plane.bmp",0)
     print("Avión y pájaro.")
     showHibrid(plane,bird,13,13,7,7)
 
-    submarine = cv2.imread("../Images/submarine.bmp",0)
-    fish = cv2.imread("../Images/fish.bmp",0)
+    submarine = cv2.imread("imagenes/submarine.bmp",0)
+    fish = cv2.imread("imagenes/fish.bmp",0)
     print("Submarino y pez.")
     showHibrid(submarine,fish,17,17,2,2)
 
-    bicycle = cv2.imread("../Images/bicycle.bmp",0)
-    motorcycle = cv2.imread("../Images/motorcycle.bmp",0)
+    bicycle = cv2.imread("imagenes/bicycle.bmp",0)
+    motorcycle = cv2.imread("imagenes/motorcycle.bmp",0)
     print("Bicicleta y moto.")
     showHibrid(bicycle,motorcycle,23,23,8,8)
 
