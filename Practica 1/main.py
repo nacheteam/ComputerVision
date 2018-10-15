@@ -1,4 +1,3 @@
-import practica0
 import cv2
 import numpy as np
 
@@ -63,8 +62,7 @@ def gaussianConvolution(sigmaX,sigmaY,hsize,wsize,im):
     # sigmaY puede ser 0, con lo que se toma sigmaY como sigmaX.
     # En caso de ser los dos 0 se calcula con wsize y hsize.
     smoothed = cv2.GaussianBlur(im,(wsize,hsize),sigmaX,sigmaY)
-    pintaI(smoothed)
-
+    return smoothed
 
 ################################################################################
 ## Apartado B: Usar getDerivKernels para obtener las máscaras 1D que permiten ##
@@ -89,7 +87,7 @@ def DerivKernel(ksize,dx,dy):
 def convolutionLaplacian(img,ksize,borderType,sigma,depth=-1):
     img_gray = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
     laplacian = cv2.Laplacian(img_gray,depth,ksize,borderType=borderType)
-    pintaI(laplacian)
+    return laplacian
 
 
 ################################################################################
@@ -211,68 +209,86 @@ def showHibrid(img1,img2,hsize,wsize,sigmaX,sigmaY):
 ################################################################################
 
 def main():
-    '''
+
     #Leo la imagen
     img = cv2.imread("imagenes/lena.jpg",-1)
-    #Ejercicio 1 Apartado Acv2.copyMakeBorder(img,offsetRow,offsetRow,offsetCol,offsetCol,borderType=cv2.BORDER_R
-    print("Ejecutando el apartado A con varios parámetros.")
-    for sigmaX,sigmaY,hsize,wsize in zip([0,1,3,5],[0,3,1,5],[1,3,5,7,11],[1,3,7,5,11]):
-        gaussianConvolution(sigmaX,sigmaY,hsize,wsize,img)
+    #Ejercicio 1 Apartado A
+    print("Convolución gaussiana.")
+    gaussian_conv = []
+    for sigmaX,sigmaY,hsize,wsize in zip([0,1,3,5],[0,3,1,5],[3,5,7,11],[3,7,5,11]):
+        gaussian_conv.append(gaussianConvolution(sigmaX,sigmaY,hsize,wsize,img))
+    pintaMI(gaussian_conv)
 
     #Ejercicio 1 Apartado B
-    print("Ejecutando el apartado B con varios parámetros de sigma. Se pinta con tamaño 100 para poder ver bien el resultado.")
+    print("Kernel de primera derivada con varios tamaños.")
     for ksize in [3,5,7,11]:
         kx,ky = DerivKernel(ksize,1,1)
-        pintaMI([kx,ky])
+        print("Tamaño " + str(ksize))
+        print("dx: " + str(kx))
+        print("dy: " + str(ky))
 
     #Ejercicio 1 Apartado C
-    print("Ejecutando el apartado C con varios parámetros de ksize y borderType.")
+    print("Convolución laplaciana.")
     ksizes = [3,5,9,3,5,9,3,5,9,3,5,9]
     borders = [cv2.BORDER_REFLECT,cv2.BORDER_REFLECT,cv2.BORDER_REFLECT,cv2.BORDER_REFLECT,cv2.BORDER_REFLECT,cv2.BORDER_REFLECT,cv2.BORDER_REPLICATE,cv2.BORDER_REPLICATE,cv2.BORDER_REPLICATE,cv2.BORDER_REPLICATE,cv2.BORDER_REPLICATE,cv2.BORDER_REPLICATE]
     sigma = [1,1,1,1,1,1,3,3,3,3,3,3]
+    laplacian_conv = []
     for ksize,borderType,sigma in zip(ksizes,borders,sigma):
-        convolutionLaplacian(img,ksize,borderType,sigma)
+        laplacian_conv.append(convolutionLaplacian(img,ksize,borderType,sigma))
+    pintaMI(laplacian_conv)
 
-    '''
+
     # Cargo la imagen en blanco y negro
     img2 = cv2.imread("imagenes/bicycle.bmp",0)
 
-    '''
+
     # Ejercicio 2 Apartado A
-    print("Ejecutando el apartado A del segundo ejercicio")
-    pintaI(convolution2dSeparableMaskReflected(img2,np.array([1,2,1])/np.sum([1,2,1]),np.array([1,2,1])/np.sum([1,2,1])))
+    print("Convolución con máscaras separables. (Gaussiana,identidad y detección de bordes)")
+    conv_sep = []
+    conv_sep.append(convolution2dSeparableMaskReflected(img2,np.array([1,2,1])/np.sum([1,2,1]),np.array([1,2,1])/np.sum([1,2,1])))
+    conv_sep.append(convolution2dSeparableMaskReflected(img2,np.array([0,1,0])/np.sum([0,1,0]),np.array([0,1,0])/np.sum([0,1,0])))
+    conv_sep.append(convolution2dSeparableMaskReflected(img2,np.array([1,2,1])/np.sum([1,2,1]),np.array([1,0,-1])/np.sum(np.absolute([1,0,-1]))))
+    pintaMI(conv_sep)
 
     # Ejercicio 2 Apartado B
+    derivMask_conv = []
     for ksize in [3,5,7,11]:
-        pintaI(convolution2dDerivMask(img2,ksize))
+        derivMask_conv.append(convolution2dDerivMask(img2,ksize))
+    print("Convolución 2D primera derivada")
+    pintaMI(derivMask_conv)
 
     # Ejercicio 2 Apartado C
+    derivMask2_conv = []
     for ksize in [3,5,7,11]:
-        pintaI(convolution2dDerivMaskSecOr(img2,ksize))
+        derivMask2_conv.append(convolution2dDerivMaskSecOr(img2,ksize))
+    print("Convolución 2D segunda derivada")
+    pintaMI(derivMask2_conv)
 
     # Ejercicio 2 Apartado D
+    print("Pirámide gaussiana")
     pyr = gaussianPyramid(img2)
     pintaMI(pyr)
 
 
     # Ejercicio 2 Apartado E
+    print("Pirámide laplaciana")
     pyr2 = laplacianPyramid(img2)
     pintaMI(pyr2)
-    '''
+
 
     bird = cv2.imread("imagenes/bird.bmp",0)
     plane = cv2.imread("imagenes/plane.bmp",0)
-    print("Avión y pájaro.")
+    print("Imagen híbrida avión y pájaro.")
     showHibrid(plane,bird,13,13,7,7)
 
     submarine = cv2.imread("imagenes/submarine.bmp",0)
     fish = cv2.imread("imagenes/fish.bmp",0)
-    print("Submarino y pez.")
+    print("Imagen híbrida submarino y pez.")
     showHibrid(submarine,fish,17,17,2,2)
 
     bicycle = cv2.imread("imagenes/bicycle.bmp",0)
     motorcycle = cv2.imread("imagenes/motorcycle.bmp",0)
-    print("Bicicleta y moto.")
+    print("Imagen híbrida bicicleta y moto.")
     showHibrid(bicycle,motorcycle,23,23,8,8)
 
 main()
