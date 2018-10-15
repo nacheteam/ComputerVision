@@ -26,9 +26,9 @@ def gaussianConvolution(sigmaX,sigmaY,hsize,wsize,im):
 ## interpretar dichas máscaras 1D para distintos valores de sigma.            ##
 ################################################################################
 
-def printDerivKernel(ksize,dx,dy):
+def DerivKernel(ksize,dx,dy):
     kx,ky = cv2.getDerivKernels(dx,dy,ksize)
-    practica0.pintaMI([kx,ky])
+    return kx,ky
 
 
 ################################################################################
@@ -96,6 +96,10 @@ def convolution2dSeparableMaskReflected(img,kernelRow,kernelCol):
 ## bordes a cero.                                                             ##
 ################################################################################
 
+def convolution2dDerivMask(img,ksize):
+    kernel = DerivKernel(ksize,1,1)
+    return cv2.sepFilter2D(img,-1,kernel[0],kernel[1])
+
 
 
 ################################################################################
@@ -113,7 +117,8 @@ def main():
     #Ejercicio 1 Apartado B
     print("Ejecutando el apartado B con varios parámetros de sigma. Se pinta con tamaño 100 para poder ver bien el resultado.")
     for ksize in [3,5,7,11]:
-        printDerivKernel(ksize,1,1)
+        kx,ky = DerivKernel(ksize,1,1)
+        practica0.pintaMI([kx,ky])
 
     #Ejercicio 1 Apartado C
     print("Ejecutando el apartado C con varios parámetros de ksize y borderType.")
@@ -123,8 +128,15 @@ def main():
     for ksize,borderType,sigma in zip(ksizes,borders,sigma):
         convolutionLaplacian(img,ksize,borderType,sigma)
 
+    # Cargo la imagen en blanco y negro
+    img2 = cv2.imread("../Images/lena.jpg",0)
+
     # Ejercicio 2 Apartado A
     print("Ejecutando el apartado A del segundo ejercicio")
-    practica0.pintaI(convolution2dSeparableMaskReflected(img,np.array([1,2,1])/np.sum([1,2,1]),np.array([1,2,1])/np.sum([1,2,1])))
+    practica0.pintaI(convolution2dSeparableMaskReflected(img2,np.array([1,2,1])/np.sum([1,2,1]),np.array([1,2,1])/np.sum([1,2,1])))
+
+    # Ejercicio 2 Apartado B
+    for ksize in [3,5,7,11]:
+        practica0.pintaI(convolution2dDerivMask(img2,ksize))
 
 main()
