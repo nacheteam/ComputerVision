@@ -59,9 +59,9 @@ def pintaMI(vim):
             max_w = im.shape[1]
     for im in vim:
         if len(im.shape)==2:
-            imagenes.append(cv2.copyMakeBorder(cv2.cvtColor(im,cv2.COLOR_GRAY2RGB),top=0,bottom=max_h-im.shape[0],left=0,right=max_w-im.shape[1],borderType= cv2.BORDER_CONSTANT, value=[0,0,0]))
+            imagenes.append(cv2.copyMakeBorder(cv2.cvtColor(im,cv2.COLOR_GRAY2RGB),top=0,bottom=max_h-im.shape[0],left=0,right=0,borderType= cv2.BORDER_CONSTANT, value=[0,0,0]))
         else:
-            imagenes.append(cv2.copyMakeBorder(im,top=0,bottom=max_h-im.shape[0],left=0,right=max_w-im.shape[1],borderType= cv2.BORDER_CONSTANT, value=[0,0,0]))
+            imagenes.append(cv2.copyMakeBorder(im,top=0,bottom=max_h-im.shape[0],left=0,right=0,borderType= cv2.BORDER_CONSTANT, value=[0,0,0]))
     concatenada = cv2.hconcat(imagenes)
     cv2.namedWindow('Imagenes', cv2.WINDOW_NORMAL)
     cv2.imshow("Imagenes",concatenada)
