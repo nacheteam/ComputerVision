@@ -100,7 +100,14 @@ def convolution2dDerivMask(img,ksize):
     kernel = DerivKernel(ksize,1,1)
     return cv2.sepFilter2D(img,-1,kernel[0],kernel[1])
 
+################################################################################
+## Apartado C: El cálculo de la convolución 2D con una máscara 2D de 2ª       ##
+## derivada de tamaño variable.                                               ##
+################################################################################
 
+def convolution2dDerivMaskSecOr(img,ksize):
+    kernel = DerivKernel(ksize,2,2)
+    return cv2.sepFilter2D(img,-1,kernel[0],kernel[1])
 
 ################################################################################
 ##                                 MAIN                                       ##
