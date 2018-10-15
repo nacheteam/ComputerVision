@@ -3,12 +3,6 @@ import cv2
 import numpy as np
 
 ################################################################################
-##                             CONSTANTES                                     ##
-################################################################################
-
-KERNEL1D_SIZE = 100
-
-################################################################################
 ####   PUNTO 1: escribir funciones que implementen los siguientes puntos.   ####
 ################################################################################
 
@@ -32,9 +26,9 @@ def gaussianConvolution(sigmaX,sigmaY,hsize,wsize,im):
 ## interpretar dichas máscaras 1D para distintos valores de sigma.            ##
 ################################################################################
 
-def printDerivKernel(sigma,ksize):
-    kernel = cv2.getGaussianKernel(ksize,sigma)
-    practica0.pintaI(kernel)
+def printDerivKernel(ksize,dx,dy):
+    kx,ky = cv2.getDerivKernels(dx,dy,ksize)
+    practica0.pintaMI([kx,ky])
 
 
 ################################################################################
@@ -97,13 +91,20 @@ def convolution2dSeparableMaskReflected(img,kernelRow,kernelCol):
 '''
 
 ################################################################################
+## Apartado B: El cálculo de la convolución 2D con una máscara 2D de 1ª       ##
+## derivada de tamaño variable. Mostrar ejemplos de funcionamiento usando     ##
+## bordes a cero.                                                             ##
+################################################################################
+
+
+
+################################################################################
 ##                                 MAIN                                       ##
 ################################################################################
 
 def main():
     #Leo la imagen
     img = cv2.imread("../Images/lena.jpg",-1)
-    '''
     #Ejercicio 1 Apartado Acv2.copyMakeBorder(img,offsetRow,offsetRow,offsetCol,offsetCol,borderType=cv2.BORDER_R
     print("Ejecutando el apartado A con varios parámetros.")
     for sigmaX,sigmaY,hsize,wsize in zip([0,1,3,5],[0,3,1,5],[1,3,5,7,11],[1,3,7,5,11]):
@@ -111,8 +112,8 @@ def main():
 
     #Ejercicio 1 Apartado B
     print("Ejecutando el apartado B con varios parámetros de sigma. Se pinta con tamaño 100 para poder ver bien el resultado.")
-    for sigma in [0.1,1,2,3,4,5,6,7,8,9,10]:
-        printDerivKernel(sigma,KERNEL1D_SIZE)
+    for ksize in [3,5,7,11]:
+        printDerivKernel(ksize,1,1)
 
     #Ejercicio 1 Apartado C
     print("Ejecutando el apartado C con varios parámetros de ksize y borderType.")
@@ -121,7 +122,6 @@ def main():
     sigma = [1,1,1,1,1,1,3,3,3,3,3,3]
     for ksize,borderType,sigma in zip(ksizes,borders,sigma):
         convolutionLaplacian(img,ksize,borderType,sigma)
-    '''
 
     # Ejercicio 2 Apartado A
     print("Ejecutando el apartado A del segundo ejercicio")
