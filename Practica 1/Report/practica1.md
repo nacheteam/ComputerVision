@@ -20,4 +20,6 @@ Para esta prueba he movido la varianza entre 0 y 5 (en ambos ejes) y el tamaño 
 
 ![GaussianBlur](./Imagenes/1A.png)
 
-Podemos observar que el efecto se hace más visible de izquierda a derecha. Si nos fijamos en la imagen podemos ver que al hacer más grande el tamaño del núcleo podemos percibir de forma más nítida los rectángulos o cuadrados en la imagen. Además se observa que al aumentar los valores de la sigma el suavizado se hace más visible.
+Podemos observar que el efecto se hace más visible de izquierda a derecha. Si nos fijamos en la imagen podemos ver que al hacer más grande el tamaño del núcleo podemos percibir de forma más nítida los rectángulos o cuadrados en la imagen. Además se observa que al aumentar los valores de sigma el suavizado se hace más visible.
+
+### Apartado B
