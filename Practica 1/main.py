@@ -224,8 +224,8 @@ def main():
     for ksize in [3,5,7,11]:
         kx,ky = DerivKernel(ksize,1,1)
         print("Tamaño " + str(ksize))
-        print("dx: " + str(kx))
-        print("dy: " + str(ky))
+        print("dx: " + str(kx.transpose()[0]))
+        print("dy: " + str(ky.transpose()[0]))
 
     #Ejercicio 1 Apartado C
     print("Convolución laplaciana.")
@@ -235,7 +235,10 @@ def main():
     laplacian_conv = []
     for ksize,borderType,sigma in zip(ksizes,borders,sigma):
         laplacian_conv.append(convolutionLaplacian(img,ksize,borderType,sigma))
-    pintaMI(laplacian_conv)
+    laplacian_conv1 = laplacian_conv[:len(laplacian_conv)//2]
+    laplacian_conv2 = laplacian_conv[len(laplacian_conv)//2:]
+    pintaMI(laplacian_conv1)
+    pintaMI(laplacian_conv2)
 
 
     # Cargo la imagen en blanco y negro
@@ -275,7 +278,7 @@ def main():
     pyr2 = laplacianPyramid(img2)
     pintaMI(pyr2)
 
-
+    # Ejercicio 3
     bird = cv2.imread("imagenes/bird.bmp",0)
     plane = cv2.imread("imagenes/plane.bmp",0)
     print("Imagen híbrida avión y pájaro.")
