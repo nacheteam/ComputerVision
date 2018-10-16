@@ -219,10 +219,11 @@ def main():
 
     #Ejercicio 1 Apartado B
     print("Kernel de primera derivada con varios tamaños.")
-    for ksize,deriv in zip([3,5,7,11],[1,2,3,4]):
-        kx,ky = DerivKernel(ksize,deriv,deriv)
+    for ksize,derivX,derivY in zip([3,5,7,11],[1,2,3,4],[1,2,4,5]):
+        kx,ky = DerivKernel(ksize,derivX,derivY)
         print("Tamaño " + str(ksize))
-        print("Orden " + str(deriv))
+        print("Orden X " + str(derivX))
+        print("Ordern Y " + str(derivY))
         print("dx: " + str(kx.transpose()[0]))
         print("dy: " + str(ky.transpose()[0]))
 
