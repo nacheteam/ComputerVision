@@ -82,11 +82,8 @@ def DerivKernel(ksize,dx,dy):
 ## sigma: 1 y 3.                                                              ##
 ################################################################################
 
-# NO FUNCIONA MUESTRA TODO NEGRO
-
 def convolutionLaplacian(img,ksize,borderType,sigma,depth=-1):
-    img_gray = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
-    laplacian = cv2.Laplacian(img_gray,depth,ksize,borderType=borderType)
+    laplacian = cv2.Laplacian(img,depth,ksize,borderType=borderType)
     return laplacian
 
 
@@ -212,6 +209,7 @@ def main():
 
     #Leo la imagen
     img = cv2.imread("imagenes/lena.jpg",-1)
+    marilyn = cv2.imread("imagenes/marilyn.bmp",-1)
     #Ejercicio 1 Apartado A
     print("Convolución gaussiana.")
     gaussian_conv = []
@@ -221,9 +219,10 @@ def main():
 
     #Ejercicio 1 Apartado B
     print("Kernel de primera derivada con varios tamaños.")
-    for ksize in [3,5,7,11]:
-        kx,ky = DerivKernel(ksize,1,1)
+    for ksize,deriv in zip([3,5,7,11],[1,2,3,4]):
+        kx,ky = DerivKernel(ksize,deriv,deriv)
         print("Tamaño " + str(ksize))
+        print("Orden " + str(deriv))
         print("dx: " + str(kx.transpose()[0]))
         print("dy: " + str(ky.transpose()[0]))
 
@@ -234,7 +233,7 @@ def main():
     sigma = [1,1,1,1,1,1,3,3,3,3,3,3]
     laplacian_conv = []
     for ksize,borderType,sigma in zip(ksizes,borders,sigma):
-        laplacian_conv.append(convolutionLaplacian(img,ksize,borderType,sigma))
+        laplacian_conv.append(convolutionLaplacian(marilyn,ksize,borderType,sigma))
     laplacian_conv1 = laplacian_conv[:len(laplacian_conv)//2]
     laplacian_conv2 = laplacian_conv[len(laplacian_conv)//2:]
     pintaMI(laplacian_conv1)
