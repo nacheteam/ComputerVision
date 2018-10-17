@@ -83,7 +83,9 @@ def DerivKernel(ksize,dx,dy):
 ################################################################################
 
 def convolutionLaplacian(img,ksize,borderType,sigma,depth=-1):
-    laplacian = cv2.Laplacian(img,depth,ksize,borderType=borderType)
+    img_blur = cv2.GaussianBlur(img,(ksize,ksize),sigma)
+    img_gray = cv2.cvtColor(img_blur,cv2.COLOR_RGB2GRAY)
+    laplacian = cv2.Laplacian(img_gray,depth,ksize,borderType=borderType)+30
     return laplacian
 
 
@@ -230,7 +232,7 @@ def main():
     #Ejercicio 1 Apartado C
     print("Convolución laplaciana.")
     ksizes = [3,5,9,3,5,9,3,5,9,3,5,9]
-    borders = [cv2.BORDER_REFLECT,cv2.BORDER_REFLECT,cv2.BORDER_REFLECT,cv2.BORDER_REFLECT,cv2.BORDER_REFLECT,cv2.BORDER_REFLECT,cv2.BORDER_REPLICATE,cv2.BORDER_REPLICATE,cv2.BORDER_REPLICATE,cv2.BORDER_REPLICATE,cv2.BORDER_REPLICATE,cv2.BORDER_REPLICATE]
+    borders = [cv2.BORDER_REFLECT,cv2.BORDER_REFLECT,cv2.BORDER_REFLECT,cv2.BORDER_REPLICATE,cv2.BORDER_REPLICATE,cv2.BORDER_REPLICATE,cv2.BORDER_REFLECT,cv2.BORDER_REFLECT,cv2.BORDER_REFLECT,cv2.BORDER_REPLICATE,cv2.BORDER_REPLICATE,cv2.BORDER_REPLICATE]
     sigma = [1,1,1,1,1,1,3,3,3,3,3,3]
     laplacian_conv = []
     for ksize,borderType,sigma in zip(ksizes,borders,sigma):
