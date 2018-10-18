@@ -135,3 +135,14 @@ Para comprobar el resultado obtenido veamos el ejemplo:
 Hay que tener en cuenta que por motivos puramente estéticos para observar bien los cambios en la imagen he sumado una constante (45) a cada pixel de la imagen con lo que el fondo en vez de ser negro es de un tono gris claro.
 
 ## Ejercicio 3
+En este ejercicio se nos pide implementar la idea estudiada en el paper de Oliva, Torralba y Schyns. La idea detrás de las imágenes híbridas consiste en dividir una imagen en dos: la que contiene las frecuencias altas y las frecuencias bajas de tal forma que si nos alejamos lo suficiente de la imagen veamos las frecuencias bajas y si nos acercamos veamos las frecuencias altas.
+
+Para conseguir las imágenes correspondientes aplicamos el siguiente proceso: primero hacemos un suavizado a la imagen para obtener la imagen que contiene las frecuencias bajas y después restamos esta a la original para obtener las frecuencias altas. Con ello sólo nos queda sumar las dos imágenes obtenidas para obtener la híbrida.
+
+Para este ejercicio he tomado tres parejas como el enunciado pedía: un pájaro y un avión, un submarino y un pez y una bicicleta y una moto. Los parámetros han sido ajustados a mano para intentar obtener la mejor vista posible de la imagen híbrida. A continuación se muestran los resultados:
+
+![Pájaro y avión](./Imagenes/3A.PNG)
+![Submarino y pez](./Imagenes/3B.PNG)
+![Bicicleta y avión](./Imágenes/3C.PNG)
+
+Cabe destacar que no sólo es importante escoger el tamaño de la máscara y sigma de forma adecuada si no también hacer la elección correcta de que imágen tomar las frecuencias altas y de cuál las bajas.
