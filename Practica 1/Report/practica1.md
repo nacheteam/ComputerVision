@@ -90,7 +90,7 @@ Esta función implementa la convolución con máscaras separables. Estas máscar
 
 En los ejemplos generados se aplica en primer lugar una Gaussiana, luego la matriz identidad y por último una máscara de detección de bordes.
 
-La función está implementada a partir de la función sepFilted2D que aplica un filtro separable a una imagen dada.
+La función está implementada a partir de la función sepFilter2D que aplica un filtro separable a una imagen dada.
 
 ![Máscaras separables](./Imagenes/2A.PNG)
 
@@ -106,3 +106,12 @@ En primer lugar cabe destacar que los tamaños han variado tomando valores 3,5,7
 Como conclusión podemos decir que si ponemos un tamaño pequeño obtendremos los bordes más significativos o con una diferencia de colores mayor y si tomamos un tamaño más grande de máscara obtendremos hasta los bordes más sutiles de forma gradiente si nos alejamos de ellos.
 
 ### Apartado C
+Para implementar la máscara de segunda derivada empleamos las mismas funciones que en el segundo apartado, pero tomando ahora dx=2=dy y aplicando sepFilter2D. Veamos los ejemplos para explicarlos:
+
+![Segunda derivada](./Imagenes/2C.PNG)
+
+Los ejemplos han sido obtenidos con tamaños de máscara variando entre 3,5,7 y 11.
+
+Para comenzar el análisis hay que tener en cuenta que derivamos en la dirección (2,2) o lo que es lo mismo $2\cdot (1,1)$, es decir, esencialmente derivamos en la misma dirección que en el apartado anterior pero con mayor 'intensidad'. Esto es claramente visible cuando miramos la primera y segunda imagen. Podemos apreciar que los bordes más resaltados son los que van en la misma dirección de la derivación como se puede apreciar en las ruedas de la bicicleta o en el cuadro de la misma que son los bordes más resaltados. Así mismo podemos percibir como en el apartado anterior que cuando mayor es el tamaño de la máscara los bordes que se obtienen son más gruesos y más imprecisos.
+
+### Apartado D
