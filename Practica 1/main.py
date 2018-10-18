@@ -57,6 +57,16 @@ def pintaMI(vim):
 ## de máscara y valores de sigma. Valorar los resultados.                     ##
 ################################################################################
 
+'''
+@brief Función que obtiene un suavizado gaussiano.
+@param sigmaX varianza en el eje X.
+@param sigmaY varianza en el eje Y.
+@param hsize tamaño de altura de la máscara.
+@param wsize tamaño de anchura de la máscara.
+@param im imagen a la que se le quiere aplicar el suavizado.
+@return Devuelve una imagen suavizada mediante una convolución gaussiana con los
+        parámetros especificados.
+'''
 def gaussianConvolution(sigmaX,sigmaY,hsize,wsize,im):
     # Nótese que wsize y hsize tienen que ser impares y pueden ser distintos
     # sigmaY puede ser 0, con lo que se toma sigmaY como sigmaX.
@@ -70,7 +80,18 @@ def gaussianConvolution(sigmaX,sigmaY,hsize,wsize,im):
 ## interpretar dichas máscaras 1D para distintos valores de sigma.            ##
 ################################################################################
 
+'''
+@brief Función que devuelve la máscara separable derivada 2D.
+@param ksize tamaño cuadrado de la máscara.
+@param dx Orden de derivación en la dirección de X.
+@param dy Orden de derivación en la dirección de Y.
+@return Devuelve dos vectores que son los que corresponden a la máscara derivada
+        2D de tamaño cuadrado ksize y de orden de derivación dx en el sentido de X
+        y dy en el sentido de Y.
+'''
 def DerivKernel(ksize,dx,dy):
+    # Función que devuelve la máscara separable de tamaño ksize y de orden en X dx
+    # y de orden en y dy
     kx,ky = cv2.getDerivKernels(dx,dy,ksize)
     return kx,ky
 
@@ -82,9 +103,25 @@ def DerivKernel(ksize,dx,dy):
 ## sigma: 1 y 3.                                                              ##
 ################################################################################
 
+'''
+@brief Función que recibe una imagen y la devuelve con el operador laplaciano aplicado.
+@param img Imagen a la que se le quiere aplicar el operador laplaciano.
+@param ksize Tamaño de la máscara cuadrada para el suavizado gaussiano y para
+             el operador laplaciano.
+@param borderType Tipo de borde que se quiere aplicar en el operador laplaciano.
+@param sigma Varianza usada en el suavizado gaussiano.
+@param depth Profundidad de la imagen de salida. Por defecto -1 que es la misma
+             que la de la imagen de entrada.
+@return Esta función aplica un suavizado gaussiano a la imagen, posteriormente la
+        convierte a escala de grises y tras esto aplica el operador laplaciano.
+        Devuelve la imagen resultante tras este proceso.
+'''
 def convolutionLaplacian(img,ksize,borderType,sigma,depth=-1):
+    # Se aplica un suavizado gaussiano
     img_blur = cv2.GaussianBlur(img,(ksize,ksize),sigma)
+    # Se convierte a escala de grises
     img_gray = cv2.cvtColor(img_blur,cv2.COLOR_RGB2GRAY)
+    # Se aplica el operador laplaciano
     laplacian = cv2.Laplacian(img_gray,depth,ksize,borderType=borderType)+30
     return laplacian
 
@@ -99,6 +136,15 @@ def convolutionLaplacian(img,ksize,borderType,sigma,depth=-1):
 ## tamaño variable. Usar bordes reflejados. Mostrar resultados.               ##
 ################################################################################
 
+'''
+@brief Esta función toma una imagen y una máscara separable y le aplica la convolución
+       dada por la máscara a la imagen.
+@param img Imagen a la que se le va a aplicar la convolución.
+@param kernelRow Máscara por filas.
+@param kernelCol Máscara por columnas.
+@return Devuelve la imagen resultante al aplicar la convolución a la imagen dada
+        con la máscara separable proporcionada.
+'''
 def convolution2dSeparableMaskReflected(img,kernelRow,kernelCol):
     # El kernel debe estar normalizado.
     return cv2.sepFilter2D(img,-1,kernelRow,kernelCol,borderType=cv2.BORDER_REFLECT)
@@ -139,8 +185,16 @@ def convolution2dSeparableMaskReflected(img,kernelRow,kernelCol):
 ## bordes a cero.                                                             ##
 ################################################################################
 
+'''
+@brief Esta función devuelve la imagen con una máscara derivada de primer orden aplicada.
+@param img Imagen a la que se le quiere aplicar la máscara derivada.
+@param ksize Tamaño cuadrado de la máscara.
+@return Devuelve la imagen pasada como argumento con la máscara derivada aplicada.
+'''
 def convolution2dDerivMask(img,ksize):
+    # Obtenemos la máscara derivada de primer orden en ambas direcciones
     kernel = DerivKernel(ksize,1,1)
+    # Aplicamos la máscara
     return cv2.sepFilter2D(img,-1,kernel[0],kernel[1])
 
 ################################################################################
@@ -148,8 +202,16 @@ def convolution2dDerivMask(img,ksize):
 ## derivada de tamaño variable.                                               ##
 ################################################################################
 
+'''
+@brief Esta función devuelve la imagen con una máscara derivada de primer segundo aplicada.
+@param img Imagen a la que se le quiere aplicar la máscara derivada.
+@param ksize Tamaño cuadrado de la máscara.
+@return Devuelve la imagen pasada como argumento con la máscara derivada aplicada.
+'''
 def convolution2dDerivMaskSecOr(img,ksize):
+    # Obtenemos la máscara derivada de segundo orden en ambas direcciones
     kernel = DerivKernel(ksize,2,2)
+    # Aplicamos la máscara
     return cv2.sepFilter2D(img,-1,kernel[0],kernel[1])
 
 ################################################################################
@@ -158,11 +220,19 @@ def convolution2dDerivMaskSecOr(img,ksize):
 ## usando bordes ¿reflejados?                                                 ##
 ################################################################################
 
+'''
+@brief Esta función obtiene la pirámide gaussiana de la imagen dada.
+@param img Imagen a la que se le quiere calcular la pirámide gaussiana.
+@param levels Niveles de la pirámide gaussiana, por defecto 4.
+@return Devuelve la pirámide gaussiana de la imagen pasada.
+'''
 def gaussianPyramid(img,levels=4):
     pyr = []
+    # Se hace un downsample a la imagen. La función pyrDown implementa ya el blur.
     img_pyr = cv2.pyrDown(img,borderType=cv2.BORDER_REFLECT)
     pyr.append(img)
     pyr.append(img_pyr)
+    # Se hace el downsample y el blur tantas veces como niveles se quieran a la imagen una y otra vez.
     for i in range(levels-2):
         img_pyr = cv2.pyrDown(img_pyr)
         pyr.append(img_pyr)
@@ -174,14 +244,26 @@ def gaussianPyramid(img,levels=4):
 ## usando bordes ¿reflejados?                                                 ##
 ################################################################################
 
+'''
+@brief Esta función obtiene la pirámide laplaciana de la imagen dada.
+@param img Imagen a la que se le quiere calcular la pirámide laplaciana.
+@param levels Niveles de la pirámide laplaciana, por defecto 4.
+@return Devuelve la pirámide laplaciana de la imagen pasada.
+'''
 def laplacianPyramid(img,levels=4):
+    # Se parte de la pirámide gaussiana.
     pyr = gaussianPyramid(img,levels)
     res = []
+    # Empezamos desde el final hacia el principio
     for i in range(levels-1,0,-1):
+        # Le hacemos un upsampe a la imagen de la pirámide gaussiana
         gauss_up = cv2.pyrUp(pyr[i],dstsize=(len(pyr[i-1][0]),len(pyr[i-1])))
+        # La restamos con la anterior
         sub = cv2.subtract(gauss_up,pyr[i-1]) + 45
         res.append(sub)
+    # Damos la vuelta a la lista de la pirámide laplaciana
     res = res[::-1]
+    # Añadimos la última imagen de la pirámide gaussiana.
     res.append(pyr[-1])
     return res
 
@@ -196,6 +278,16 @@ def laplacianPyramid(img,levels=4):
 ## negativos).                                                                ##
 ################################################################################
 
+'''
+@brief Esta función muestra las bajas frecuencias de la imagen 1, las altas de
+       la imagen 2 y por último la suma de ambas.
+@param img1 Imagen de la que se obtienen las bajas frecuencias.
+@param img2 Imagen de la que se obtienen las altas frecuencias.
+@param hsize Tamaño de la máscara en altura.
+@param wsize Tamaño de la máscara en anchura.
+@param sigmaX Varianza en la dirección X.
+@param sigmaY Varianza en la dirección Y.
+'''
 def showHibrid(img1,img2,hsize,wsize,sigmaX,sigmaY):
     low_freq1 = np.absolute(cv2.GaussianBlur(img1,(hsize,wsize),sigmaX,sigmaY))
     low_freq2 = np.absolute(cv2.GaussianBlur(img2,(hsize,wsize),sigmaX,sigmaY))
@@ -209,9 +301,11 @@ def showHibrid(img1,img2,hsize,wsize,sigmaX,sigmaY):
 
 def main():
 
-    #Leo la imagen
+    #Leo la imagen de lena
     img = cv2.imread("imagenes/lena.jpg",-1)
-    marilyn = cv2.imread("imagenes/marilyn.bmp",-1)
+    #Leo la imagen de marilyn
+    marilyn = cv2.imread("imagenes/marilyn.bmp",-1)cuadrada
+
     #Ejercicio 1 Apartado A
     print("Convolución gaussiana.")
     gaussian_conv = []
@@ -241,7 +335,7 @@ def main():
     pintaMI(laplacian_conv2)
 
 
-    # Cargo la imagen en blanco y negro
+    # Cargo la imagen de la bicicleta en blanco y negro
     img2 = cv2.imread("imagenes/bicycle.bmp",0)
 
 
