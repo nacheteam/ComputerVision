@@ -124,3 +124,14 @@ Veamos un ejemplo para observar que el resultado obtenido es el esperable:
 ![Pirámide Gaussiana](./Imagenes/2D.PNG)
 
 ### Apartado E
+En este ejercicio se nos pide que implementemos la pirámide laplaciana. Esta pirámide se basa en la gaussiana por lo que nos valemos de la función implementada en el apartado anterior para implementar este.
+
+El mecanismo de construcción de la pirámide laplaciana consiste en tomar la imagen i+1-ésima de la pirámide gaussiana, realizarle un upsample para igualarla en tamaño a la i-ésima y restarlas entre sí. Esto nos va a dar algo parecido a lo que obtendríamos con una máscara de detección de bordes. Tenemos que tener en cuenta que haciendo esto la última imagen de la pirámide no podemos hallarla con la diferencia, con lo que la última imagen de la pirámide será la última imagen de la pirámide gaussiana.
+
+Para comprobar el resultado obtenido veamos el ejemplo:
+
+![Pirámide Laplaciana](./Imagenes/2E.PNG)
+
+Hay que tener en cuenta que por motivos puramente estéticos para observar bien los cambios en la imagen he sumado una constante (45) a cada pixel de la imagen con lo que el fondo en vez de ser negro es de un tono gris claro.
+
+## Ejercicio 3
