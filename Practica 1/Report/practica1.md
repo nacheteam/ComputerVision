@@ -9,8 +9,9 @@ fontsize: 12pt
 geometry: margin=1.4in
 ---
 
-# Práctica 1: Filtrado y Muestreo
+# \huge{Práctica 1: Filtrado y Muestreo}
 # Ignacio Aguilera Martos
+# Visión por Computador
 
 ## Ejercicio 1
 
@@ -143,6 +144,6 @@ Para este ejercicio he tomado tres parejas como el enunciado pedía: un pájaro 
 
 ![Pájaro y avión](./Imagenes/3A.PNG)
 ![Submarino y pez](./Imagenes/3B.PNG)
-![Bicicleta y avión](./Imágenes/3C.PNG)
+![Bicicleta y avión](./Imagenes/3C.PNG)
 
 Cabe destacar que no sólo es importante escoger el tamaño de la máscara y sigma de forma adecuada si no también hacer la elección correcta de que imágen tomar las frecuencias altas y de cuál las bajas.
