@@ -199,7 +199,7 @@ def laplacianPyramid(img,levels=4):
 def showHibrid(img1,img2,hsize,wsize,sigmaX,sigmaY):
     low_freq1 = np.absolute(cv2.GaussianBlur(img1,(hsize,wsize),sigmaX,sigmaY))
     low_freq2 = np.absolute(cv2.GaussianBlur(img2,(hsize,wsize),sigmaX,sigmaY))
-    high_freq2 = cv2.subtract(img2,low_freq2)
+    high_freq2 = np.absolute(cv2.subtract(img2,low_freq2))
     hibrid = cv2.add(low_freq1,high_freq2)
     pintaMI([low_freq1,high_freq2,hibrid])
 
