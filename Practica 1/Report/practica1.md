@@ -116,13 +116,13 @@ Los ejemplos han sido obtenidos con tamaños de máscara variando entre 3,5,7 y 
 Para comenzar el análisis hay que tener en cuenta que derivamos en la dirección (2,2) o lo que es lo mismo $2\cdot (1,1)$, es decir, esencialmente derivamos en la misma dirección que en el apartado anterior pero con mayor 'intensidad'. Esto es claramente visible cuando miramos la primera y segunda imagen. Podemos apreciar que los bordes más resaltados son los que van en la misma dirección de la derivación como se puede apreciar en las ruedas de la bicicleta o en el cuadro de la misma que son los bordes más resaltados. Así mismo podemos percibir como en el apartado anterior que cuando mayor es el tamaño de la máscara los bordes que se obtienen son más gruesos y más imprecisos.
 
 ### Apartado D
-En este apartado el objetivo era implementar una pirámide gaussiana, es decir, una secuencia de imágenes en la cual primero se aplica un suavizado gaussiano y después se hace un subsampling para obtener una imagen de menor tamaño. En el enunciado no se especificaban los bordes a usar, por lo que he tomado bordes reflejados.
+En este apartado el objetivo era implementar una pirámide gaussiana, es decir, una secuencia de imágenes en la cual primero se aplica un suavizado gaussiano y después se hace un subsampling para obtener una imagen de menor tamaño. En el enunciado no se especificaban los bordes a usar, por lo que he tomado bordes constantes.
 
 Para implementar la función he utilizado la función pyrDown que se encarga tanto del suavizado como del downsampling como se especifica en la documentación de OpenCV. Esto se repite hasta obtener los 4 niveles pedidos por defecto.
 
 Veamos un ejemplo para observar que el resultado obtenido es el esperable:
 
-![Pirámide Gaussiana](./Imagenes/2D.PNG)
+![Pirámide Gaussiana](./Imagenes/2D.png)
 
 ### Apartado E
 En este ejercicio se nos pide que implementemos la pirámide laplaciana. Esta pirámide se basa en la gaussiana por lo que nos valemos de la función implementada en el apartado anterior para implementar este.

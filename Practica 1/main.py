@@ -231,7 +231,7 @@ def convolution2dDerivMaskSecOr(img,ksize):
 def gaussianPyramid(img,levels=4):
     pyr = []
     # Se hace un downsample a la imagen. La función pyrDown implementa ya el blur.
-    img_pyr = cv2.pyrDown(img,borderType=cv2.BORDER_REFLECT)
+    img_pyr = cv2.pyrDown(img)
     pyr.append(img)
     pyr.append(img_pyr)
     # Se hace el downsample y el blur tantas veces como niveles se quieran a la imagen una y otra vez.
