@@ -73,7 +73,7 @@ $$
 Con esto lo que estamos haciendo es hacer la resta de los valores en las esquinas, o lo que es lo mismo en la dirección (1,1). Con ello lo que obtendremos de valor en el píxel será un borde si la diferencia de los valores de los píxeles en las esquinas es muy grande.
 
 ### Apartado C
-Para aplicar la laplaciana a las imágenes lo primero que tenemos que hacer es aplicar una convolución gaussiana para eliminar el ruido en la imagen. Para ello nos valemos de la función GaussianBlur ya utilizada en el apartado A con un kernel cuadrado y la varianza dada. Debemos recordar que el operador laplaciano está pensado para detectar bordes con lo que está pensado para ser aplicado a imágenes en blanco y negro. Convertimos la imagen de RGB a escala de grises y tras esto le aplicamos el operador laplaciano que consiste en sumar las derivadas de segundo orden de la imagen. Analicemos que obtenemos con esto:
+Para aplicar la laplaciana a las imágenes lo primero que tenemos que hacer es aplicar una convolución gaussiana para eliminar el ruido en la imagen. Para ello nos valemos de la función GaussianBlur ya utilizada en el apartado A con un kernel cuadrado y la varianza dada. Aplicamos tras el suavizado el operador laplaciano que consiste en sumar las derivadas de segundo orden de la imagen. Analicemos que obtenemos con esto:
 
 ![Laplacian1](./Imagenes/1C1.png)
 ![Laplacian2](./Imagenes/1C2.png)
@@ -98,18 +98,18 @@ La función está implementada a partir de la función sepFilter2D que aplica un
 ### Apartado B
 En este apartado se nos pide implementar la convolución 2D con una máscara de primera derivada con tamaño variable. Para implementar esto podemos usar getDerivKernels para obtener la máscara separable de la primera derivada en ambos sentidos, es decir, dx=1=dy y tras esto aplicar la máscara separable a la imagen mediante la función sepFilter2D.
 
-Vamos a observar los ejemplos con tamaño variable del kernel:
+Vamos a observar los ejemplos con tamaño variable del kernel, tenemos que tener en cuenta que las imágenes han sido suavizadas previamente:
 
-![Primera derivada](./Imagenes/2B.PNG)
+![Primera derivada](./Imagenes/2B.png)
 
 En primer lugar cabe destacar que los tamaños han variado tomando valores 3,5,7 y 11. Podemos observar claramente cómo varía la detección de bordes. Para empezar vemos que en la primera y en la última imagen hay bordes que no son compartidos, como por ejemplo en el borde de la misma. Este fenómeno puede ser explicado fácilmente si pensamos en la repercusión de expandir el tamaño de la máscara. Esta expansión va a provocar que hagamos muchas más sumas al valor del píxel central con  lo que al hacer más sumas el valor obtenido será mucho mayor que si tenemos un tamaño menor, con lo que podemos obtener bordes con más facilidad. El hecho de sumar un valor mayor cuanto más grande es el tamaño de la máscara podemos observarlo de igual modo entre la primera y segunda imágenes en las que no apreciamos una diferencia esencial de bordes pero por contra si vemos que los bordes se muestran mucho más blancos en la segunda imagen (con tamaño mayor de máscara) que en la primera. Así mismo al aumentar el tamaño de la máscara es más probable obtener unos bordes mucho más grandes ya que los píxeles aledaños al borde real serán tomados también como tal ya que un extremo del kernel puede caer en un lado del borde y el otro extremo en el lado contrario.
 
 Como conclusión podemos decir que si ponemos un tamaño pequeño obtendremos los bordes más significativos o con una diferencia de colores mayor y si tomamos un tamaño más grande de máscara obtendremos hasta los bordes más sutiles de forma gradiente si nos alejamos de ellos.
 
 ### Apartado C
-Para implementar la máscara de segunda derivada empleamos las mismas funciones que en el segundo apartado, pero tomando ahora dx=2=dy y aplicando sepFilter2D. Veamos los ejemplos para explicarlos:
+Para implementar la máscara de segunda derivada empleamos las mismas funciones que en el segundo apartado, pero tomando ahora dx=2=dy y aplicando sepFilter2D y aplicando un suavizado a la imagen para reducir el ruido. Veamos los ejemplos para explicarlos:
 
-![Segunda derivada](./Imagenes/2C.PNG)
+![Segunda derivada](./Imagenes/2C.png)
 
 Los ejemplos han sido obtenidos con tamaños de máscara variando entre 3,5,7 y 11.
 
