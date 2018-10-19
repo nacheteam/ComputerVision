@@ -254,10 +254,10 @@ def gaussianPyramid(img,levels=4):
 '''
 def laplacianPyramid(img,levels=4):
     # Se parte de la pirámide gaussiana.
-    pyr = gaussianPyramid(img,levels)
+    pyr = gaussianPyramid(img,levels+1)
     res = []
     # Empezamos desde el final hacia el principio
-    for i in range(levels-1,0,-1):
+    for i in range(levels,0,-1):
         # Le hacemos un upsampe a la imagen de la pirámide gaussiana
         gauss_up = cv2.pyrUp(pyr[i],dstsize=(len(pyr[i-1][0]),len(pyr[i-1])))
         # La restamos con la anterior
@@ -265,8 +265,6 @@ def laplacianPyramid(img,levels=4):
         res.append(sub)
     # Damos la vuelta a la lista de la pirámide laplaciana
     res = res[::-1]
-    # Añadimos la última imagen de la pirámide gaussiana.
-    res.append(pyr[-1])
     return res
 
 ################################################################################
