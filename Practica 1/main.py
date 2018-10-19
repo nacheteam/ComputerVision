@@ -119,10 +119,8 @@ def DerivKernel(ksize,dx,dy):
 def convolutionLaplacian(img,ksize,borderType,sigma,depth=-1):
     # Se aplica un suavizado gaussiano
     img_blur = cv2.GaussianBlur(img,(ksize,ksize),sigma)
-    # Se convierte a escala de grises
-    img_gray = cv2.cvtColor(img_blur,cv2.COLOR_RGB2GRAY)
     # Se aplica el operador laplaciano
-    laplacian = cv2.Laplacian(img_gray,depth,ksize,borderType=borderType)+30
+    laplacian = cv2.Laplacian(img_blur,depth,ksize,borderType=borderType)+30
     return laplacian
 
 
@@ -192,10 +190,12 @@ def convolution2dSeparableMaskReflected(img,kernelRow,kernelCol):
 @return Devuelve la imagen pasada como argumento con la máscara derivada aplicada.
 '''
 def convolution2dDerivMask(img,ksize):
+    # Savizamos para reducir el ruido
+    smoothed = cv2.GaussianBlur(img,(ksize,ksize),1,1)
     # Obtenemos la máscara derivada de primer orden en ambas direcciones
     kernel = DerivKernel(ksize,1,1)
     # Aplicamos la máscara
-    return cv2.sepFilter2D(img,-1,kernel[0],kernel[1])
+    return cv2.sepFilter2D(smoothed,-1,kernel[0],kernel[1])
 
 ################################################################################
 ## Apartado C: El cálculo de la convolución 2D con una máscara 2D de 2ª       ##
@@ -209,10 +209,12 @@ def convolution2dDerivMask(img,ksize):
 @return Devuelve la imagen pasada como argumento con la máscara derivada aplicada.
 '''
 def convolution2dDerivMaskSecOr(img,ksize):
+    # Savizamos para reducir el ruido
+    smoothed = cv2.GaussianBlur(img,(ksize,ksize),1,1)
     # Obtenemos la máscara derivada de segundo orden en ambas direcciones
     kernel = DerivKernel(ksize,2,2)
     # Aplicamos la máscara
-    return cv2.sepFilter2D(img,-1,kernel[0],kernel[1])
+    return cv2.sepFilter2D(smoothed,-1,kernel[0],kernel[1])
 
 ################################################################################
 ## Apartado D: Una función que genere una representación en pirámide          ##
@@ -304,7 +306,7 @@ def main():
     #Leo la imagen de lena
     img = cv2.imread("imagenes/lena.jpg",-1)
     #Leo la imagen de marilyn
-    marilyn = cv2.imread("imagenes/marilyn.bmp",-1)cuadrada
+    marilyn = cv2.imread("imagenes/marilyn.bmp",-1)
 
     #Ejercicio 1 Apartado A
     print("Convolución gaussiana.")
