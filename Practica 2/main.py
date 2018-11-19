@@ -69,13 +69,15 @@ def keyPointsSURF(img,hessianThreshold,nOctaves,nOctaveLayers,extended,upright):
 def main():
     # Ejercicio 1 apartado a
     yosemite1 = cv2.imread("imagenes/yosemite/Yosemite1.jpg",-1)
-    kp = keyPointsSIFT(yosemite1,contrastThreshold=0.04,edgeThreshold=10,sigma=1.6)
+    kp = keyPointsSIFT(yosemite1,contrastThreshold=0.06,edgeThreshold=6,sigma=1.6)
     yosemite1=cv2.drawKeypoints(yosemite1,kp,yosemite1)
+    print("El número de puntos obtenidos por SIFT: " + str(len(kp)))
     pintaI(yosemite1)
 
     yosemite1 = cv2.imread("imagenes/yosemite/Yosemite1.jpg",-1)
-    kp = keyPointsSURF(yosemite1,hessianThreshold=100,nOctaves=4,nOctaveLayers=3,extended=False,upright=False)
+    kp = keyPointsSURF(yosemite1,hessianThreshold=400,nOctaves=4,nOctaveLayers=3,extended=False,upright=False)
     yosemite1=cv2.drawKeypoints(yosemite1,kp,yosemite1)
+    print("El número de puntos obtenidos por SURF: " + str(len(kp)))
     pintaI(yosemite1)
 
 main()
