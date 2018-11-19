@@ -146,6 +146,7 @@ def obtenNumeroPuntosCapa(kp):
 @param img Imagen sobre la que se quiere superponer la información de los puntos clave
 @param kp Puntos clave de la imagen img
 @param sigma Sigma empleado en la detección de los puntos clave
+@param surf Si es true se le han pasado puntos SURF, si es false son SIFT
 '''
 def pintaCirculos(img,kp,surf=False):
     unpacked = unpackOctave(kp)
