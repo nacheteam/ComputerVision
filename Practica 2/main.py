@@ -1,5 +1,23 @@
 import numpy as np
 import cv2
+import math
+
+################################################################################
+##                                COLORES RGB                                 ##
+################################################################################
+
+AMARILLO = (255,255,51)
+ROJO = (255,0,0)
+NARANJA = (255,128,0)
+VERDE = (128,255,0)
+VERDE_AZULADO = (0,255,128)
+AZUL_CLARO = (0,255,255)
+AZUL = (0,0,255)
+MORADO = (127,0,255)
+ROSA = (255,0,255)
+GRIS = (128,128,128)
+
+COLORES = [AMARILLO,ROJO,NARANJA,VERDE,VERDE_AZULADO,AZUL_CLARO,AZUL,MORADO,ROSA,GRIS]
 
 ################################################################################
 ##                         FUNCIONES AUXILIARES                               ##
@@ -123,6 +141,19 @@ def obtenNumeroPuntosCapa(kp):
             numero_puntos[str(ol[1])]+=1
     return numero_puntos
 
+'''
+@brief Obtiene una imagen con círculos en cada punto clave del color correspondiente a la octava
+@param img Imagen sobre la que se quiere superponer la información de los puntos clave
+@param kp Puntos clave de la imagen img
+@param sigma Sigma empleado en la detección de los puntos clave
+'''
+def pintaCirculos(img,kp,sigma):
+    unpacked = unpackOctave(kp)
+    imagen_circulos = img
+    for i  in range(len(kp)):
+        imagen_circulos = cv2.circle(imagen_circulos,(int(kp[i].pt[0]),int(kp[i].pt[1])),int(math.ceil(sigma)),COLORES[unpacked[i][0]])
+    return imagen_circulos
+
 ################################################################################
 ##                                    MAIN                                    ##
 ################################################################################
@@ -131,19 +162,21 @@ def main():
     # Ejercicio 1 apartado a
     yosemite1 = cv2.imread("imagenes/yosemite/Yosemite1.jpg",-1)
     kp_sift = keyPointsSIFT(yosemite1,contrastThreshold=0.06,edgeThreshold=6,sigma=1.6)
-    yosemite1=cv2.drawKeypoints(yosemite1,kp_sift,yosemite1)
+    yosemite1_kp_sift=cv2.drawKeypoints(yosemite1,kp_sift,yosemite1)
     print("El número de puntos obtenidos por SIFT: " + str(len(kp_sift)))
-    pintaI(yosemite1)
+    pintaI(yosemite1_kp_sift)
 
     yosemite1 = cv2.imread("imagenes/yosemite/Yosemite1.jpg",-1)
     kp_surf = keyPointsSURF(yosemite1,hessianThreshold=400,nOctaves=4,nOctaveLayers=3,extended=False,upright=False)
-    yosemite1=cv2.drawKeypoints(yosemite1,kp_surf,yosemite1)
+    yosemite1_kp_surf=cv2.drawKeypoints(yosemite1,kp_surf,yosemite1)
     print("El número de puntos obtenidos por SURF: " + str(len(kp_surf)))
-    pintaI(yosemite1)
+    pintaI(yosemite1_kp_surf)
 
     # Ejercicio 1 apartado b
+    yosemite1 = cv2.imread("imagenes/yosemite/Yosemite1.jpg",-1)
     print("El número de puntos por octava en SIFT ha sido: " + str(obtenNumeroPuntosOctava(kp_sift)))
     print("El número de puntos por octava en SURF ha sido: " + str(obtenNumeroPuntosOctava(kp_surf)))
     print("El número de puntos por capa en SIFT ha sido: " + str(obtenNumeroPuntosCapa(kp_sift)))
+    pintaI(pintaCirculos(yosemite1,kp_sift,1.6))
 
 main()
