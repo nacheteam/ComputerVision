@@ -62,6 +62,33 @@ def keyPointsSURF(img,hessianThreshold,nOctaves,nOctaveLayers,extended,upright):
     kp = sift.detect(img,None)
     return kp
 
+def unpackSIFTOctave(kp):
+    """unpackSIFTOctave(kpt)->(octave,layer,scale)
+    @created by Silencer at 2018.01.23 11:12:30 CST
+    @brief Unpack Sift Keypoint by Silencer
+    @param kpt: cv2.KeyPoint (of SIFT)
+    """
+    unpacked = []
+    for kpt in kp:
+        _octave = kpt.octave
+        octave = _octave&0xFF
+        layer  = (_octave>>8)&0xFF
+        if octave>=128:
+            octave |= -128
+            octave+=1
+        unpacked.append([octave,layer])
+    return unpacked
+
+def obtenNumeroPuntosOctava(kp):
+    unpacked = unpackSIFTOctave(kp)
+    numero_puntos = {}
+    for ol in unpacked:
+        if not str(ol[0]) in numero_puntos:
+            numero_puntos[str(ol[0])]=1
+        else:
+            numero_puntos[str(ol[0])]+=1
+    return numero_puntos
+
 ################################################################################
 ##                                    MAIN                                    ##
 ################################################################################
@@ -69,15 +96,19 @@ def keyPointsSURF(img,hessianThreshold,nOctaves,nOctaveLayers,extended,upright):
 def main():
     # Ejercicio 1 apartado a
     yosemite1 = cv2.imread("imagenes/yosemite/Yosemite1.jpg",-1)
-    kp = keyPointsSIFT(yosemite1,contrastThreshold=0.06,edgeThreshold=6,sigma=1.6)
-    yosemite1=cv2.drawKeypoints(yosemite1,kp,yosemite1)
-    print("El número de puntos obtenidos por SIFT: " + str(len(kp)))
+    kp_sift = keyPointsSIFT(yosemite1,contrastThreshold=0.06,edgeThreshold=6,sigma=1.6)
+    yosemite1=cv2.drawKeypoints(yosemite1,kp_sift,yosemite1)
+    print("El número de puntos obtenidos por SIFT: " + str(len(kp_sift)))
     pintaI(yosemite1)
 
     yosemite1 = cv2.imread("imagenes/yosemite/Yosemite1.jpg",-1)
-    kp = keyPointsSURF(yosemite1,hessianThreshold=400,nOctaves=4,nOctaveLayers=3,extended=False,upright=False)
-    yosemite1=cv2.drawKeypoints(yosemite1,kp,yosemite1)
-    print("El número de puntos obtenidos por SURF: " + str(len(kp)))
+    kp_surf = keyPointsSURF(yosemite1,hessianThreshold=400,nOctaves=4,nOctaveLayers=3,extended=False,upright=False)
+    yosemite1=cv2.drawKeypoints(yosemite1,kp_surf,yosemite1)
+    print("El número de puntos obtenidos por SURF: " + str(len(kp_surf)))
     pintaI(yosemite1)
+
+    # Ejercicio 1 apartado b
+    print("El número de puntos por octava en SIFT ha sido: " + str(obtenNumeroPuntosOctava(kp_sift)))
+    print("El número de puntos por octava en SURF ha sido: " + str(obtenNumeroPuntosOctava(kp_surf)))
 
 main()
