@@ -105,6 +105,16 @@ def obtenNumeroPuntosOctava(kp):
             numero_puntos[str(ol[0])]+=1
     return numero_puntos
 
+def obtenNumeroPuntosCapa(kp):
+    unpacked = unpackOctave(kp)
+    numero_puntos = {}
+    for ol in unpacked:
+        if not str(ol[1]) in numero_puntos:
+            numero_puntos[str(ol[1])]=1
+        else:
+            numero_puntos[str(ol[1])]+=1
+    return numero_puntos
+
 ################################################################################
 ##                                    MAIN                                    ##
 ################################################################################
@@ -126,5 +136,6 @@ def main():
     # Ejercicio 1 apartado b
     print("El número de puntos por octava en SIFT ha sido: " + str(obtenNumeroPuntosOctava(kp_sift)))
     print("El número de puntos por octava en SURF ha sido: " + str(obtenNumeroPuntosOctava(kp_surf)))
+    print("El número de puntos por capa en SIFT ha sido: " + str(obtenNumeroPuntosCapa(kp_sift)))
 
 main()
