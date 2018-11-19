@@ -147,11 +147,14 @@ def obtenNumeroPuntosCapa(kp):
 @param kp Puntos clave de la imagen img
 @param sigma Sigma empleado en la detección de los puntos clave
 '''
-def pintaCirculos(img,kp,sigma):
+def pintaCirculos(img,kp,surf=False):
     unpacked = unpackOctave(kp)
     imagen_circulos = img
     for i  in range(len(kp)):
-        imagen_circulos = cv2.circle(imagen_circulos,(int(kp[i].pt[0]),int(kp[i].pt[1])),int(math.ceil(sigma)),COLORES[unpacked[i][0]])
+        if not surf:
+            imagen_circulos = cv2.circle(imagen_circulos,(int(kp[i].pt[0]),int(kp[i].pt[1])),int(kp[i].size),COLORES[unpacked[i][0]])
+        else:
+            imagen_circulos = cv2.circle(imagen_circulos,(int(kp[i].pt[0]),int(kp[i].pt[1])),int(kp[i].size/7),COLORES[unpacked[i][0]])
     return imagen_circulos
 
 ################################################################################
@@ -177,6 +180,7 @@ def main():
     print("El número de puntos por octava en SIFT ha sido: " + str(obtenNumeroPuntosOctava(kp_sift)))
     print("El número de puntos por octava en SURF ha sido: " + str(obtenNumeroPuntosOctava(kp_surf)))
     print("El número de puntos por capa en SIFT ha sido: " + str(obtenNumeroPuntosCapa(kp_sift)))
-    pintaI(pintaCirculos(yosemite1,kp_sift,1.6))
+    pintaI(pintaCirculos(yosemite1,kp_sift))
+    pintaI(pintaCirculos(yosemite1,kp_surf,surf=True))
 
 main()
