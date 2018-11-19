@@ -81,7 +81,7 @@ def keyPointsSURF(img,hessianThreshold,nOctaves,nOctaveLayers,extended,upright):
 
 '''
 @brief Obtiene la octava y la capa de los puntos dados.
-@param kp puntos clave de los que se quieren obtener información.
+@param kp puntos clave de los que se quieren obtener información. (lista)
 '''
 def unpackOctave(kp):
     unpacked = []
@@ -95,6 +95,10 @@ def unpackOctave(kp):
         unpacked.append([octava,capa])
     return unpacked
 
+'''
+@brief Obtiene un diccionario con el número de puntos por cada octava
+@param kp Puntos clave (lista)
+'''
 def obtenNumeroPuntosOctava(kp):
     unpacked = unpackOctave(kp)
     numero_puntos = {}
@@ -105,6 +109,10 @@ def obtenNumeroPuntosOctava(kp):
             numero_puntos[str(ol[0])]+=1
     return numero_puntos
 
+'''
+@brief Obtiene un diccionario con el número de puntos por cada capa
+@param kp Puntos clave (lista)
+'''
 def obtenNumeroPuntosCapa(kp):
     unpacked = unpackOctave(kp)
     numero_puntos = {}
