@@ -51,36 +51,52 @@ def pintaMI(vim):
 ##                              EJERCICIO 1                                   ##
 ################################################################################
 
+'''
+@brief Función que obtiene los puntos clave de la imagen img con los parámetros dados.
+@param img Imagen de opencv de la que se quieren obtener los puntos clave
+@param contrastThreshold parámetro de umbral de SIFT (es un double)
+@param edgeThreshold parámetro de umbral de SIFT para la detección de puntos en los bordes de las figuras de la imagen (es un double)
+@param sigma parámetro de la Gaussiana (es un double).
+'''
 def keyPointsSIFT(img,contrastThreshold,edgeThreshold,sigma):
     sift = cv2.xfeatures2d.SIFT_create(nfeatures=0,nOctaveLayers=3,contrastThreshold=contrastThreshold,edgeThreshold=edgeThreshold,sigma=sigma)
     kp = sift.detect(img,None)
     return kp
 
 
+'''
+@brief Función que obtiene los puntos clave de la imagen img con los parámetros dados.
+@param img Imagen de opencv de la que se quieren obtener los puntos clave
+@param hessianThreshold parámetro de umbral para el valor de la hessiana de los posibles puntos clave (es un double)
+@param nOctaves número de octavas (es un entero)
+@param nOctaveLayers número de capas (es un entero)
+@param extended booleano de información extendida
+@param upright booleano de detección de características en vertical y rotadas.
+'''
 def keyPointsSURF(img,hessianThreshold,nOctaves,nOctaveLayers,extended,upright):
     sift = cv2.xfeatures2d.SURF_create(hessianThreshold=hessianThreshold,nOctaves=nOctaves,nOctaveLayers=nOctaveLayers,extended=extended,upright=upright)
     kp = sift.detect(img,None)
     return kp
 
-def unpackSIFTOctave(kp):
-    """unpackSIFTOctave(kpt)->(octave,layer,scale)
-    @created by Silencer at 2018.01.23 11:12:30 CST
-    @brief Unpack Sift Keypoint by Silencer
-    @param kpt: cv2.KeyPoint (of SIFT)
-    """
+
+'''
+@brief Obtiene la octava y la capa de los puntos dados.
+@param kp puntos clave de los que se quieren obtener información.
+'''
+def unpackOctave(kp):
     unpacked = []
     for kpt in kp:
-        _octave = kpt.octave
-        octave = _octave&0xFF
-        layer  = (_octave>>8)&0xFF
-        if octave>=128:
-            octave |= -128
-            octave+=1
-        unpacked.append([octave,layer])
+        oc = kpt.octave
+        octava = oc&0xFF
+        capa  = (oc>>8)&0xFF
+        if octava>=128:
+            octava |= -128
+            octava+=1
+        unpacked.append([octava,capa])
     return unpacked
 
 def obtenNumeroPuntosOctava(kp):
-    unpacked = unpackSIFTOctave(kp)
+    unpacked = unpackOctave(kp)
     numero_puntos = {}
     for ol in unpacked:
         if not str(ol[0]) in numero_puntos:
