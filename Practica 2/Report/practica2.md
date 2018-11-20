@@ -60,3 +60,22 @@ Como podemos observar hay un punto en concreto que destaca por el gran radio de 
 ![Círculos SURF](./Imagenes/1B_SURF.png)
 
 Se puede observar en el caso de SURF que se comparten puntos con SIFT en los que se ha aplicado un suavizado muy grande hasta detectarlos como puntos de interés.
+
+### Apartado C
+**\underline{Enunciado:}**
+Mostrar cómo con el vector de keyPoint extraídos se pueden calcular los descriptores SIFT y SURF asociados a cada punto usando OpenCV.
+
+**\underline{Solución:}**
+Para poder calcular los descriptores utilizando ya los keyPoints calculados en los apartados anteriores OpenCV tiene la función 'compute'.
+
+La función compute es válida tanto para objetos SIFT como SURF, de forma que dados los keyPoints y la imagen se pueden obtener los descriptores asignados a dichos puntos de interés.
+
+Aquí podemos ver la salida de los keyPoints para SIFT:
+
+![Descriptores SIFT](./Imagenes/1C_Descriptores_SIFT.png)
+
+![Descriptores SIFT y SURF](./Imagenes/1C_Descriptores_SIFT_SURF.png)
+
+![Descriptores SURF](./Imagenes/11C_Descriptores_SURF.png)
+
+OpenCV también ofrece un método que calcula los descriptores y los puntos de interés en una sola orden: detectAndCompute. Esta orden funciona igual que la detección de puntos de interés, con la única diferencia de que devuelve dos objetos: los puntos de interés y los descriptores.
