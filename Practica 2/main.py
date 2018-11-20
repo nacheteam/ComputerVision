@@ -92,8 +92,8 @@ def keyPointsSIFT(img,contrastThreshold,edgeThreshold,sigma):
 @param upright booleano de detección de características en vertical y rotadas.
 '''
 def keyPointsSURF(img,hessianThreshold,nOctaves,nOctaveLayers,extended,upright):
-    sift = cv2.xfeatures2d.SURF_create(hessianThreshold=hessianThreshold,nOctaves=nOctaves,nOctaveLayers=nOctaveLayers,extended=extended,upright=upright)
-    kp = sift.detect(img,None)
+    surf = cv2.xfeatures2d.SURF_create(hessianThreshold=hessianThreshold,nOctaves=nOctaves,nOctaveLayers=nOctaveLayers,extended=extended,upright=upright)
+    kp = surf.detect(img,None)
     return kp
 
 
@@ -158,6 +158,26 @@ def pintaCirculos(img,kp,surf=False):
             imagen_circulos = cv2.circle(imagen_circulos,(int(kp[i].pt[0]),int(kp[i].pt[1])),int(kp[i].size/7),COLORES[unpacked[i][0]])
     return imagen_circulos
 
+'''
+@brief Función que obtiene el vector de descriptores.
+@param img Imagen de la que queremos obtener los descriptores.
+@param kp Puntos de interés de la imagen img.
+@param sift Objeto SIFT empleado en la detección de los puntos de interes kp de img.
+'''
+def obtenerDescriptoresSIFT(img,kp,sift):
+    des = sift.compute(img,kp)
+    return des
+
+'''
+@brief Función que obtiene el vector de descriptores.
+@param img Imagen de la que queremos obtener los descriptores.
+@param kp Puntos de interés de la imagen img.
+@param surf Objeto SURF empleado en la detección de los puntos de interes kp de img.
+'''
+def obtenerDescriptoresSURF(img,kp,surf):
+    des = surf.compute(img,kp)
+    return des
+
 ################################################################################
 ##                                    MAIN                                    ##
 ################################################################################
@@ -183,5 +203,16 @@ def main():
     print("El número de puntos por capa en SIFT ha sido: " + str(obtenNumeroPuntosCapa(kp_sift)))
     pintaI(pintaCirculos(yosemite1,kp_sift))
     pintaI(pintaCirculos(yosemite1,kp_surf,surf=True))
+
+    # Ejercicio 1 apartado c
+    yosemite1 = cv2.imread("imagenes/yosemite/Yosemite1.jpg",-1)
+    sift = cv2.xfeatures2d.SIFT_create(nfeatures=0,nOctaveLayers=3,contrastThreshold=0.06,edgeThreshold=6,sigma=1.6)
+    surf = cv2.xfeatures2d.SURF_create(hessianThreshold=400,nOctaves=4,nOctaveLayers=3,extended=False,upright=False)
+    kp_sift = sift.detect(yosemite1,None)
+    kp_surf = surf.detect(yosemite1,None)
+    descriptores_sift = sift.compute(yosemite1,kp_sift)
+    descriptores_surf = surf.compute(yosemite1,kp_surf)
+    print("Descriptores SIFT: " + str(descriptores_sift))
+    print("Descriptores SURF: " + str(descriptores_surf))
 
 main()
