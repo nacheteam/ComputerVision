@@ -179,40 +179,90 @@ def obtenerDescriptoresSURF(img,kp,surf):
     return des
 
 ################################################################################
+##                              EJERCICIO 2                                   ##
+################################################################################
+
+def obtenerImagenBruteForceMatching(img1,img2):
+    print("Hey")
+
+################################################################################
 ##                                    MAIN                                    ##
 ################################################################################
 
 def main():
     # Ejercicio 1 apartado a
+    print("Imagen Yosemite1")
+
     yosemite1 = cv2.imread("imagenes/yosemite/Yosemite1.jpg",-1)
-    kp_sift = keyPointsSIFT(yosemite1,contrastThreshold=0.06,edgeThreshold=6,sigma=1.6)
-    yosemite1_kp_sift=cv2.drawKeypoints(yosemite1,kp_sift,yosemite1)
-    print("El número de puntos obtenidos por SIFT: " + str(len(kp_sift)))
+    kp_sift1 = keyPointsSIFT(yosemite1,contrastThreshold=0.06,edgeThreshold=6,sigma=1.6)
+    yosemite1_kp_sift=cv2.drawKeypoints(yosemite1,kp_sift1,yosemite1)
+    print("El número de puntos obtenidos por SIFT: " + str(len(kp_sift1)))
     pintaI(yosemite1_kp_sift)
 
     yosemite1 = cv2.imread("imagenes/yosemite/Yosemite1.jpg",-1)
-    kp_surf = keyPointsSURF(yosemite1,hessianThreshold=400,nOctaves=4,nOctaveLayers=3,extended=False,upright=False)
-    yosemite1_kp_surf=cv2.drawKeypoints(yosemite1,kp_surf,yosemite1)
-    print("El número de puntos obtenidos por SURF: " + str(len(kp_surf)))
+    kp_surf1 = keyPointsSURF(yosemite1,hessianThreshold=400,nOctaves=4,nOctaveLayers=3,extended=False,upright=False)
+    yosemite1_kp_surf=cv2.drawKeypoints(yosemite1,kp_surf1,yosemite1)
+    print("El número de puntos obtenidos por SURF: " + str(len(kp_surf1)))
     pintaI(yosemite1_kp_surf)
 
+    print("Imagen Yosemite2")
+
+    yosemite2 = cv2.imread("imagenes/yosemite/Yosemite2.jpg",-1)
+    kp_sift2 = keyPointsSIFT(yosemite2,contrastThreshold=0.06,edgeThreshold=4,sigma=1.6)
+    yosemite1_kp_sift=cv2.drawKeypoints(yosemite2,kp_sift2,yosemite1)
+    print("El número de puntos obtenidos por SIFT: " + str(len(kp_sift2)))
+    pintaI(yosemite1_kp_sift)
+
+    yosemite2 = cv2.imread("imagenes/yosemite/Yosemite2.jpg",-1)
+    kp_surf2 = keyPointsSURF(yosemite2,hessianThreshold=500,nOctaves=4,nOctaveLayers=3,extended=False,upright=False)
+    yosemite2_kp_surf=cv2.drawKeypoints(yosemite2,kp_surf2,yosemite1)
+    print("El número de puntos obtenidos por SURF: " + str(len(kp_surf2)))
+    pintaI(yosemite2_kp_surf)
+
     # Ejercicio 1 apartado b
+    print("Imagen Yosemite1")
+
     yosemite1 = cv2.imread("imagenes/yosemite/Yosemite1.jpg",-1)
-    print("El número de puntos por octava en SIFT ha sido: " + str(obtenNumeroPuntosOctava(kp_sift)))
-    print("El número de puntos por octava en SURF ha sido: " + str(obtenNumeroPuntosOctava(kp_surf)))
-    print("El número de puntos por capa en SIFT ha sido: " + str(obtenNumeroPuntosCapa(kp_sift)))
-    pintaI(pintaCirculos(yosemite1,kp_sift))
-    pintaI(pintaCirculos(yosemite1,kp_surf,surf=True))
+    print("Imagen Yosemite 1")
+    print("El número de puntos por octava en SIFT ha sido: " + str(obtenNumeroPuntosOctava(kp_sift1)))
+    print("El número de puntos por octava en SURF ha sido: " + str(obtenNumeroPuntosOctava(kp_surf1)))
+    print("El número de puntos por capa en SIFT ha sido: " + str(obtenNumeroPuntosCapa(kp_sift1)))
+    pintaI(pintaCirculos(yosemite1,kp_sift1))
+    pintaI(pintaCirculos(yosemite1,kp_surf1,surf=True))
+
+    print("Imagen Yosemite2")
+
+    yosemite2 = cv2.imread("imagenes/yosemite/Yosemite2.jpg",-1)
+    print("Imagen Yosemite 2")
+    print("El número de puntos por octava en SIFT ha sido: " + str(obtenNumeroPuntosOctava(kp_sift2)))
+    print("El número de puntos por octava en SURF ha sido: " + str(obtenNumeroPuntosOctava(kp_surf2)))
+    print("El número de puntos por capa en SIFT ha sido: " + str(obtenNumeroPuntosCapa(kp_sift2)))
+    pintaI(pintaCirculos(yosemite2,kp_sift2))
+    pintaI(pintaCirculos(yosemite2,kp_surf2,surf=True))
 
     # Ejercicio 1 apartado c
+    print("Imagen Yosemite1")
+
     yosemite1 = cv2.imread("imagenes/yosemite/Yosemite1.jpg",-1)
-    sift = cv2.xfeatures2d.SIFT_create(nfeatures=0,nOctaveLayers=3,contrastThreshold=0.06,edgeThreshold=6,sigma=1.6)
-    surf = cv2.xfeatures2d.SURF_create(hessianThreshold=400,nOctaves=4,nOctaveLayers=3,extended=False,upright=False)
-    kp_sift = sift.detect(yosemite1,None)
-    kp_surf = surf.detect(yosemite1,None)
-    descriptores_sift = sift.compute(yosemite1,kp_sift)
-    descriptores_surf = surf.compute(yosemite1,kp_surf)
-    print("Descriptores SIFT: " + str(descriptores_sift))
-    print("Descriptores SURF: " + str(descriptores_surf))
+    sift1 = cv2.xfeatures2d.SIFT_create(nfeatures=0,nOctaveLayers=3,contrastThreshold=0.06,edgeThreshold=6,sigma=1.6)
+    surf1 = cv2.xfeatures2d.SURF_create(hessianThreshold=400,nOctaves=4,nOctaveLayers=3,extended=False,upright=False)
+    kp_sift1 = sift1.detect(yosemite1,None)
+    kp_surf1 = surf1.detect(yosemite1,None)
+    descriptores_sift1 = sift1.compute(yosemite1,kp_sift1)
+    descriptores_surf1 = surf1.compute(yosemite1,kp_surf1)
+    print("Descriptores SIFT: " + str(descriptores_sift1))
+    print("Descriptores SURF: " + str(descriptores_surf1))
+
+    print("Imagen Yosemite2")
+
+    yosemite2 = cv2.imread("imagenes/yosemite/Yosemite2.jpg",-1)
+    sift2 = cv2.xfeatures2d.SIFT_create(nfeatures=0,nOctaveLayers=3,contrastThreshold=0.06,edgeThreshold=6,sigma=1.6)
+    surf2 = cv2.xfeatures2d.SURF_create(hessianThreshold=400,nOctaves=4,nOctaveLayers=3,extended=False,upright=False)
+    kp_sift2 = sift2.detect(yosemite2,None)
+    kp_surf2 = surf2.detect(yosemite2,None)
+    descriptores_sift2 = sift2.compute(yosemite2,kp_sift2)
+    descriptores_surf2 = surf2.compute(yosemite2,kp_surf2)
+    print("Descriptores SIFT: " + str(descriptores_sift2))
+    print("Descriptores SURF: " + str(descriptores_surf2))
 
 main()
