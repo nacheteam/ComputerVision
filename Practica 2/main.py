@@ -1,6 +1,7 @@
 import numpy as np
 import cv2
-import math
+import random
+random.seed(123456789)
 
 ################################################################################
 ##                                COLORES RGB                                 ##
@@ -182,8 +183,30 @@ def obtenerDescriptoresSURF(img,kp,surf):
 ##                              EJERCICIO 2                                   ##
 ################################################################################
 
-def obtenerImagenBruteForceMatching(img1,img2):
-    print("Hey")
+def obtenerImagenBruteForceMatching(img1,img2,kp_sift1,kp_sift2,des1,des2,crossCheck,nMatches):
+    brute_force = cv2.BFMatcher(cv2.NORM_L2,crossCheck=crossCheck)
+    matches = brute_force.match(des1,des2)
+    random_seq = random.sample(range(len(matches)),nMatches)
+    rand_matches = [matches[i] for i in random_seq]
+    matched = cv2.drawMatches(img1,kp_sift1,img2,kp_sift2,rand_matches,None, flags=2)
+    return matched
+
+def obtenerImagenLoweAverage2NNMatching(img1,img2,kp_sift1,kp_sift2,des1,des2,nMatches):
+    brute_force = cv2.BFMatcher(cv2.NORM_L2,crossCheck=False)
+    matches = brute_force.knnMatch(des1,des2,k=2)
+
+    buenos = []
+    for mat1,mat2 in matches:
+        if mat1.distance < 0.75*mat2.distance:
+            buenos.append([mat1])
+
+    random_seq = random.sample(range(len(buenos)),nMatches)
+    rand_matches = [buenos[i] for i in random_seq]
+
+    outImg = np.zeros((100,100))
+
+    res = cv2.drawMatchesKnn(img1,kp_sift1,img2,kp_sift2,rand_matches,outImg,flags=2)
+    return res
 
 ################################################################################
 ##                                    MAIN                                    ##
@@ -246,8 +269,8 @@ def main():
     surf1 = cv2.xfeatures2d.SURF_create(hessianThreshold=400,nOctaves=4,nOctaveLayers=3,extended=False,upright=False)
     kp_sift1 = sift1.detect(yosemite1,None)
     kp_surf1 = surf1.detect(yosemite1,None)
-    descriptores_sift1 = sift1.compute(yosemite1,kp_sift1)
-    descriptores_surf1 = surf1.compute(yosemite1,kp_surf1)
+    _, descriptores_sift1 = sift1.compute(yosemite1,kp_sift1)
+    _, descriptores_surf1 = surf1.compute(yosemite1,kp_surf1)
     print("Descriptores SIFT: " + str(descriptores_sift1))
     print("Descriptores SURF: " + str(descriptores_surf1))
 
@@ -258,9 +281,18 @@ def main():
     surf2 = cv2.xfeatures2d.SURF_create(hessianThreshold=400,nOctaves=4,nOctaveLayers=3,extended=False,upright=False)
     kp_sift2 = sift2.detect(yosemite2,None)
     kp_surf2 = surf2.detect(yosemite2,None)
-    descriptores_sift2 = sift2.compute(yosemite2,kp_sift2)
-    descriptores_surf2 = surf2.compute(yosemite2,kp_surf2)
+    _, descriptores_sift2 = sift2.compute(yosemite2,kp_sift2)
+    _, descriptores_surf2 = surf2.compute(yosemite2,kp_surf2)
     print("Descriptores SIFT: " + str(descriptores_sift2))
     print("Descriptores SURF: " + str(descriptores_surf2))
+
+    # Ejercicio 2a
+    print("Fuerza bruta+crosscheck")
+    res_bf_ck = obtenerImagenBruteForceMatching(yosemite1,yosemite2,kp_sift1,kp_sift2,descriptores_sift1,descriptores_sift2,True,100)
+    pintaI(res_bf_ck)
+
+    print("Fuerza Lowe-Average 2NN")
+    res_la_2nn = obtenerImagenLoweAverage2NNMatching(yosemite1,yosemite2,kp_sift1,kp_sift2,descriptores_sift1,descriptores_sift2,100)
+    pintaI(res_la_2nn)
 
 main()
