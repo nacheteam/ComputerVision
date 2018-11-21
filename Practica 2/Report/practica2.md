@@ -84,12 +84,18 @@ Para poder calcular los descriptores utilizando ya los keyPoints calculados en l
 
 La función compute es válida tanto para objetos SIFT como SURF, de forma que dados los keyPoints y la imagen se pueden obtener los descriptores asignados a dichos puntos de interés.
 
-Aquí podemos ver la salida de los keyPoints para SIFT:
+Aquí podemos ver la salida de los keyPoints para SIFT y SURF sobre Yosemite1 y Yosemite2:
 
-![Descriptores SIFT](./Imagenes/1C_Descriptores_SIFT.png)
+![Descriptores SIFT Yosemite1](./Imagenes/1C_Descriptores_SIFT_yosemite1.png)
 
-![Descriptores SIFT y SURF](./Imagenes/1C_Descriptores_SIFT_SURF.png)
+![Descriptores SIFT y SURF Yosemite1](./Imagenes/1C_Descriptores_SIFT_SURF_yosemite1.png)
 
-![Descriptores SURF](./Imagenes/11C_Descriptores_SURF.png)
+![Descriptores SURF Yosemite1](./Imagenes/11C_Descriptores_SURF_yosemite1.png)
+
+![Descriptores SIFT Yosemite2](./Imagenes/1C_Descriptores_SIFT_yosemite2.png)
+
+![Descriptores SIFT y SURF Yosemite2](./Imagenes/1C_Descriptores_SIFT_SURF_yosemite2.png)
+
+![Descriptores SURF Yosemite2](./Imagenes/1C_Descriptores_SURF_yosemite2.png)
 
 OpenCV también ofrece un método que calcula los descriptores y los puntos de interés en una sola orden: detectAndCompute. Esta orden funciona igual que la detección de puntos de interés, con la única diferencia de que devuelve dos objetos: los puntos de interés y los descriptores.
