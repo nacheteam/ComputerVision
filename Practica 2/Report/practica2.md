@@ -90,7 +90,7 @@ Aquí podemos ver la salida de los keyPoints para SIFT y SURF sobre Yosemite1 y 
 
 ![Descriptores SIFT y SURF Yosemite1](./Imagenes/1C_Descriptores_SIFT_SURF_yosemite1.png)
 
-![Descriptores SURF Yosemite1](./Imagenes/11C_Descriptores_SURF_yosemite1.png)
+![Descriptores SURF Yosemite1](./Imagenes/1C_Descriptores_SURF_yosemite1.png)
 
 ![Descriptores SIFT Yosemite2](./Imagenes/1C_Descriptores_SIFT_yosemite2.png)
 
