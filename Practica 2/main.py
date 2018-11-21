@@ -197,10 +197,17 @@ usando las correspondencias BruteForce y CrossCheck
 @return Imagen con los matches
 '''
 def obtenerImagenBruteForceMatching(img1,img2,kp_sift1,kp_sift2,des1,des2,crossCheck,nMatches):
+    # Se crea el objeto BFMatcher con norma L2 y con el crosscheck que le hayamos pasado
     brute_force = cv2.BFMatcher(cv2.NORM_L2,crossCheck=crossCheck)
+    # Se obtiene el matching
     matches = brute_force.match(des1,des2)
+
+    # Se obtiene una muestra sin reemplazamiento
     random_seq = random.sample(range(len(matches)),nMatches)
     rand_matches = [matches[i] for i in random_seq]
+
+    #Se obtiene la imagen con las correspondencias. El flag está puesto a 2 para que no dibuje
+    #los keypoints sin correspondencias.
     matched = cv2.drawMatches(img1,kp_sift1,img2,kp_sift2,rand_matches,None, flags=2)
     return matched
 
@@ -217,19 +224,26 @@ las correspondencias Lowe-Average-2NN
 @return Imagen con los matches
 '''
 def obtenerImagenLoweAverage2NNMatching(img1,img2,kp_sift1,kp_sift2,des1,des2,nMatches):
+    # Se crea el objeto BFMatcher con la norma L2 y con el crossCheck a False puesto que no es necesario
     brute_force = cv2.BFMatcher(cv2.NORM_L2,crossCheck=False)
+    # Se encuentran las correspondencias con k=2
     matches = brute_force.knnMatch(des1,des2,k=2)
 
+    # Se aplica el test de Lowe para quedarnos con puntos cercanos
     buenos = []
     for mat1,mat2 in matches:
         if mat1.distance < 0.75*mat2.distance:
             buenos.append([mat1])
 
+    # Tomamos una muestra sin reemplazamiento sobre los cribados por el test
     random_seq = random.sample(range(len(buenos)),nMatches)
     rand_matches = [buenos[i] for i in random_seq]
 
+    # Creamos una imagen a ceros necesaria para el drawMatchesKnn
     outImg = np.zeros((100,100))
 
+    # Obtenemos la imagen con las correspondencias con el flags=2 para que no nos pinte
+    # los key points sin correspondencias.
     res = cv2.drawMatchesKnn(img1,kp_sift1,img2,kp_sift2,rand_matches,outImg,flags=2)
     return res
 
