@@ -223,7 +223,6 @@ def main():
     print("Imagen Yosemite1")
 
     yosemite1 = cv2.imread("imagenes/yosemite/Yosemite1.jpg",-1)
-    print("Imagen Yosemite 1")
     print("El número de puntos por octava en SIFT ha sido: " + str(obtenNumeroPuntosOctava(kp_sift1)))
     print("El número de puntos por octava en SURF ha sido: " + str(obtenNumeroPuntosOctava(kp_surf1)))
     print("El número de puntos por capa en SIFT ha sido: " + str(obtenNumeroPuntosCapa(kp_sift1)))
@@ -233,7 +232,6 @@ def main():
     print("Imagen Yosemite2")
 
     yosemite2 = cv2.imread("imagenes/yosemite/Yosemite2.jpg",-1)
-    print("Imagen Yosemite 2")
     print("El número de puntos por octava en SIFT ha sido: " + str(obtenNumeroPuntosOctava(kp_sift2)))
     print("El número de puntos por octava en SURF ha sido: " + str(obtenNumeroPuntosOctava(kp_surf2)))
     print("El número de puntos por capa en SIFT ha sido: " + str(obtenNumeroPuntosCapa(kp_sift2)))
