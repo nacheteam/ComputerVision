@@ -183,6 +183,19 @@ def obtenerDescriptoresSURF(img,kp,surf):
 ##                              EJERCICIO 2                                   ##
 ################################################################################
 
+'''
+@brief La función obtiene la imagen con las ocurrencias de los descriptores entre img1 y img2
+usando las correspondencias BruteForce y CrossCheck
+@param img1 Imagen con la que se quiere establecer una correspondencia entre descriptores
+@param img2 Imagen con la que se quiere establecer una correspondencia entre descriptores
+@param kp_sift1 Puntos de interés de la imagen 1 usando SIFT
+@param kp_sift2 Puntos de interés de la imagen 2 usando SIFT
+@param des1 Descriptores de la imagen 1 de los puntos de interés kp_sift1
+@param des2 Descriptores de la imagen 2 de los puntos de interés kp_sift2
+@param crossCheck Booleano que indica si se activa o no el Cross Check
+@param nMatches Número de matches que se quiere obtener en la imagen devuelta.
+@return Imagen con los matches
+'''
 def obtenerImagenBruteForceMatching(img1,img2,kp_sift1,kp_sift2,des1,des2,crossCheck,nMatches):
     brute_force = cv2.BFMatcher(cv2.NORM_L2,crossCheck=crossCheck)
     matches = brute_force.match(des1,des2)
@@ -191,6 +204,18 @@ def obtenerImagenBruteForceMatching(img1,img2,kp_sift1,kp_sift2,des1,des2,crossC
     matched = cv2.drawMatches(img1,kp_sift1,img2,kp_sift2,rand_matches,None, flags=2)
     return matched
 
+'''
+@brief La función obtiene la imagen con las ocurrencias de los descriptores entre img1 y img2
+las correspondencias Lowe-Average-2NN
+@param img1 Imagen con la que se quiere establecer una correspondencia entre descriptores
+@param img2 Imagen con la que se quiere establecer una correspondencia entre descriptores
+@param kp_sift1 Puntos de interés de la imagen 1 usando SIFT
+@param kp_sift2 Puntos de interés de la imagen 2 usando SIFT
+@param des1 Descriptores de la imagen 1 de los puntos de interés kp_sift1
+@param des2 Descriptores de la imagen 2 de los puntos de interés kp_sift2
+@param nMatches Número de matches que se quiere obtener en la imagen devuelta.
+@return Imagen con los matches
+'''
 def obtenerImagenLoweAverage2NNMatching(img1,img2,kp_sift1,kp_sift2,des1,des2,nMatches):
     brute_force = cv2.BFMatcher(cv2.NORM_L2,crossCheck=False)
     matches = brute_force.knnMatch(des1,des2,k=2)
