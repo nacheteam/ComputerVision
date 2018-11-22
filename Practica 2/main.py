@@ -1,6 +1,7 @@
 import numpy as np
 import cv2
 import random
+import math
 random.seed(123456789)
 
 ################################################################################
@@ -248,10 +249,60 @@ def obtenerImagenLoweAverage2NNMatching(img1,img2,kp_sift1,kp_sift2,des1,des2,nM
     return res
 
 ################################################################################
+##                              EJERCICIO 3                                   ##
+################################################################################
+
+def obtenerMosaico(images):
+    homografias = []
+
+    sift = cv2.xfeatures2d.SIFT_create()
+    kp_image1, descriptores_image1 = sift.detectAndCompute(images[0],None)
+    kp_image2, descriptores_image2 = sift.detectAndCompute(images[1],None)
+    kp_image3, descriptores_image3 = sift.detectAndCompute(images[2],None)
+
+    # Calculamos los matches
+    brute_force = cv2.BFMatcher(cv2.NORM_L2,crossCheck=False)
+    matches = brute_force.knnMatch(descriptores_image2,descriptores_image1,k=2)
+    buenos_matches = []
+    for mat1,mat2 in matches:
+        if mat1.distance < 0.75*mat2.distance:
+            buenos_matches.append(mat1)
+
+    p1 = np.array([kp_image1[match.trainIdx].pt for match in buenos_matches])
+    p2 = np.array([kp_image2[match.queryIdx].pt for match in buenos_matches])
+    H = cv2.findHomography(p2,p1,cv2.RANSAC,1)
+    homografias.append(H)
+
+    homografias.append(np.float32(np.array([[1,0,750],[0,1,350],[0,0,1]])))
+
+    # Calculamos los matches
+    brute_force = cv2.BFMatcher(cv2.NORM_L2,crossCheck=False)
+    matches = brute_force.knnMatch(descriptores_image2,descriptores_image3,k=2)
+    buenos_matches = []
+    for mat1,mat2 in matches:
+        if mat1.distance < 0.75*mat2.distance:
+            buenos_matches.append(mat1)
+
+    p1 = np.array([kp_image2[match.queryIdx].pt for match in buenos_matches])
+    p2 = np.array([kp_image3[match.trainIdx].pt for match in buenos_matches])
+    H = cv2.findHomography(p1,p2,cv2.RANSAC,1)
+    homografias.append(H)
+
+    img_res = np.zeros(shape=(700,1500),dtype='float32')
+
+    img_res = cv2.warpPerspective(src=images[0],dst=img_res,M=np.dot(homografias[1],homografias[0][0]),dsize=(1500,700),borderMode=cv2.BORDER_TRANSPARENT)
+    img_res = cv2.warpPerspective(src=images[1],dst=img_res,M=homografias[1],dsize=(1500,700),borderMode=cv2.BORDER_TRANSPARENT)
+    img_res = cv2.warpPerspective(src=images[2],dst=img_res,M=np.dot(homografias[1],homografias[2][0]),dsize=(1500,700),borderMode=cv2.BORDER_TRANSPARENT)
+
+    pintaI(img_res)
+
+
+################################################################################
 ##                                    MAIN                                    ##
 ################################################################################
 
 def main():
+    '''
     # Ejercicio 1 apartado a
     print("Imagen Yosemite1")
 
@@ -333,5 +384,12 @@ def main():
     print("Fuerza Lowe-Average 2NN")
     res_la_2nn = obtenerImagenLoweAverage2NNMatching(yosemite1,yosemite2,kp_sift1,kp_sift2,descriptores_sift1,descriptores_sift2,100)
     pintaI(res_la_2nn)
+    '''
+
+    # Ejercicio 3 y 4
+    yosemite1 = cv2.imread("imagenes/yosemite_full/yosemite1.jpg",-1)
+    yosemite2 = cv2.imread("imagenes/yosemite_full/yosemite2.jpg",-1)
+    yosemite3 = cv2.imread("imagenes/yosemite_full/yosemite3.jpg",-1)
+    obtenerMosaico([yosemite1,yosemite2,yosemite3])
 
 main()
