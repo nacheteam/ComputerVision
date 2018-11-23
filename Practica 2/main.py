@@ -275,13 +275,30 @@ def getHomograhy(image1,image2):
     return cv2.findHomography(p1,p2,cv2.RANSAC,1)[0]
 
 '''
+@brief Obtiene una estimación de tamaño para la imagen al unir el vector de imagenes por una homografía
+@param images Vector de imagenes de opencv
+@return Devuelve dos enteros, el primero el número de columnas y el segundo el de filas.
+'''
+def getTamano(images):
+    sizes = [image.shape for image in images]
+    n = 0
+    m = 0
+    for (t,r,z) in sizes:
+        n+=t
+        if m<r:
+            m=r
+    return n,m
+
+'''
 @brief Función que obtiene el mosaico con el vector de imagenes images de tamaño n filas y m columnas.
 @param images Vector de imágenes de OpenCV
 @param n Número de filas de la imagen resultado
 @param m Número de columnas de la imagen resultado
 @return Devuelve una imagen de OpenCV después de juntar convenientemente las imágenes del vector images.
 '''
-def obtenerMosaico(images,n,m):
+def obtenerMosaico(images,n=-1,m=-1):
+    if n==-1:
+        n,m=getTamano(images)
     # El indice central del vector de imagenes
     indice_central=math.floor(len(images)/2)
     # Tamaño de la imagen central (se usa para la traslacion)
@@ -349,7 +366,7 @@ def obtenerMosaico3(images):
     homografias.append(np.float32(np.array([[1,0,750-300],[0,1,350-300],[0,0,1]])))
 
     # Calculamos los matches
-    matches = brute_force.knnMatch(descriptores_image2,descriptores_image3,k=2)
+    matches = brute_force.knnMatch(descriptores_500image2,descriptores_image3,k=2)
     buenos_matches = []
     for mat1,mat2 in matches:
         if mat1.distance < 0.8*mat2.distance:
@@ -374,6 +391,7 @@ def obtenerMosaico3(images):
 ################################################################################
 
 def main():
+    '''
     # Ejercicio 1 apartado a
     print("Imagen Yosemite1")
 
@@ -456,14 +474,14 @@ def main():
     res_la_2nn = obtenerImagenLoweAverage2NNMatching(yosemite1,yosemite2,kp_sift1,kp_sift2,descriptores_sift1,descriptores_sift2,100)
     pintaI(res_la_2nn)
 
-
+    '''
     # Ejercicio 3 y 4
     yosemite1 = cv2.imread("imagenes/yosemite_full/yosemite1.jpg",-1)
     yosemite2 = cv2.imread("imagenes/yosemite_full/yosemite2.jpg",-1)
     yosemite3 = cv2.imread("imagenes/yosemite_full/yosemite3.jpg",-1)
     yosemite4 = cv2.imread("imagenes/yosemite_full/yosemite4.jpg",-1)
-    pintaI(obtenerMosaico([yosemite1,yosemite2,yosemite3],1500,700))
-    pintaI(obtenerMosaico([yosemite1,yosemite2,yosemite3,yosemite4],2000,700))
+    pintaI(obtenerMosaico([yosemite1,yosemite2,yosemite3]))
+    pintaI(obtenerMosaico([yosemite1,yosemite2,yosemite3,yosemite4]))
     #pintaI(obtenerMosaico3([yosemite1,yosemite2,yosemite3]))
 
     mosaico1 = cv2.imread("imagenes/mosaico-1/mosaico002.jpg",-1)
@@ -477,7 +495,7 @@ def main():
     mosaico9 = cv2.imread("imagenes/mosaico-1/mosaico010.jpg",-1)
     mosaico10 = cv2.imread("imagenes/mosaico-1/mosaico011.jpg",-1)
 
-    pintaI(obtenerMosaico([mosaico1,mosaico2,mosaico3,mosaico4],800,500))
-    pintaI(obtenerMosaico([mosaico1,mosaico2,mosaico3,mosaico4,mosaico5,mosaico6,mosaico7,mosaico8,mosaico9,mosaico10],1200,500))
+    pintaI(obtenerMosaico([mosaico1,mosaico2,mosaico3,mosaico4]))
+    pintaI(obtenerMosaico([mosaico1,mosaico2,mosaico3,mosaico4,mosaico5,mosaico6,mosaico7,mosaico8,mosaico9,mosaico10],n=1400,m=600))
 
 main()
