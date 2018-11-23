@@ -253,6 +253,12 @@ def obtenerImagenLoweAverage2NNMatching(img1,img2,kp_sift1,kp_sift2,des1,des2,nM
 ##                              EJERCICIO 3                                   ##
 ################################################################################
 
+'''
+@brief Función que devuelve una matriz con la homografía entre las imagenes usando Lowe-Average-2NN
+@param image1 Imagen de opencv
+@param image2 Imagen de opencv
+@return Devuelve una matriz de numpy de 3x3 con floats que representa la homografía.
+'''
 def getHomograhy(image1,image2):
     sift = cv2.xfeatures2d.SIFT_create()
     brute_force = cv2.BFMatcher(cv2.NORM_L2,crossCheck=False)
@@ -268,6 +274,13 @@ def getHomograhy(image1,image2):
     p2 = np.array([kp_image2[match.trainIdx].pt for match in buenos_matches])
     return cv2.findHomography(p1,p2,cv2.RANSAC,1)[0]
 
+'''
+@brief Función que obtiene el mosaico con el vector de imagenes images de tamaño n filas y m columnas.
+@param images Vector de imágenes de OpenCV
+@param n Número de filas de la imagen resultado
+@param m Número de columnas de la imagen resultado
+@return Devuelve una imagen de OpenCV después de juntar convenientemente las imágenes del vector images.
+'''
 def obtenerMosaico(images,n,m):
     # El indice central del vector de imagenes
     indice_central=math.floor(len(images)/2)
@@ -283,16 +296,18 @@ def obtenerMosaico(images,n,m):
     # Para cada pareja de imagenes se calcula la homografía
     # Si estamos en la parte izquierda se calcula de fuera hacia dentro
     # Si estamos en la parte derecha se calcula de dentro hacia fuera
-    for i in reversed(range(indice_central)):
+    for i in range(indice_central-1,-1,-1):
         H = getHomograhy(images[i],images[i+1])
         homografias_izq.append(H)
 
-    for i in range(indice_central,len(images)-1):    
+    for i in range(indice_central,len(images)-1):
         H = getHomograhy(images[i+1],images[i])
         homografias_der.append(H)
 
     for i in range(1,len(homografias_izq)):
         homografias_izq[i] = homografias_izq[i-1]@homografias_izq[i]
+
+    # Le damos la vuelta y quitamos la  traslación
     homografias_izq = list(reversed(homografias_izq[1:]))
 
     for i in range(1,len(homografias_der)):
@@ -305,6 +320,11 @@ def obtenerMosaico(images,n,m):
 
     return imagen_res
 
+'''
+@brief Función que obtiene a mano la imagen que resulta de unir tres imagenes
+@param images Vector con tres imagenes de opencv
+@return Devuelve una imagen resultado tras unir las imagenes de images
+'''
 def obtenerMosaico3(images):
     homografias = []
 
@@ -354,7 +374,6 @@ def obtenerMosaico3(images):
 ################################################################################
 
 def main():
-    '''
     # Ejercicio 1 apartado a
     print("Imagen Yosemite1")
 
@@ -402,7 +421,7 @@ def main():
     print("El número de puntos por capa en SIFT ha sido: " + str(obtenNumeroPuntosCapa(kp_sift2)))
     pintaI(pintaCirculos(yosemite2,kp_sift2))
     pintaI(pintaCirculos(yosemite2,kp_surf2,surf=True))
-range
+
     # Ejercicio 1 apartado c
     print("Imagen Yosemite1")
 
@@ -436,7 +455,7 @@ range
     print("Fuerza Lowe-Average 2NN")
     res_la_2nn = obtenerImagenLoweAverage2NNMatching(yosemite1,yosemite2,kp_sift1,kp_sift2,descriptores_sift1,descriptores_sift2,100)
     pintaI(res_la_2nn)
-    '''
+
 
     # Ejercicio 3 y 4
     yosemite1 = cv2.imread("imagenes/yosemite_full/yosemite1.jpg",-1)
