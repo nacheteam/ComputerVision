@@ -2,6 +2,7 @@ import numpy as np
 import cv2
 import random
 import math
+import itertools
 random.seed(123456789)
 
 ################################################################################
@@ -252,48 +253,55 @@ def obtenerImagenLoweAverage2NNMatching(img1,img2,kp_sift1,kp_sift2,des1,des2,nM
 ##                              EJERCICIO 3                                   ##
 ################################################################################
 
-def obtenerMosaico(images,n,m):
-    homografias = []
+def getHomograhy(image1,image2):
     sift = cv2.xfeatures2d.SIFT_create()
     brute_force = cv2.BFMatcher(cv2.NORM_L2,crossCheck=False)
-    imagen_res = np.zeros(shape=(m,n),dtype='uint8')
-    indice_central=len(images)//2
+    kp_image1, descriptores_image1 = sift.detectAndCompute(image1,None)
+    kp_image2, descriptores_image2 = sift.detectAndCompute(image2,None)
+    matches = brute_force.knnMatch(descriptores_image1,descriptores_image2,k=2)
+    buenos_matches = []
+    for mat1,mat2 in matches:
+        if mat1.distance < 0.8*mat2.distance:
+            buenos_matches.append(mat1)
 
-    for i in range(len(images)-1):
-        sift = cv2.xfeatures2d.SIFT_create()
-        kp_image1, descriptores_image1 = sift.detectAndCompute(images[i],None)
-        kp_image2, descriptores_image2 = sift.detectAndCompute(images[i+1],None)
-        matches = brute_force.knnMatch(descriptores_image1,descriptores_image2,k=2)
-        buenos_matches = []
-        for mat1,mat2 in matches:
-            if mat1.distance < 0.8*mat2.distance:
-                buenos_matches.append(mat1)
+    p1 = np.array([kp_image1[match.queryIdx].pt for match in buenos_matches])
+    p2 = np.array([kp_image2[match.trainIdx].pt for match in buenos_matches])
+    return cv2.findHomography(p1,p2,cv2.RANSAC,1)[0]
 
-        p1 = np.array([kp_image1[match.queryIdx].pt for match in buenos_matches])
-        p2 = np.array([kp_image2[match.trainIdx].pt for match in buenos_matches])
-        if i<indice_central:
-            H = cv2.findHomography(p1,p2,cv2.RANSAC,1)
-            homografias.append(H)
-        else:
-            H = cv2.findHomography(p2,p1,cv2.RANSAC,1)
-            homografias.append(H)
-
-
+def obtenerMosaico(images,n,m):
+    # El indice central del vector de imagenes
+    indice_central=math.floor(len(images)/2)
+    # Tamaño de la imagen central (se usa para la traslacion)
     (n_central,m_central,z) = images[indice_central].shape
-    print(n_central)
-    print(m_central)
-
     traslacion = np.float32(np.array([[1,0,n//2-m_central//2],[0,1,m//2-n_central//2],[0,0,1]]))
-    contador_homografias=0
+    # Vector que vamos a rellenar con las homografias
+    homografias_izq = [traslacion]
+    homografias_der = [traslacion]
+    # Imagen que se va a devolver
+    imagen_res = np.zeros(n*m*3,dtype='uint8').reshape(m,n,3)
+
+    # Para cada pareja de imagenes se calcula la homografía
+    # Si estamos en la parte izquierda se calcula de fuera hacia dentro
+    # Si estamos en la parte derecha se calcula de dentro hacia fuera
+    for i in reversed(range(indice_central)):
+        H = getHomograhy(images[i],images[i+1])
+        homografias_izq.append(H)
+
+    for i in range(indice_central,len(images)-1):    
+        H = getHomograhy(images[i+1],images[i])
+        homografias_der.append(H)
+
+    for i in range(1,len(homografias_izq)):
+        homografias_izq[i] = homografias_izq[i-1]@homografias_izq[i]
+    homografias_izq = list(reversed(homografias_izq[1:]))
+
+    for i in range(1,len(homografias_der)):
+        homografias_der[i] = homografias_der[i-1]@homografias_der[i]
+
+    homografias_buenas = homografias_izq + homografias_der
+
     for i in range(len(images)):
-        if i==0:
-            imagen_res = cv2.warpPerspective(src=images[i],dst=imagen_res,M=np.dot(traslacion,homografias[contador_homografias][0]),dsize=(n,m))
-            contador_homografias+=1
-        elif i!=indice_central:
-            imagen_res = cv2.warpPerspective(src=images[i],dst=imagen_res,M=np.dot(traslacion,homografias[contador_homografias][0]),dsize=(n,m),borderMode=cv2.BORDER_TRANSPARENT)
-            contador_homografias+=1
-        else:
-            imagen_res = cv2.warpPerspective(src=images[i],dst=imagen_res,M=traslacion,dsize=(n,m),borderMode=cv2.BORDER_TRANSPARENT)
+        imagen_res = cv2.warpPerspective(src=images[i],dst=imagen_res,M=homografias_buenas[i],dsize=(n,m),borderMode=cv2.BORDER_TRANSPARENT)
 
     return imagen_res
 
@@ -394,7 +402,7 @@ def main():
     print("El número de puntos por capa en SIFT ha sido: " + str(obtenNumeroPuntosCapa(kp_sift2)))
     pintaI(pintaCirculos(yosemite2,kp_sift2))
     pintaI(pintaCirculos(yosemite2,kp_surf2,surf=True))
-
+range
     # Ejercicio 1 apartado c
     print("Imagen Yosemite1")
 
@@ -435,7 +443,22 @@ def main():
     yosemite2 = cv2.imread("imagenes/yosemite_full/yosemite2.jpg",-1)
     yosemite3 = cv2.imread("imagenes/yosemite_full/yosemite3.jpg",-1)
     yosemite4 = cv2.imread("imagenes/yosemite_full/yosemite4.jpg",-1)
-    pintaI(obtenerMosaico([yosemite1,yosemite2,yosemite3,yosemite4],1500,700))
-    pintaI(obtenerMosaico3([yosemite1,yosemite2,yosemite3]))
+    pintaI(obtenerMosaico([yosemite1,yosemite2,yosemite3],1500,700))
+    pintaI(obtenerMosaico([yosemite1,yosemite2,yosemite3,yosemite4],2000,700))
+    #pintaI(obtenerMosaico3([yosemite1,yosemite2,yosemite3]))
+
+    mosaico1 = cv2.imread("imagenes/mosaico-1/mosaico002.jpg",-1)
+    mosaico2 = cv2.imread("imagenes/mosaico-1/mosaico003.jpg",-1)
+    mosaico3 = cv2.imread("imagenes/mosaico-1/mosaico004.jpg",-1)
+    mosaico4 = cv2.imread("imagenes/mosaico-1/mosaico005.jpg",-1)
+    mosaico5 = cv2.imread("imagenes/mosaico-1/mosaico006.jpg",-1)
+    mosaico6 = cv2.imread("imagenes/mosaico-1/mosaico007.jpg",-1)
+    mosaico7 = cv2.imread("imagenes/mosaico-1/mosaico008.jpg",-1)
+    mosaico8 = cv2.imread("imagenes/mosaico-1/mosaico009.jpg",-1)
+    mosaico9 = cv2.imread("imagenes/mosaico-1/mosaico010.jpg",-1)
+    mosaico10 = cv2.imread("imagenes/mosaico-1/mosaico011.jpg",-1)
+
+    pintaI(obtenerMosaico([mosaico1,mosaico2,mosaico3,mosaico4],800,500))
+    pintaI(obtenerMosaico([mosaico1,mosaico2,mosaico3,mosaico4,mosaico5,mosaico6,mosaico7,mosaico8,mosaico9,mosaico10],1200,500))
 
 main()
