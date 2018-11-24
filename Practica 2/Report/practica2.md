@@ -154,3 +154,32 @@ donde x es la coordenada en el eje x a la que queremos trasladar la imagen centr
 Veamos los resultados obtenidos con las imagenes Yosemite1, Yosemite2 y Yosemite3:
 
 ![Mosaico3](./Imagenes/Yosemite1-2-3.png)
+
+
+## Ejercicio 4
+Lo mismo que en el punto anterior pero para $N>5$ (usar las imágenes para mosaico).
+
+**\underline{Solución:}**
+Una vez realizado el ejercicio para tres imágenes únicamente debemos tener en cuenta varias cosas:
+
+- Si tenemos un número impar de imagenes tenemos localizado claramente el centro de dicho vector, pero en el caso de un número par estará desplazado hacia uno de los lados ya que no hay un centro.
+
+- El orden de las homografías influye en el resultado final, si estamos en la mitad izquierda las homografías van de izquierda a derecha, es decir la imagen 0 con la imagen 1, la 1 con la 2, etc. En el caso de la parte derecha del vector de imágenes las homografías deben ir a la inversa, es decir, la imagen N-ésima con la (N-1)-ésima, la (N-1)-ésima con la (N-2)-ésima, etc.
+
+- Ahora al tener un número mayor de imágenes vamos a tener que realizar composición de homografías (no sólo con la traslación). Tenemos que tener en cuenta que la primera imagen de todas tendrá que tener una homografía que sea composición de todas las que hay a su derecha (incluida la traslación) más la suya, que es la que pega la imagen 1 con la 2. De igual forma para el resto de imágenes y para el lado derecho del vector de imágenes.
+
+Tras estas consideraciones la implementación de la función no supone mucha dificultad. En primer lugar obtenemos las homografías en el orden correcto que pegan las imágenes entre sí como especifico en el segundo punto. Después calculamos la composición de forma conveniente como se especifica en el tercer punto y por último obtenemos un vector en el que tengamos para cada posición la homografía correspondiente para cada imagen. De esta foma el último paso, que es aplicar la función warpPerspective se hace de forma sencilla recorriendo el vector en orden y aplicando las homografías en orden, incluyendo la traslación que estará en la posición central para que la imagen central se traslade al centro de la imagen resultado.
+
+Veamos los resultados para Yosemite1, Yosemite2 y Yosemite3 para comparar con el ejercicio anterior:
+
+![Yosemite1,2,3 general](./Imagenes/4_Yosemite1-2-3.png)
+
+Como podemos observar el resultado es exactamente el mismo que en el ejercicio anterior, ya que el funcionamiento es el mismo.
+
+Veamos que se obtiene una buena superposición también con un número par de imágenes Yosemite 1 a Yosemite 4:
+
+![Yosemite1-2-3-4](./Imagenes/Imagenes/Yosemite1-2-3-4.png)
+
+Por último veamos que cuando no tenemos todas las imágenes alineadas de izquierda a derecha también obtenemos una buena superposición, como ocurre con las imágenes de mosaico de la ETSIIT:
+
+![ETSIIT](./Imagenes/4_ETSIIT.png)
