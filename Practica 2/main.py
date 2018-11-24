@@ -20,6 +20,7 @@ MORADO = (127,0,255)
 ROSA = (255,0,255)
 GRIS = (128,128,128)
 
+# Se usan para las imágenes de los círculos
 COLORES = [AMARILLO,ROJO,NARANJA,VERDE,VERDE_AZULADO,AZUL_CLARO,AZUL,MORADO,ROSA,GRIS]
 
 ################################################################################
@@ -80,7 +81,9 @@ def pintaMI(vim):
 @param sigma parámetro de la Gaussiana (es un double).
 '''
 def keyPointsSIFT(img,contrastThreshold,edgeThreshold,sigma):
+    # Creo el objeto SIFT
     sift = cv2.xfeatures2d.SIFT_create(nfeatures=0,nOctaveLayers=3,contrastThreshold=contrastThreshold,edgeThreshold=edgeThreshold,sigma=sigma)
+    # Uso sólo compute porque queremos sólo los KeyPoints
     kp = sift.detect(img,None)
     return kp
 
@@ -95,7 +98,9 @@ def keyPointsSIFT(img,contrastThreshold,edgeThreshold,sigma):
 @param upright booleano de detección de características en vertical y rotadas.
 '''
 def keyPointsSURF(img,hessianThreshold,nOctaves,nOctaveLayers,extended,upright):
+    # Creo el objeto SURF
     surf = cv2.xfeatures2d.SURF_create(hessianThreshold=hessianThreshold,nOctaves=nOctaves,nOctaveLayers=nOctaveLayers,extended=extended,upright=upright)
+    # Uso sólo compute porque queremos sólo los KeyPoints
     kp = surf.detect(img,None)
     return kp
 
@@ -106,10 +111,14 @@ def keyPointsSURF(img,hessianThreshold,nOctaves,nOctaveLayers,extended,upright):
 '''
 def unpackOctave(kp):
     unpacked = []
+    # Para cada KeyPoint en el vector kp
     for kpt in kp:
         oc = kpt.octave
+        # Cogemos la octava
         octava = oc&0xFF
+        # Cogemos la capa
         capa  = (oc>>8)&0xFF
+        # Las octava 255 la pasamos a -1 y le sumamos 1 para que empiecen en 0
         if octava>=128:
             octava |= -128
             octava+=1
@@ -122,10 +131,13 @@ def unpackOctave(kp):
 '''
 def obtenNumeroPuntosOctava(kp):
     unpacked = unpackOctave(kp)
+    # Hacemos un diccionario
     numero_puntos = {}
     for ol in unpacked:
+        # Si no está la clave correspondiene a la octava le asignamos 1
         if not str(ol[0]) in numero_puntos:
             numero_puntos[str(ol[0])]=1
+        # En caso contrario sumamos
         else:
             numero_puntos[str(ol[0])]+=1
     return numero_puntos
@@ -136,10 +148,13 @@ def obtenNumeroPuntosOctava(kp):
 '''
 def obtenNumeroPuntosCapa(kp):
     unpacked = unpackOctave(kp)
+    # Hacemos un diccionario
     numero_puntos = {}
     for ol in unpacked:
+        # Si no está la clave correspondiente a la capa le asignamos 1
         if not str(ol[1]) in numero_puntos:
             numero_puntos[str(ol[1])]=1
+        # En caso contrario sumamos
         else:
             numero_puntos[str(ol[1])]+=1
     return numero_puntos
@@ -148,12 +163,13 @@ def obtenNumeroPuntosCapa(kp):
 @brief Obtiene una imagen con círculos en cada punto clave del color correspondiente a la octava
 @param img Imagen sobre la que se quiere superponer la información de los puntos clave
 @param kp Puntos clave de la imagen img
-@param sigma Sigma empleado en la detección de los puntos clave
 @param surf Si es true se le han pasado puntos SURF, si es false son SIFT
 '''
 def pintaCirculos(img,kp,surf=False):
     unpacked = unpackOctave(kp)
     imagen_circulos = img
+    # Si es surf disminuimos el tamaño de los circulos para que se pueda ver bien la imagen
+    # Usamos kp[i].size que es un número proporcional a sigma
     for i  in range(len(kp)):
         if not surf:
             imagen_circulos = cv2.circle(imagen_circulos,(int(kp[i].pt[0]),int(kp[i].pt[1])),int(kp[i].size),COLORES[unpacked[i][0]])
@@ -162,22 +178,24 @@ def pintaCirculos(img,kp,surf=False):
     return imagen_circulos
 
 '''
-@brief Función que obtiene el vector de descriptores.
-@param img Imagen de la que queremos obtener los descriptores.
+@brief Función que obtiene el vector de KeyPoints y descriptores.
+@param img Imagen de la que queremos obtener los KeyPoints y descriptores.
 @param kp Puntos de interés de la imagen img.
-@param sift Objeto SIFT empleado en la detección de los puntos de interes kp de img.
+@param sift Objeto SIFT empleado en la detección de los puntos de interés kp de img.
 '''
 def obtenerDescriptoresSIFT(img,kp,sift):
+    # Obtenemos los KeyPoints y los descriptores
     des = sift.compute(img,kp)
     return des
 
 '''
-@brief Función que obtiene el vector de descriptores.
-@param img Imagen de la que queremos obtener los descriptores.
+@brief Función que obtiene el vector de KeyPoints y descriptores.
+@param img Imagen de la que queremos obtener los KeyPoints y descriptores.
 @param kp Puntos de interés de la imagen img.
-@param surf Objeto SURF empleado en la detección de los puntos de interes kp de img.
+@param sift Objeto SIFT empleado en la detección de los puntos de interés kp de img.
 '''
 def obtenerDescriptoresSURF(img,kp,surf):
+    # Obtenemos los KeyPoints y los descriptores
     des = surf.compute(img,kp)
     return des
 
@@ -260,18 +278,30 @@ def obtenerImagenLoweAverage2NNMatching(img1,img2,kp_sift1,kp_sift2,des1,des2,nM
 @return Devuelve una matriz de numpy de 3x3 con floats que representa la homografía.
 '''
 def getHomograhy(image1,image2):
+    # Creamos el objeto SIFT por defecto
     sift = cv2.xfeatures2d.SIFT_create()
+
+    # Creamos el objeto BFMatcher con el crossCheck a Falso para aplicar Lowe-Average-2NN
     brute_force = cv2.BFMatcher(cv2.NORM_L2,crossCheck=False)
+
+    # Obtenemos los KeyPoint y descriptores de las dos imágenes
     kp_image1, descriptores_image1 = sift.detectAndCompute(image1,None)
     kp_image2, descriptores_image2 = sift.detectAndCompute(image2,None)
+
+    # Hacemos el matching de las imágenes
     matches = brute_force.knnMatch(descriptores_image1,descriptores_image2,k=2)
     buenos_matches = []
+
+    # Aplicamos el test de Lowe
     for mat1,mat2 in matches:
         if mat1.distance < 0.8*mat2.distance:
             buenos_matches.append(mat1)
 
+    # Calculamos las coordenadas
     p1 = np.array([kp_image1[match.queryIdx].pt for match in buenos_matches])
     p2 = np.array([kp_image2[match.trainIdx].pt for match in buenos_matches])
+
+    # Devolvemos sólo la matriz que define la homografía
     return cv2.findHomography(p1,p2,cv2.RANSAC,1)[0]
 
 '''
@@ -280,9 +310,11 @@ def getHomograhy(image1,image2):
 @return Devuelve dos enteros, el primero el número de columnas y el segundo el de filas.
 '''
 def getTamano(images):
+    # Tomamos las dimensiones de las imágenes
     sizes = [image.shape for image in images]
     n = 0
     m = 0
+    # El número de columnas es la suma y el de filas el máximo
     for (t,r,z) in sizes:
         n+=t
         if m<r:
@@ -332,6 +364,7 @@ def obtenerMosaico(images,n=-1,m=-1):
 
     homografias_buenas = homografias_izq + homografias_der
 
+    # Las unimos con warpPerspective en una sola imagen
     for i in range(len(images)):
         imagen_res = cv2.warpPerspective(src=images[i],dst=imagen_res,M=homografias_buenas[i],dsize=(n,m),borderMode=cv2.BORDER_TRANSPARENT)
 
@@ -340,6 +373,8 @@ def obtenerMosaico(images,n=-1,m=-1):
 '''
 @brief Función que obtiene a mano la imagen que resulta de unir tres imagenes
 @param images Vector con tres imagenes de opencv
+@param n Número de filas de la imagen resultado
+@param m Número de columnas de la imagen resultado
 @return Devuelve una imagen resultado tras unir las imagenes de images
 '''
 def obtenerMosaico3(images,n,m):
