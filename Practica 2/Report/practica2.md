@@ -124,3 +124,33 @@ Para la detección de correspondencias Lowe-Average-2NN tenemos que aplicar los 
 Como podemos ver esta vez los puntos muy distantes entre las imágenes no han pasado el test de Lowe, de forma que sólo tenemos correspondencias cercanas al colocar las dos imágenes juntas. Si nos paramos a observar el test lo que estamos es comparando la distancia obtenida de los dos vecinos al punto, es decir, distancias de dos correspondencias muy distantes serán rechazadas ya que tienen menos cohesión, al hacer esto es mucho más fácil que las correspondencias que obtengamos sean muy ajustadas a lo que percibimos visualmente, cosa evidente al comparar zonas muy similares de las imágenes.
 
 Si comparamos los dos métodos podemos ver que en el primero obtenemos puntos repartidos por toda la imagen, de forma que hay muchas líneas cruzadas, ya que al ser puntos muy distantes entre sí no vamos a encontrar una correspondencia. Por ejemplo, si tomamos la imagen generada, podemos ver que en la montaña de la izquierda hay varios puntos de interés marcados. Estos puntos no tienen una correspondencia real en la imagen de al lado, puesto que dicha parte de la primera imagen no se encuentra en la segunda. Aquí es donde el test de Lowe nos da una gran mejora con respecto a la fuerza bruta.
+
+
+## Ejercicio 3
+Escribir una función que genere un mosaico de calidad a partir de N=3 imágenes relacionadas por homografías, sus listas de keyPoints calculados de acuerdo al punto anterior y las correspondencias encontradas entre dichas listas. Estimar las homografías entre ellas usando la función cv2.findHomography(p1,p2,CV_RANSAC,1). Para el mosaico será necesario.
+
+a) Definir una imagen en la que pintaremos el mosaico.
+
+b) Definir la homografía que lleva cada una de las imágenes a la imagen del mosaico.
+
+c) Usar la función cv2.warpPerspective() para trasladar cada imagen al mosaico (Ayuda: Usar el flag BORDER_TRANSPARENT de warpPerspective).
+
+**\underline{Solución:}**
+Antes de abarcar la pregunta 4 y hacer la función para el caso general he realizado el caso de tres imágenes a mano, tal y como se pide en el tercer ejercicio. Hay que tener en cuenta que al componer las homografías y al obtenerlas el orden cuenta y es muy relevante, ya que podemos obtener muchos cortes en la imagen resultado por no hacer las homografías en el orden correcto como ahora discutiré.
+
+Para el caso de tres imágenes comenzamos calculando los puntos de interés y descriptores de las tres imágenes y calculamos las coincidencias con Lowe Average 2NN para calcular la homografía de la primera con la segunda. Para la segunda imagen y la tercera tenemos que tener en cuenta que el cálculo de la homografía debe ser al revés, en otro caso nos quedaría un corte notable en la imagen resultado. Ahora tenemos que pensar cómo trasladamos la imgen central hacia la imagen resultado donde uniremos con las dos homografías calculadas.
+
+Para la imagen central debemos hacer una traslación con una matriz de la forma:
+$$
+\begin{pmatrix}
+1 & 0 & x \\
+0 & 1 & y \\
+0 & 0 & 1
+\end{pmatrix}
+$$
+
+donde x es la coordenada en el eje x a la que queremos trasladar la imagen central e y es la corrdenada en el eje y a la que queremos trasladar la imagen central. De esta forma obtenemos tres homografías: la que nos pega la primera imagen con la segunda, la traslación de la imagen central a la imagen resultado y la homografía que nos pega la tercera imagen con la segunda. Además cabe decir que el punto (x,y) al que queremos trasladar nuestra imagen central es el punto medio de la imagen resultado menos la mitad de la dimensión de la imagen. Esto lo debemos hacer así para que la imagen nos quede centrada, ya que la traslación nos lleva la esquina superior izquierda al punto (x,y), si la trasladasemos justo al centro de la imagen resultado la imagen no nos quedaría centrada.
+
+Veamos los resultados obtenidos con las imagenes Yosemite1, Yosemite2 y Yosemite3:
+
+![Mosaico3](./Imagenes/Yosemite1-2-3.png)
