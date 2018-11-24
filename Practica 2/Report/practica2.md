@@ -6,7 +6,7 @@ lang: es
 toc: true
 toc-depth: 1
 fontsize: 12pt
-geometry: margin=1.4in
+geometry: margin=1in
 ---
 
 # \huge{Práctica 2: Detección de puntos relevantes y construcción de panoramas}
@@ -27,23 +27,27 @@ Los valores que he empleado para SURF y Yosemite1 los valores nfeatures, nOctave
 
 Los puntos que he obtenido han sido:
 
-![SIFT yosemite1](./Imagenes/1A_SIFT_yosemite1.png)
+\newpage
+![SIFT yosemite1](./Imagenes/1A_SIFT_yosemite1.png){ width=75% height=75% }
 
 En la detección de los puntos SURF he modificado únicamente el parámetro hessianThreshold. Los puntos que SURF obtiene tienen que tener una hessiana mayor que este valor, por lo que si lo vamos aumentando se obtienen menos puntos clave en la imagen. El valor que he tomado para este parámetro ha sido 400. Al inicio, al igual que con SIFT, obtuve muchos puntos en la imagen que estaban colocados en zonas negras y el cielo, fui aumentando el valor de umbral hasta que conseguí que estos puntos no estuvieran y hubiese un conjunto de al menos 1000 puntos.
 
 Los puntos que he obtenido han sido:
 
-![SURF yosemite1](./Imagenes/1A_SURF_yosemite1.png)
+\newpage
+![SURF yosemite1](./Imagenes/1A_SURF_yosemite1.png){ width=75% height=75% }
 
 Para la imagen Yosemite2 he utilizado en SIFT los valores contrastThreshold a 0.06 y edgeThreshold a 4, puesto que detectaba muchos puntos en los bordes de las nubes.
 
 Los resultados obtenidos para SIFT han sido:
 
-![SIFT yosemite2](./Imagenes/1A_SIFT_yosemite2.png)
+\newpage
+![SIFT yosemite2](./Imagenes/1A_SIFT_yosemite2.png){ width=75% height=75% }
 
 Para la imagen Yosemite2  he utilizado en SURF un valor de hessianThreshold de 500, ya que al igual que con SIFT se obtenían muchos puntos en las nubes que posteriormente no iban a ser relevantes por la gran concrentración de los mismos.
 
-![SURF yosemite2](./Imagenes/1A_SURF_yosemite2.png)
+\newpage
+![SURF yosemite2](./Imagenes/1A_SURF_yosemite2.png){ width=75% height=75% }
 
 ### Apartado B
 **\underline{Enunciado:}**
@@ -63,15 +67,17 @@ Como podemos observar la detección de puntos de interés es más efectiva en la
 
 Para poder visualizar mejor los puntos de interés obtenidos tal y como se dice en el enunciado, puede ser de interés pintar los puntos por colores en función de sus octavas y pintar los puntos como círculos cuyo radio sea proporcional al sigma usado para hallarlo, de forma que podemos ver el nivel de suavizado que se ha requerido para llegar al mismo. Veamos las imagenes para SIFT:
 
-![Círculos SIFT](./Imagenes/1B_SIFT_yosemite1.png)
+\newpage
+![Círculos SIFT](./Imagenes/1B_SIFT_yosemite1.png){ width=55% height=55% }
 
-![Círculos SIFT](./Imagenes/1B_SIFT_yosemite2.png)
+![Círculos SIFT](./Imagenes/1B_SIFT_yosemite2.png){ width=55% height=55% }
 
+\newpage
 Como podemos observar hay un punto en concreto que destaca por el gran radio de su círculo, esto es debido a que pertenece a una de las capas más profundas de SIFT, de forma que se ha aplicado un suavizado muy grande hasta llegar a el. Cabe destacar que los colores empleados para pintar las octavas han sido (según el orden): amarillo, rojo, naranja, verde, verde azulado y azul claro. De esta forma los puntos de la primera octava se pintan en amarillo y los de la última en azul claro.
 
-![Círculos SURF](./Imagenes/1B_SURF_yosemite1.png)
+![Círculos SURF](./Imagenes/1B_SURF_yosemite1.png){ width=55% height=55% }
 
-![Círculos SURF](./Imagenes/1B_SURF_yosemite2.png)
+![Círculos SURF](./Imagenes/1B_SURF_yosemite2.png){ width=55% height=55% }
 
 Se puede observar en el caso de SURF que se comparten puntos con SIFT en los que se ha aplicado un suavizado muy grande hasta detectarlos como puntos de interés.
 
@@ -86,17 +92,21 @@ La función compute es válida tanto para objetos SIFT como SURF, de forma que d
 
 Aquí podemos ver la salida de los keyPoints para SIFT y SURF sobre Yosemite1 y Yosemite2:
 
-![Descriptores SIFT Yosemite1](./Imagenes/1C_Descriptores_SIFT_yosemite1.png)
+![Descriptores SIFT Yosemite1](./Imagenes/1C_Descriptores_SIFT_yosemite1.png){ width=50% height=50% }
 
-![Descriptores SIFT y SURF Yosemite1](./Imagenes/1C_Descriptores_SIFT_SURF_yosemite1.png)
+![Descriptores SIFT y SURF Yosemite1](./Imagenes/1C_Descriptores_SIFT_SURF_yosemite1.png){ width=50% height=50% }
 
-![Descriptores SURF Yosemite1](./Imagenes/1C_Descriptores_SURF_yosemite1.png)
+\newpage
 
-![Descriptores SIFT Yosemite2](./Imagenes/1C_Descriptores_SIFT_yosemite2.png)
+![Descriptores SURF Yosemite1](./Imagenes/1C_Descriptores_SURF_yosemite1.png){ width=50% height=50% }
 
-![Descriptores SIFT y SURF Yosemite2](./Imagenes/1C_Descriptores_SIFT_SURF_yosemite2.png)
+![Descriptores SIFT Yosemite2](./Imagenes/1C_Descriptores_SIFT_yosemite2.png){ width=50% height=50% }
 
-![Descriptores SURF Yosemite2](./Imagenes/1C_Descriptores_SURF_yosemite2.png)
+\newpage
+
+![Descriptores SIFT y SURF Yosemite2](./Imagenes/1C_Descriptores_SIFT_SURF_yosemite2.png){ width=50% height=50% }
+
+![Descriptores SURF Yosemite2](./Imagenes/1C_Descriptores_SURF_yosemite2.png){ width=50% height=50% }
 
 OpenCV también ofrece un método que calcula los descriptores y los puntos de interés en una sola orden: detectAndCompute. Esta orden funciona igual que la detección de puntos de interés, con la única diferencia de que devuelve dos objetos: los puntos de interés y los descriptores.
 
@@ -119,6 +129,7 @@ Como podemos observar las correspondencias de los puntos que no comparten las im
 
 Para la detección de correspondencias Lowe-Average-2NN tenemos que aplicar los criterior que Lowe define en su paper. Debemos buscar las correspondencias esta vez con el crossCheck a False y con la función knnMatch que nos busca las correspondencias usando los dos puntos más cercanos, es decir con 2NN. Tras esto tenemos que aplicar el test definido por Lowe en el que sólo nos quedamos con puntos que disten poco entre sí, es decir que las correspondencias entre las imágenes sean cercanas con la intención de poder hacer un pegado de las mismas de buena calidad. Tras esta selección de Lowe tomamos la muestra de 100 puntos de la imagen al igual que en el caso anterior y obtenemos la imagen con las correspondencias.
 
+\newpage
 ![Matches LA2NN](./Imagenes/2A_MatchesLA2NN.png)
 
 Como podemos ver esta vez los puntos muy distantes entre las imágenes no han pasado el test de Lowe, de forma que sólo tenemos correspondencias cercanas al colocar las dos imágenes juntas. Si nos paramos a observar el test lo que estamos es comparando la distancia obtenida de los dos vecinos al punto, es decir, distancias de dos correspondencias muy distantes serán rechazadas ya que tienen menos cohesión, al hacer esto es mucho más fácil que las correspondencias que obtengamos sean muy ajustadas a lo que percibimos visualmente, cosa evidente al comparar zonas muy similares de las imágenes.
@@ -153,7 +164,8 @@ donde x es la coordenada en el eje x a la que queremos trasladar la imagen centr
 
 Veamos los resultados obtenidos con las imagenes Yosemite1, Yosemite2 y Yosemite3:
 
-![Mosaico3](./Imagenes/Yosemite1-2-3.png)
+\newpage
+![Mosaico3](./Imagenes/3_Yosemite1-2-3.png)
 
 
 ## Ejercicio 4
@@ -178,7 +190,7 @@ Como podemos observar el resultado es exactamente el mismo que en el ejercicio a
 
 Veamos que se obtiene una buena superposición también con un número par de imágenes Yosemite 1 a Yosemite 4:
 
-![Yosemite1-2-3-4](./Imagenes/Imagenes/Yosemite1-2-3-4.png)
+![Yosemite1-2-3-4](./Imagenes/4_Yosemite1-2-3-4.png)
 
 Por último veamos que cuando no tenemos todas las imágenes alineadas de izquierda a derecha también obtenemos una buena superposición, como ocurre con las imágenes de mosaico de la ETSIIT:
 
