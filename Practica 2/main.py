@@ -342,7 +342,7 @@ def obtenerMosaico(images,n=-1,m=-1):
 @param images Vector con tres imagenes de opencv
 @return Devuelve una imagen resultado tras unir las imagenes de images
 '''
-def obtenerMosaico3(images):
+def obtenerMosaico3(images,n,m):
     homografias = []
 
     sift = cv2.xfeatures2d.SIFT_create()
@@ -363,10 +363,10 @@ def obtenerMosaico3(images):
     H = cv2.findHomography(p1,p2,cv2.RANSAC,1)
     homografias.append(H)
 
-    homografias.append(np.float32(np.array([[1,0,750-300],[0,1,350-300],[0,0,1]])))
+    homografias.append(np.float32(np.array([[1,0,n//2-images[1].shape[1]//2],[0,1,m//2-images[1].shape[0]//2],[0,0,1]])))
 
     # Calculamos los matches
-    matches = brute_force.knnMatch(descriptores_500image2,descriptores_image3,k=2)
+    matches = brute_force.knnMatch(descriptores_image2,descriptores_image3,k=2)
     buenos_matches = []
     for mat1,mat2 in matches:
         if mat1.distance < 0.8*mat2.distance:
@@ -377,13 +377,13 @@ def obtenerMosaico3(images):
     H = cv2.findHomography(p2,p1,cv2.RANSAC,1)
     homografias.append(H)
 
-    img_res = np.zeros(shape=(700,1500),dtype='uint8')
+    img_res = np.zeros(shape=(m,n),dtype='uint8')
 
-    img_res = cv2.warpPerspective(src=images[0],dst=img_res,M=np.dot(homografias[1],homografias[0][0]),dsize=(1500,700))
-    img_res = cv2.warpPerspective(src=images[1],dst=img_res,M=homografias[1],dsize=(1500,700),borderMode=cv2.BORDER_TRANSPARENT)
-    img_res = cv2.warpPerspective(src=images[2],dst=img_res,M=np.dot(homografias[1],homografias[2][0]),dsize=(1500,700),borderMode=cv2.BORDER_TRANSPARENT)
+    img_res = cv2.warpPerspective(src=images[0],dst=img_res,M=np.dot(homografias[1],homografias[0][0]),dsize=(n,m))
+    img_res = cv2.warpPerspective(src=images[1],dst=img_res,M=homografias[1],dsize=(n,m),borderMode=cv2.BORDER_TRANSPARENT)
+    img_res = cv2.warpPerspective(src=images[2],dst=img_res,M=np.dot(homografias[1],homografias[2][0]),dsize=(n,m),borderMode=cv2.BORDER_TRANSPARENT)
 
-    pintaI(img_res)
+    return img_res
 
 
 ################################################################################
@@ -391,7 +391,7 @@ def obtenerMosaico3(images):
 ################################################################################
 
 def main():
-    '''
+
     # Ejercicio 1 apartado a
     print("Imagen Yosemite1")
 
@@ -474,8 +474,14 @@ def main():
     res_la_2nn = obtenerImagenLoweAverage2NNMatching(yosemite1,yosemite2,kp_sift1,kp_sift2,descriptores_sift1,descriptores_sift2,100)
     pintaI(res_la_2nn)
 
-    '''
-    # Ejercicio 3 y 4
+
+    # Ejercicio 3
+    yosemite1 = cv2.imread("imagenes/yosemite_full/yosemite1.jpg",-1)
+    yosemite2 = cv2.imread("imagenes/yosemite_full/yosemite2.jpg",-1)
+    yosemite3 = cv2.imread("imagenes/yosemite_full/yosemite3.jpg",-1)
+    pintaI(obtenerMosaico3([yosemite1,yosemite2,yosemite3],1500,700))
+
+    # Ejercicio 4
     yosemite1 = cv2.imread("imagenes/yosemite_full/yosemite1.jpg",-1)
     yosemite2 = cv2.imread("imagenes/yosemite_full/yosemite2.jpg",-1)
     yosemite3 = cv2.imread("imagenes/yosemite_full/yosemite3.jpg",-1)
@@ -495,7 +501,6 @@ def main():
     mosaico9 = cv2.imread("imagenes/mosaico-1/mosaico010.jpg",-1)
     mosaico10 = cv2.imread("imagenes/mosaico-1/mosaico011.jpg",-1)
 
-    pintaI(obtenerMosaico([mosaico1,mosaico2,mosaico3,mosaico4]))
     pintaI(obtenerMosaico([mosaico1,mosaico2,mosaico3,mosaico4,mosaico5,mosaico6,mosaico7,mosaico8,mosaico9,mosaico10],n=1400,m=600))
 
 main()
