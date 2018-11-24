@@ -395,13 +395,13 @@ def main():
     # Ejercicio 1 apartado a
     print("Imagen Yosemite1")
 
-    yosemite1 = cv2.imread("imagenes/yosemite/Yosemite1.jpg",-1)
+    yosemite1 = cv2.imread("imagenes/yosemite1.jpg",-1)
     kp_sift1 = keyPointsSIFT(yosemite1,contrastThreshold=0.06,edgeThreshold=6,sigma=1.6)
     yosemite1_kp_sift=cv2.drawKeypoints(yosemite1,kp_sift1,yosemite1)
     print("El número de puntos obtenidos por SIFT: " + str(len(kp_sift1)))
     pintaI(yosemite1_kp_sift)
 
-    yosemite1 = cv2.imread("imagenes/yosemite/Yosemite1.jpg",-1)
+    yosemite1 = cv2.imread("imagenes/yosemite1.jpg",-1)
     kp_surf1 = keyPointsSURF(yosemite1,hessianThreshold=400,nOctaves=4,nOctaveLayers=3,extended=False,upright=False)
     yosemite1_kp_surf=cv2.drawKeypoints(yosemite1,kp_surf1,yosemite1)
     print("El número de puntos obtenidos por SURF: " + str(len(kp_surf1)))
@@ -409,13 +409,13 @@ def main():
 
     print("Imagen Yosemite2")
 
-    yosemite2 = cv2.imread("imagenes/yosemite/Yosemite2.jpg",-1)
+    yosemite2 = cv2.imread("imagenes/yosemite2.jpg",-1)
     kp_sift2 = keyPointsSIFT(yosemite2,contrastThreshold=0.06,edgeThreshold=4,sigma=1.6)
     yosemite1_kp_sift=cv2.drawKeypoints(yosemite2,kp_sift2,yosemite1)
     print("El número de puntos obtenidos por SIFT: " + str(len(kp_sift2)))
     pintaI(yosemite1_kp_sift)
 
-    yosemite2 = cv2.imread("imagenes/yosemite/Yosemite2.jpg",-1)
+    yosemite2 = cv2.imread("imagenes/yosemite2.jpg",-1)
     kp_surf2 = keyPointsSURF(yosemite2,hessianThreshold=500,nOctaves=4,nOctaveLayers=3,extended=False,upright=False)
     yosemite2_kp_surf=cv2.drawKeypoints(yosemite2,kp_surf2,yosemite1)
     print("El número de puntos obtenidos por SURF: " + str(len(kp_surf2)))
@@ -424,7 +424,7 @@ def main():
     # Ejercicio 1 apartado b
     print("Imagen Yosemite1")
 
-    yosemite1 = cv2.imread("imagenes/yosemite/Yosemite1.jpg",-1)
+    yosemite1 = cv2.imread("imagenes/yosemite1.jpg",-1)
     print("El número de puntos por octava en SIFT ha sido: " + str(obtenNumeroPuntosOctava(kp_sift1)))
     print("El número de puntos por octava en SURF ha sido: " + str(obtenNumeroPuntosOctava(kp_surf1)))
     print("El número de puntos por capa en SIFT ha sido: " + str(obtenNumeroPuntosCapa(kp_sift1)))
@@ -433,7 +433,7 @@ def main():
 
     print("Imagen Yosemite2")
 
-    yosemite2 = cv2.imread("imagenes/yosemite/Yosemite2.jpg",-1)
+    yosemite2 = cv2.imread("imagenes/yosemite2.jpg",-1)
     print("El número de puntos por octava en SIFT ha sido: " + str(obtenNumeroPuntosOctava(kp_sift2)))
     print("El número de puntos por octava en SURF ha sido: " + str(obtenNumeroPuntosOctava(kp_surf2)))
     print("El número de puntos por capa en SIFT ha sido: " + str(obtenNumeroPuntosCapa(kp_sift2)))
@@ -443,7 +443,7 @@ def main():
     # Ejercicio 1 apartado c
     print("Imagen Yosemite1")
 
-    yosemite1 = cv2.imread("imagenes/yosemite/Yosemite1.jpg",-1)
+    yosemite1 = cv2.imread("imagenes/yosemite1.jpg",-1)
     sift1 = cv2.xfeatures2d.SIFT_create(nfeatures=0,nOctaveLayers=3,contrastThreshold=0.06,edgeThreshold=6,sigma=1.6)
     surf1 = cv2.xfeatures2d.SURF_create(hessianThreshold=400,nOctaves=4,nOctaveLayers=3,extended=False,upright=False)
     kp_sift1 = sift1.detect(yosemite1,None)
@@ -455,7 +455,7 @@ def main():
 
     print("Imagen Yosemite2")
 
-    yosemite2 = cv2.imread("imagenes/yosemite/Yosemite2.jpg",-1)
+    yosemite2 = cv2.imread("imagenes/yosemite2.jpg",-1)
     sift2 = cv2.xfeatures2d.SIFT_create(nfeatures=0,nOctaveLayers=3,contrastThreshold=0.06,edgeThreshold=6,sigma=1.6)
     surf2 = cv2.xfeatures2d.SURF_create(hessianThreshold=400,nOctaves=4,nOctaveLayers=3,extended=False,upright=False)
     kp_sift2 = sift2.detect(yosemite2,None)
@@ -476,30 +476,30 @@ def main():
 
 
     # Ejercicio 3
-    yosemite1 = cv2.imread("imagenes/yosemite_full/yosemite1.jpg",-1)
-    yosemite2 = cv2.imread("imagenes/yosemite_full/yosemite2.jpg",-1)
-    yosemite3 = cv2.imread("imagenes/yosemite_full/yosemite3.jpg",-1)
+    yosemite1 = cv2.imread("imagenes/yosemite1.jpg",-1)
+    yosemite2 = cv2.imread("imagenes/yosemite2.jpg",-1)
+    yosemite3 = cv2.imread("imagenes/yosemite3.jpg",-1)
     pintaI(obtenerMosaico3([yosemite1,yosemite2,yosemite3],1500,700))
 
     # Ejercicio 4
-    yosemite1 = cv2.imread("imagenes/yosemite_full/yosemite1.jpg",-1)
-    yosemite2 = cv2.imread("imagenes/yosemite_full/yosemite2.jpg",-1)
-    yosemite3 = cv2.imread("imagenes/yosemite_full/yosemite3.jpg",-1)
-    yosemite4 = cv2.imread("imagenes/yosemite_full/yosemite4.jpg",-1)
+    yosemite1 = cv2.imread("imagenes/yosemite1.jpg",-1)
+    yosemite2 = cv2.imread("imagenes/yosemite2.jpg",-1)
+    yosemite3 = cv2.imread("imagenes/yosemite3.jpg",-1)
+    yosemite4 = cv2.imread("imagenes/yosemite4.jpg",-1)
     pintaI(obtenerMosaico([yosemite1,yosemite2,yosemite3]))
     pintaI(obtenerMosaico([yosemite1,yosemite2,yosemite3,yosemite4],2200,700))
     #pintaI(obtenerMosaico3([yosemite1,yosemite2,yosemite3]))
 
-    mosaico1 = cv2.imread("imagenes/mosaico-1/mosaico002.jpg",-1)
-    mosaico2 = cv2.imread("imagenes/mosaico-1/mosaico003.jpg",-1)
-    mosaico3 = cv2.imread("imagenes/mosaico-1/mosaico004.jpg",-1)
-    mosaico4 = cv2.imread("imagenes/mosaico-1/mosaico005.jpg",-1)
-    mosaico5 = cv2.imread("imagenes/mosaico-1/mosaico006.jpg",-1)
-    mosaico6 = cv2.imread("imagenes/mosaico-1/mosaico007.jpg",-1)
-    mosaico7 = cv2.imread("imagenes/mosaico-1/mosaico008.jpg",-1)
-    mosaico8 = cv2.imread("imagenes/mosaico-1/mosaico009.jpg",-1)
-    mosaico9 = cv2.imread("imagenes/mosaico-1/mosaico010.jpg",-1)
-    mosaico10 = cv2.imread("imagenes/mosaico-1/mosaico011.jpg",-1)
+    mosaico1 = cv2.imread("imagenes/mosaico002.jpg",-1)
+    mosaico2 = cv2.imread("imagenes/mosaico003.jpg",-1)
+    mosaico3 = cv2.imread("imagenes/mosaico004.jpg",-1)
+    mosaico4 = cv2.imread("imagenes/mosaico005.jpg",-1)
+    mosaico5 = cv2.imread("imagenes/mosaico006.jpg",-1)
+    mosaico6 = cv2.imread("imagenes/mosaico007.jpg",-1)
+    mosaico7 = cv2.imread("imagenes/mosaico008.jpg",-1)
+    mosaico8 = cv2.imread("imagenes/mosaico009.jpg",-1)
+    mosaico9 = cv2.imread("imagenes/mosaico010.jpg",-1)
+    mosaico10 = cv2.imread("imagenes/mosaico011.jpg",-1)
 
     pintaI(obtenerMosaico([mosaico1,mosaico2,mosaico3,mosaico4,mosaico5,mosaico6,mosaico7,mosaico8,mosaico9,mosaico10],n=1400,m=600))
 
