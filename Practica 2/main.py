@@ -487,7 +487,7 @@ def main():
     yosemite3 = cv2.imread("imagenes/yosemite_full/yosemite3.jpg",-1)
     yosemite4 = cv2.imread("imagenes/yosemite_full/yosemite4.jpg",-1)
     pintaI(obtenerMosaico([yosemite1,yosemite2,yosemite3]))
-    pintaI(obtenerMosaico([yosemite1,yosemite2,yosemite3,yosemite4]))
+    pintaI(obtenerMosaico([yosemite1,yosemite2,yosemite3,yosemite4],2200,700))
     #pintaI(obtenerMosaico3([yosemite1,yosemite2,yosemite3]))
 
     mosaico1 = cv2.imread("imagenes/mosaico-1/mosaico002.jpg",-1)

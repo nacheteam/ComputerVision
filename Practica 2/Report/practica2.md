@@ -18,7 +18,7 @@ Detección de puntos SIFT y SURF. Aplicar la detección de puntos SIFT y SURF so
 
 ### Apartado A
 **\underline{Enunciado:}**
-Variar los valores de umbral de la función de detección de puntos hasta obtener un conjunto numeroro ($\geq$ 1000) de puntos SIFT y SURF que sea representativo de la imágen. Justificar la elección de los parámetros en relación a la representatividad de los puntos obtenidos.
+Variar los valores de umbral de la función de detección de puntos hasta obtener un conjunto numeroso ($\geq$ 1000) de puntos SIFT y SURF que sea representativo de la imagen. Justificar la elección de los parámetros en relación a la representatividad de los puntos obtenidos.
 
 **\underline{Solución:}**
 Para la elección de los puntos SIFT he usado los valores nfeatures=0, nOctaveLayers=3, contrastThreshold=0.06, edgeThreshold=6 y sigma=1.6.
@@ -44,7 +44,7 @@ Los resultados obtenidos para SIFT han sido:
 \newpage
 ![SIFT yosemite2](./Imagenes/1A_SIFT_yosemite2.png){ width=75% height=75% }
 
-Para la imagen Yosemite2  he utilizado en SURF un valor de hessianThreshold de 500, ya que al igual que con SIFT se obtenían muchos puntos en las nubes que posteriormente no iban a ser relevantes por la gran concrentración de los mismos.
+Para la imagen Yosemite2  he utilizado en SURF un valor de hessianThreshold de 500, ya que al igual que con SIFT se obtenían muchos puntos en las nubes que posteriormente no iban a ser relevantes por la gran concentración de los mismos.
 
 \newpage
 ![SURF yosemite2](./Imagenes/1A_SURF_yosemite2.png){ width=75% height=75% }
@@ -55,7 +55,7 @@ Identificar cuántos  puntos se han detectado dentro de cada octava. En el caso 
 
 **\underline{Solución:}**
 
-Lo primero que hay que hacer para poder obtener las octavas y capas es extraer la información de los KeyPoints. Los KeyPoints, por eficiencia, tienen gran parte de la información (incluídas la escala y octava) en un sólo número entero. Para poder obtener esta información es necesario, para la octava, aplicar una máscara al número, en concreto la que viene dada por 0xFF o 255. Para poder obtener la información de la capa tenemos que hacer un shift binario de desplazamiento 8. En mi caso en concreto he modificado convenientemente el número de octava para que empiece desde el 0 en adelante.
+Lo primero que hay que hacer para poder obtener las octavas y capas es extraer la información de los KeyPoints. Los KeyPoints, por eficiencia, tienen gran parte de la información (incluidas la escala y octava) en un sólo número entero. Para poder obtener esta información es necesario, para la octava, aplicar una máscara al número, en concreto la que viene dada por 0xFF o 255. Para poder obtener la información de la capa tenemos que hacer un shift binario de desplazamiento 8. En mi caso en concreto he modificado convenientemente el número de octava para que empiece desde el 0 en adelante.
 
 Una vez que tenemos la información anterior extraída es sencillo poder contar los puntos en cada octava y capa (sólo para SIFT). Como hemos visto en teoría, se aplica un subsampling a la imagen y un blur reduciendo la resolución a la mitad cada vez que se hace esta operación, cuyo resultado es conocido como octava. En cada octava se realiza un algoritmo de detección, por lo que podemos saber de que octava proviene cada punto. Además en el algoritmo SIFT se le aplica un suavizado Gaussiano por capas (en cada capa el suavizado es mayor que en la anterior) para cada octava, de forma que no sólo podemos obtener de qué octava proviene un punto de interés si no que también podemos saber de qué capa proviene.
 
@@ -65,7 +65,7 @@ Como se puede observar la información obtenida se representa en un diccionario 
 
 Como podemos observar la detección de puntos de interés es más efectiva en la primera octava de SIFT y SURF y en las primeras capas de SIFT. Esto es razonable, puesto que cuanto más suavizado y subsampling apliquemos más restringimos los valores de los píxeles destacados. Aún así la detección en octavas y capas mayores a la primera sigue siendo útil.
 
-Para poder visualizar mejor los puntos de interés obtenidos tal y como se dice en el enunciado, puede ser de interés pintar los puntos por colores en función de sus octavas y pintar los puntos como círculos cuyo radio sea proporcional al sigma usado para hallarlo, de forma que podemos ver el nivel de suavizado que se ha requerido para llegar al mismo. Veamos las imagenes para SIFT:
+Para poder visualizar mejor los puntos de interés obtenidos tal y como se dice en el enunciado, puede ser de interés pintar los puntos por colores en función de sus octavas y pintar los puntos como círculos cuyo radio sea proporcional al sigma usado para hallarlo, de forma que podemos ver el nivel de suavizado que se ha requerido para llegar al mismo. Veamos las imágenes para SIFT:
 
 \newpage
 ![Círculos SIFT Yosemite 1](./Imagenes/1B_SIFT_yosemite1.png){ width=55% height=55% }
@@ -83,14 +83,14 @@ Se puede observar en el caso de SURF que se comparten puntos con SIFT en los que
 
 ### Apartado C
 **\underline{Enunciado:}**
-Mostrar cómo con el vector de keyPoint extraídos se pueden calcular los descriptores SIFT y SURF asociados a cada punto usando OpenCV.
+Mostrar cómo con el vector de KeyPoints extraídos se pueden calcular los descriptores SIFT y SURF asociados a cada punto usando OpenCV.
 
 **\underline{Solución:}**
-Para poder calcular los descriptores utilizando ya los keyPoints calculados en los apartados anteriores OpenCV tiene la función 'compute'.
+Para poder calcular los descriptores utilizando ya los KeyPoints calculados en los apartados anteriores OpenCV tiene la función 'compute'.
 
-La función compute es válida tanto para objetos SIFT como SURF, de forma que dados los keyPoints y la imagen se pueden obtener los descriptores asignados a dichos puntos de interés.
+La función compute es válida tanto para objetos SIFT como SURF, de forma que dados los KeyPoints y la imagen se pueden obtener los descriptores asignados a dichos puntos de interés.
 
-Aquí podemos ver la salida de los keyPoints para SIFT y SURF sobre Yosemite1 y Yosemite2:
+Aquí podemos ver la salida de los KeyPoints para SIFT y SURF sobre Yosemite1 y Yosemite2:
 
 ![Descriptores SIFT Yosemite1](./Imagenes/1C_Descriptores_SIFT_yosemite1.png){ width=50% height=50% }
 
@@ -114,7 +114,7 @@ OpenCV también ofrece un método que calcula los descriptores y los puntos de i
 
 
 ## Ejercicio 2
-Usar el detector-descriptor SIFT de OpenCV sobre las imágenes de Yosemite.rar (cv2.xfeatures2d.SIFT_create()). Extraer sus listas de keyPoints y descriptores asociados. Establecer las correspondencias existentes entre ellos usando el objeto BFMatcher de OpenCV  y los criterios de correspondencias "BruteForce+crossCheck" y "Lowe-Average-2NN". (NOTA: Si se usan los resultados propios del punto anterior en lugar del cálculo de SIFT de OpenCV se añaden 0.5 puntos).
+Usar el detector-descriptor SIFT de OpenCV sobre las imágenes de Yosemite.rar (cv2.xfeatures2d.SIFT_create()). Extraer sus listas de KeyPoints y descriptores asociados. Establecer las correspondencias existentes entre ellos usando el objeto BFMatcher de OpenCV  y los criterios de correspondencias "BruteForce+crossCheck" y "Lowe-Average-2NN". (NOTA: Si se usan los resultados propios del punto anterior en lugar del cálculo de SIFT de OpenCV se añaden 0.5 puntos).
 
 ### Apartado A
 **\underline{Enunciado:}**
@@ -141,7 +141,7 @@ Si comparamos los dos métodos podemos ver que en el primero obtenemos puntos re
 
 
 ## Ejercicio 3
-Escribir una función que genere un mosaico de calidad a partir de N=3 imágenes relacionadas por homografías, sus listas de keyPoints calculados de acuerdo al punto anterior y las correspondencias encontradas entre dichas listas. Estimar las homografías entre ellas usando la función cv2.findHomography(p1,p2,CV_RANSAC,1). Para el mosaico será necesario.
+Escribir una función que genere un mosaico de calidad a partir de N=3 imágenes relacionadas por homografías, sus listas de KeyPoints calculados de acuerdo al punto anterior y las correspondencias encontradas entre dichas listas. Estimar las homografías entre ellas usando la función cv2.findHomography(p1,p2,CV_RANSAC,1). Para el mosaico será necesario.
 
 a) Definir una imagen en la que pintaremos el mosaico.
 
@@ -163,9 +163,9 @@ $$
 \end{pmatrix}
 $$
 
-donde x es la coordenada en el eje x a la que queremos trasladar la imagen central e y es la cordenada en el eje y a la que queremos trasladar la imagen central. De esta forma obtenemos tres homografías: la que nos pega la primera imagen con la segunda, la traslación de la imagen central a la imagen resultado y la homografía que nos pega la tercera imagen con la segunda. Además cabe decir que el punto (x,y) al que queremos trasladar nuestra imagen central es el punto medio de la imagen resultado menos la mitad de la dimensión de la imagen central. Esto lo debemos hacer así para que la imagen nos quede centrada, ya que la traslación nos lleva la esquina superior izquierda al punto (x,y), si la trasladasemos justo al centro de la imagen resultado la imagen no nos quedaría centrada.
+donde x es la coordenada en el eje x a la que queremos trasladar la imagen central e y es la coordenada en el eje y a la que queremos trasladar la imagen central. De esta forma obtenemos tres homografías: la que nos pega la primera imagen con la segunda, la traslación de la imagen central a la imagen resultado y la homografía que nos pega la tercera imagen con la segunda. Además cabe decir que el punto (x,y) al que queremos trasladar nuestra imagen central es el punto medio de la imagen resultado menos la mitad de la dimensión de la imagen central. Esto lo debemos hacer así para que la imagen nos quede centrada, ya que la traslación nos lleva la esquina superior izquierda al punto (x,y), si la trasladásemos justo al centro de la imagen resultado la imagen no nos quedaría centrada.
 
-Veamos los resultados obtenidos con las imagenes Yosemite1, Yosemite2 y Yosemite3:
+Veamos los resultados obtenidos con las imágenes Yosemite1, Yosemite2 y Yosemite3:
 
 \newpage
 ![Mosaico Yosemite 1-3](./Imagenes/3_Yosemite1-2-3.png)
@@ -177,13 +177,13 @@ Lo mismo que en el punto anterior pero para $N>5$ (usar las imágenes para mosai
 **\underline{Solución:}**
 Una vez realizado el ejercicio para tres imágenes únicamente debemos tener en cuenta varias cosas:
 
-- Si tenemos un número impar de imagenes tenemos localizado claramente el centro de dicho vector, pero en el caso de un número par estará desplazado hacia uno de los lados ya que no hay un centro.
+- Si tenemos un número impar de imágenes tenemos localizado claramente el centro de dicho vector, pero en el caso de un número par estará desplazado hacia uno de los lados ya que no hay un centro.
 
 - El orden de las homografías influye en el resultado final, si estamos en la mitad izquierda las homografías van de izquierda a derecha, es decir la imagen 0 con la imagen 1, la 1 con la 2, etc. En el caso de la parte derecha del vector de imágenes las homografías deben ir a la inversa, es decir, la imagen N-ésima con la (N-1)-ésima, la (N-1)-ésima con la (N-2)-ésima, etc.
 
 - Ahora al tener un número mayor de imágenes vamos a tener que realizar composición de homografías (no sólo con la traslación). Tenemos que tener en cuenta que la primera imagen de todas tendrá que tener una homografía que sea composición de todas las que hay a su derecha (incluida la traslación) más la suya, que es la que pega la imagen 1 con la 2. De igual forma para el resto de imágenes y para el lado derecho del vector de imágenes.
 
-Tras estas consideraciones la implementación de la función no supone mucha dificultad. En primer lugar obtenemos las homografías en el orden correcto que pegan las imágenes entre sí como especifico en el segundo punto. Después calculamos la composición de forma conveniente como se especifica en el tercer punto y por último obtenemos un vector en el que tengamos para cada posición la homografía correspondiente para cada imagen. De esta foma el último paso, que es aplicar la función warpPerspective se hace de forma sencilla recorriendo el vector en orden y aplicando las homografías en orden, incluyendo la traslación que estará en la posición central para que la imagen central se traslade al centro de la imagen resultado.
+Tras estas consideraciones la implementación de la función no supone mucha dificultad. En primer lugar obtenemos las homografías en el orden correcto que pegan las imágenes entre sí como especifico en el segundo punto. Después calculamos la composición de forma conveniente como se especifica en el tercer punto y por último obtenemos un vector en el que tengamos para cada posición la homografía correspondiente para cada imagen. De esta forma el último paso, que es aplicar la función warpPerspective se hace de forma sencilla recorriendo el vector en orden y aplicando las homografías en orden, incluyendo la traslación que estará en la posición central para que la imagen central se traslade al centro de la imagen resultado.
 
 Veamos los resultados para Yosemite1, Yosemite2 y Yosemite3 para comparar con el ejercicio anterior:
 
