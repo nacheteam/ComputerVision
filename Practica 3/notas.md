@@ -17,3 +17,8 @@ tendríamos la bolsa de palabras para esa imagen.
 
 El índice invertido guardamos para cada centroide la imagen en la que ha salido
 como más cercano.
+
+Para cada imagen tomamos 5 imagenes que sean similares y una que aunque nos
+de un ratio de similitud alto no lo sea en realidad al mirar la imagen. Tenemos que
+encontrar alguna imagen en la que al mirar las 5 imágenes mas similares al menos
+se parezcan 3-4.
