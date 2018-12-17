@@ -151,10 +151,20 @@ def pintaMI(vim):
 ##                              EJERCICIO 1                                   ##
 ################################################################################
 
+'''
+@brief Función que obtiene una máscara con unos dentro del polígono
+@param img Imagen de la que va a obtenerse la máscara
+@param puntos_poly Lista de tuplas que respresentan puntos en la imagen img y que delimitan un polígono
+@return Devuelve una matriz que representa una máscara
+'''
 def creaMascara(img,puntos_poly):
+    # Tomamos las dimensiones
     (n,m,k) = img.shape
+    # Rellenamos la imagen a ceros y con blancos la región
     img_region = np.zeros((n,m,3))
     img_region = cv2.fillConvexPoly(img_region,np.array(puntos_poly),(255,255,255))
+    # Hacemos una matriz a ceros y si encontramos en la imagen de la región un blanco
+    # ponemos a 1 la posición correspondiente
     mascara = np.zeros((n,m),dtype='uint8')
     for i in range(n):
         for j in range(m):
@@ -171,7 +181,6 @@ las correspondencias Lowe-Average-2NN
 @param kp_sift2 Puntos de interés de la imagen 2 usando SIFT
 @param des1 Descriptores de la imagen 1 de los puntos de interés kp_sift1
 @param des2 Descriptores de la imagen 2 de los puntos de interés kp_sift2
-@param nMatches Número de matches que se quiere obtener en la imagen devuelta.
 @return Imagen con los matches
 '''
 def obtenerImagenLoweAverage2NNMatching(img1,img2,kp_sift1,kp_sift2,des1,des2):
@@ -194,13 +203,23 @@ def obtenerImagenLoweAverage2NNMatching(img1,img2,kp_sift1,kp_sift2,des1,des2):
     res = cv2.drawMatchesKnn(img1,kp_sift1,img2,kp_sift2,buenos,outImg,flags=2)
     return res
 
+'''
+@brief Función que pinta la imagen con las correspondencias en una región
+@param img1 Imagen
+@param img2 Imagen
+'''
 def pintaCorrespondencias(img1,img2):
+    # Se obtine la región mediante la interacción del usuario
     puntos1 = extractRegion(img1)
+    # Creamos la máscara
     mascara1 = creaMascara(img1,puntos1)
     sift = cv2.xfeatures2d.SIFT_create()
+    # Obtenemos los keypoints y descriptores con la máscara en el caso necesario
     kp1, des1 = sift.detectAndCompute(img1,mascara1)
     kp2, des2 = sift.detectAndCompute(img2,None)
+    # Obtenemos las correspondencias
     img_correspondencias = obtenerImagenLoweAverage2NNMatching(img1,img2,kp1,kp2,des1,des2)
+    # Pintamos el resultado
     pintaI(img_correspondencias)
 
 ################################################################################
