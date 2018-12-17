@@ -155,14 +155,53 @@ def creaMascara(img,puntos_poly):
     (n,m,k) = img.shape
     img_region = np.zeros((n,m,3))
     img_region = cv2.fillConvexPoly(img_region,np.array(puntos_poly),(255,255,255))
-    mascara = []
+    mascara = np.zeros((n,m),dtype='uint8')
     for i in range(n):
         for j in range(m):
             if img_region[i][j][0]==255:
-                mascara.append(True)
-            else:
-                mascara.append(False)
+                mascara[i][j]=1
     return mascara
+
+'''
+@brief La función obtiene la imagen con las ocurrencias de los descriptores entre img1 y img2
+las correspondencias Lowe-Average-2NN
+@param img1 Imagen con la que se quiere establecer una correspondencia entre descriptores
+@param img2 Imagen con la que se quiere establecer una correspondencia entre descriptores
+@param kp_sift1 Puntos de interés de la imagen 1 usando SIFT
+@param kp_sift2 Puntos de interés de la imagen 2 usando SIFT
+@param des1 Descriptores de la imagen 1 de los puntos de interés kp_sift1
+@param des2 Descriptores de la imagen 2 de los puntos de interés kp_sift2
+@param nMatches Número de matches que se quiere obtener en la imagen devuelta.
+@return Imagen con los matches
+'''
+def obtenerImagenLoweAverage2NNMatching(img1,img2,kp_sift1,kp_sift2,des1,des2):
+    # Se crea el objeto BFMatcher con la norma L2 y con el crossCheck a False puesto que no es necesario
+    brute_force = cv2.BFMatcher(cv2.NORM_L2,crossCheck=False)
+    # Se encuentran las correspondencias con k=2
+    matches = brute_force.knnMatch(des1,des2,k=2)
+
+    # Se aplica el test de Lowe para quedarnos con puntos cercanos
+    buenos = []
+    for mat1,mat2 in matches:
+        if mat1.distance < 0.8*mat2.distance:
+            buenos.append([mat1])
+
+    # Creamos una imagen a ceros necesaria para el drawMatchesKnn
+    outImg = np.zeros((100,100))
+
+    # Obtenemos la imagen con las correspondencias con el flags=2 para que no nos pinte
+    # los key points sin correspondencias.
+    res = cv2.drawMatchesKnn(img1,kp_sift1,img2,kp_sift2,buenos,outImg,flags=2)
+    return res
+
+def pintaCorrespondencias(img1,img2):
+    puntos1 = extractRegion(img1)
+    mascara1 = creaMascara(img1,puntos1)
+    sift = cv2.xfeatures2d.SIFT_create()
+    kp1, des1 = sift.detectAndCompute(img1,mascara1)
+    kp2, des2 = sift.detectAndCompute(img2,None)
+    img_correspondencias = obtenerImagenLoweAverage2NNMatching(img1,img2,kp1,kp2,des1,des2)
+    pintaI(img_correspondencias)
 
 ################################################################################
 ##                                    MAIN                                    ##
@@ -173,7 +212,6 @@ def main():
     frame91 = cv2.imread("./imagenes/91.png",-1)
     frame92 = cv2.imread("./imagenes/92.png",-1)
 
-    puntos91 = extractRegion(frame91)
-    creaMascara(frame91,puntos91)
+    pintaCorrespondencias(frame91,frame92)
 
 main()
