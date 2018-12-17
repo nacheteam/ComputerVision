@@ -209,9 +209,16 @@ def pintaCorrespondencias(img1,img2):
 
 def main():
 
+    # Ejercicio 1
+
+    # Aplicado con las imagenes 91 y 92
     frame91 = cv2.imread("./imagenes/91.png",-1)
     frame92 = cv2.imread("./imagenes/92.png",-1)
-
     pintaCorrespondencias(frame91,frame92)
+
+    # Aplicaco con las imagenes 1 y 4
+    frame1 = cv2.imread("./imagenes/1.png",-1)
+    frame4 = cv2.imread("./imagenes/4.png",-1)
+    pintaCorrespondencias(frame1,frame4)
 
 main()
