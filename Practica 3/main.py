@@ -82,7 +82,7 @@ def extractRegion(image):
     print('FlagEND', FlagEND)
     refPt.pop()
     refPt.append(refPt[0])
-    cv2.destroyWindow("image")
+    #cv2.destroyWindow("image")
     return refPt
 
 
@@ -151,8 +151,18 @@ def pintaMI(vim):
 ##                              EJERCICIO 1                                   ##
 ################################################################################
 
-
-
+def creaMascara(img,puntos_poly):
+    (n,m,k) = img.shape
+    img_region = np.zeros((n,m,3))
+    img_region = cv2.fillConvexPoly(img_region,np.array(puntos_poly),(255,255,255))
+    mascara = []
+    for i in range(n):
+        for j in range(m):
+            if img_region[i][j][0]==255:
+                mascara.append(True)
+            else:
+                mascara.append(False)
+    return mascara
 
 ################################################################################
 ##                                    MAIN                                    ##
@@ -160,6 +170,10 @@ def pintaMI(vim):
 
 def main():
 
+    frame91 = cv2.imread("./imagenes/91.png",-1)
+    frame92 = cv2.imread("./imagenes/92.png",-1)
 
+    puntos91 = extractRegion(frame91)
+    creaMascara(frame91,puntos91)
 
 main()
