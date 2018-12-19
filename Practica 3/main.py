@@ -1,6 +1,11 @@
+# -*- coding: utf-8 -*-
 import numpy as np
 import cv2
 import pickle
+
+NUM_IMAGENES = 440
+NUM_CENTROIDES = 2000
+NUM_SIMILARES = 5
 
 ################################################################################
 ##                                COLORES RGB                                 ##
@@ -17,7 +22,7 @@ MORADO = (127,0,255)
 ROSA = (255,0,255)
 GRIS = (128,128,128)
 
-# Se usan para las imágenes de los círculos
+# Se usan para las imagenes de los circulos
 COLORES = [AMARILLO,ROJO,NARANJA,VERDE,VERDE_AZULADO,AZUL_CLARO,AZUL,MORADO,ROSA,GRIS]
 
 ################################################################################
@@ -223,11 +228,75 @@ def pintaCorrespondencias(img1,img2):
     pintaI(img_correspondencias)
 
 ################################################################################
+##                              EJERCICIO 2                                   ##
+################################################################################
+
+# No hago la raiz cuadrada para no saturar
+def distanciaEuclidea(v1,v2s):
+    return np.sum(np.power(np.array(v1)-np.array(v2s),2),axis=1)
+
+def normaEuclidea(v):
+    return np.sum(np.array(v)*np.array(v))
+
+def convierteAVectorNormalizado(histograma):
+    vec = []
+    for i in range(NUM_CENTROIDES):
+        if str(i) in histograma:
+            vec.append(histograma[str(i)])
+        else:
+            vec.append(0)
+    return vec/normaEuclidea(vec)
+
+def obtenerHistograma(sift,img,centroides):
+    _, des = sift.detectAndCompute(img,None)
+    histograma = {}
+
+    for d in des:
+        distancias = distanciaEuclidea(d,centroides)
+        min = np.argmin(distancias)
+        if not str(min) in histograma:
+            histograma[str(min)] = 1
+        else:
+            histograma[str(min)]+=1
+    return histograma
+
+def crearModeloHistogramas():
+    sift = cv2.xfeatures2d.SIFT_create()
+    dic = loadDictionary("./kmeanscenters2000.pkl")
+    imagenes = []
+    for i in range(NUM_IMAGENES+1):
+        img = cv2.imread("./imagenes/" + str(i) + ".png",-1)
+        imagenes.append(img)
+    histogramas = []
+
+    contador = 0
+    for img in imagenes:
+        print(contador)
+        contador+=1
+        histogramas.append(obtenerHistograma(sift,img,dic[2]))
+    return histogramas
+
+def convierteHistogramasVectores(histogramas):
+    histogramas_vec = []
+    for i in range(len(histogramas)):
+        histogramas_vec.append(convierteAVectorNormalizado(histogramas[i]))
+    return histogramas_vec
+
+def devuelveSimilares(pos,histogramas_vec):
+    similitudes = []
+    for i in range(len(histogramas_vec)):
+        if pos!=i:
+            similitudes.append(np.sum(np.multiply(histogramas_vec[i],histogramas_vec[pos])))
+        else:
+            similitudes.append(0)
+    return arr.argsort()[-NUM_SIMILARES:][::-1]
+
+################################################################################
 ##                                    MAIN                                    ##
 ################################################################################
 
 def main():
-
+    '''
     # Ejercicio 1
 
     # Aplicado con las imagenes 91 y 92
@@ -239,5 +308,8 @@ def main():
     frame1 = cv2.imread("./imagenes/1.png",-1)
     frame4 = cv2.imread("./imagenes/4.png",-1)
     pintaCorrespondencias(frame1,frame4)
+    '''
+
+    print(crearModeloHistogramas())
 
 main()
