@@ -450,7 +450,7 @@ def pintaMinimos():
 ################################################################################
 
 def main():
-    '''
+
     # Ejercicio 1
 
     # Aplicado con las imagenes 91 y 92
@@ -493,8 +493,9 @@ def main():
 
     # Obtenemos la estructura de indice invertido para las imagenes con los centroides.
     print(obtenerIndiceInvertido(histogramas_vec))
-    '''
 
+
+    # Ejercicio 3
     pintaMinimos()
 
 main()
