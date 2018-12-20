@@ -343,13 +343,13 @@ def devuelveSimilares(pos,histogramas_vec):
     for i in range(len(histogramas_vec)):
         # Si la posición no es la de la pregunta, hacemos la distancia euclídea
         if pos!=i:
-            # Estoy usando la distancia euclidea, puede que sea el producto escalar
-            similitudes.append(np.sum(np.power(histogramas_vec[i]-histogramas_vec[pos],2)))
+            # Uso el producto escalar
+            similitudes.append(np.sum(histogramas_vec[i]*histogramas_vec[pos]))
         # Si la posición es la de la pregunta le asignamos distancia infinita
         else:
-            similitudes.append(float('inf'))
+            similitudes.append(-1)
     # Devolvemos los 5 primeros indices
-    return np.array(similitudes).argsort()[:NUM_SIMILARES]
+    return np.array(similitudes).argsort()[:NUM_SIMILARES][::-1]
 
 '''
 @brief Función que dada una imagen pinta las más similares
@@ -392,6 +392,11 @@ def obtenerIndiceInvertido(histogramas_vec):
         indice_invertido.append(apariciones)
     return indice_invertido
 
+################################################################################
+##                              EJERCICIO 3                                   ##
+################################################################################
+
+
 
 ################################################################################
 ##                                    MAIN                                    ##
@@ -416,7 +421,6 @@ def main():
     frame4 = cv2.imread("./imagenes/4.png",-1)
     pintaCorrespondencias(frame1,frame4)
     '''
-
     # Ejercicio 2
 
     # Obtenemos los histogramas como vectores
@@ -437,5 +441,6 @@ def main():
 
     # Obtenemos la estructura de indice invertido para las imagenes con los centroides.
     print(obtenerIndiceInvertido(histogramas_vec))
+
 
 main()
