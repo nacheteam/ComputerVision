@@ -175,7 +175,7 @@ def creaMascara(img,puntos_poly):
     mascara = np.zeros((n,m),dtype='uint8')
     for i in range(n):
         for j in range(m):
-            if img_region[i][j][0]==255:
+            if img_region[i][j][0]==255 and img_region[i][j][1]==255 and img_region[i][j][2]==255:
                 mascara[i][j]=1
     return mascara
 
@@ -375,7 +375,7 @@ def pintaRespuestas(imagen,histo_vec,pos):
 ################################################################################
 
 def main():
-    '''
+
     # Ejercicio 1
 
     # Aplicado con las imagenes 91 y 92
@@ -383,13 +383,18 @@ def main():
     frame92 = cv2.imread("./imagenes/92.png",-1)
     pintaCorrespondencias(frame91,frame92)
 
+    #Aplicado con las imagenes 23 y 24
+    frame23 = cv2.imread("./imagenes/23.png",-1)
+    frame24 = cv2.imread("./imagenes/24.png",-1)
+    pintaCorrespondencias(frame23,frame24)
+
     # Aplicado con las imagenes 1 y 4
     frame1 = cv2.imread("./imagenes/1.png",-1)
     frame4 = cv2.imread("./imagenes/4.png",-1)
     pintaCorrespondencias(frame1,frame4)
+
+
     '''
-
-
     histogramas_vec = crearModeloHistogramas()
     frame1 = cv2.imread("./imagenes/1.png",-1)
     frame91 = cv2.imread("./imagenes/91.png",-1)
@@ -400,6 +405,6 @@ def main():
     pintaRespuestas(frame91,histogramas_vec,91)
     print("Frame200")
     pintaRespuestas(frame200,histogramas_vec,200)
-
+    '''
 
 main()
