@@ -343,8 +343,8 @@ def devuelveSimilares(pos,histogramas_vec):
     for i in range(len(histogramas_vec)):
         # Si la posición no es la de la pregunta, hacemos la distancia euclídea
         if pos!=i:
-            # Uso el producto escalar
-            similitudes.append(np.sum(histogramas_vec[i]*histogramas_vec[pos]))
+            # Uso la distancia euclidea TODO: Cambiarlo a producto escalar
+            similitudes.append(np.sum(np.power(histogramas_vec[i]-histogramas_vec[pos],2)))
         # Si la posición es la de la pregunta le asignamos distancia infinita
         else:
             similitudes.append(-1)
