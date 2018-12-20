@@ -233,12 +233,29 @@ def pintaCorrespondencias(img1,img2):
 ##                              EJERCICIO 2                                   ##
 ################################################################################
 
+'''
+@brief Función que obtiene la distancia euclídea entre un vector y una lista de vectores
+@param v1 Vector
+@param v2s Lista de vectores
+@return Vector con la distancia euclídea del vector v1 a cada uno de la lista v2s
+'''
 def distanciaEuclidea(v1,v2s):
     return np.sqrt(np.sum(np.power(np.array(v1)-np.array(v2s),2),axis=1))
 
+'''
+@brief Función que obtiene la norma euclídea de un vector
+@param v Vector del que se quiere obtener la norma euclídea
+@return Devuelve la norma euclídea del vector v
+'''
 def normaEuclidea(v):
     return np.sqrt(np.sum(np.array(v)*np.array(v)))
 
+'''
+@brief Función que convierte un histograma a un vector normalizado
+@param histograma Histograma con las ocurrencias de cada centroide
+@return Devuelve un vector que tiene en cada posición un 0 si no hay ocurrencias
+del centroide o el número de ocurrencias del mismo. Este vector está normalizado.
+'''
 def convierteAVectorNormalizado(histograma):
     vec = []
     for i in range(NUM_CENTROIDES):
@@ -248,23 +265,42 @@ def convierteAVectorNormalizado(histograma):
             vec.append(0)
     return vec/normaEuclidea(vec)
 
+'''
+@brief Función que obtiene el histograma de una imagen dada
+@param sift Objeto de tipo SIFT que se usa para obtener los descriptores
+@param img Imagen de la que se quiere obtener el histograma
+@param centroides Lista de centroides para sacar los mas cercanos y el número de ocurrencias de los mismos.
+@return Devuelve un objeto de tipo diccionario con el histograma
+'''
 def obtenerHistograma(sift,img,centroides):
+    # Obtenemos los descriptores
     _, des = sift.detectAndCompute(img,None)
     histograma = {}
     #des_sample = random.sample(list(des),200) if 200<len(des) else des
     print("Tamaño del descriptor: " + str(len(des)))
+    # Para cada descriptor
     for d in des:
+        # Calculamos las distancias de el descriptor a todos los centroides
         distancias = distanciaEuclidea(d,centroides)
+        # Obtenemos el indice del minimo
         min = np.argmin(distancias)
+        # Si no está en el histograma lo ponemos a uno, si está sumamos uno
         if not str(min) in histograma:
             histograma[str(min)] = 1
         else:
             histograma[str(min)]+=1
     return histograma
 
+'''
+@brief Función que obtiene todos los histogramas como vectores de todas las imágenes
+@return Devuelve una lista de vectores que representan los histogramas
+'''
 def crearModeloHistogramas():
-    sift = cv2.xfeatures2d.SIFT_create(contrastThreshold=0.07)
+    # Creo el objeto SIFT
+    sift = cv2.xfeatures2d.SIFT_create()
+    # Cargamos los centroides
     dic = loadDictionary("./kmeanscenters2000.pkl")
+    # Hacemos un vector con todas las imagenes en orden
     imagenes = []
     for i in range(NUM_IMAGENES+1):
         img = cv2.imread("./imagenes/" + str(i) + ".png",-1)
@@ -272,35 +308,66 @@ def crearModeloHistogramas():
     histogramas = []
 
     contador = 0
+    # Para cada imagen
     for img in imagenes:
         print("Creando modelo de histogramas " + str(contador) + "/" + str(len(imagenes)))
         contador+=1
+        # Añadimos el histograma de la imagen correspondiente
         histogramas.append(obtenerHistograma(sift,img,dic[2]))
+    # Convertimos todos los histogramas en vectores
     histogramas_vec=convierteHistogramasVectores(histogramas)
     return histogramas_vec
 
+'''
+@brief Función que convierte una lista de histogramas en una lista de vectores
+@param histogramas Lista de histogramas
+@return Devuelve una lista de vectores asociados a los histogramas
+'''
 def convierteHistogramasVectores(histogramas):
     histogramas_vec = []
+    # Para cada histograma
     for i in range(len(histogramas)):
+        # Lo convertimos en vector normalizado y lo añadimos a la lista
         histogramas_vec.append(convierteAVectorNormalizado(histogramas[i]))
     return histogramas_vec
 
+'''
+@brief Función que devuelve los indices de las imágenes más similares a una dada
+@param pos Posición de la imagen pregunta
+@param histogramas_vec Histogramas de las imágenes como vectores
+@return Lista con los índices de las imágenes más similares a la dada
+'''
 def devuelveSimilares(pos,histogramas_vec):
     similitudes = []
+    #Para cada histograma
     for i in range(len(histogramas_vec)):
+        # Si la posición no es la de la pregunta, hacemos la distancia euclídea
         if pos!=i:
             # Estoy usando la distancia euclidea, puede que sea el producto escalar
             similitudes.append(np.sum(np.power(histogramas_vec[i]-histogramas_vec[pos],2)))
+        # Si la posición es la de la pregunta le asignamos distancia infinita
         else:
             similitudes.append(float('inf'))
-    return np.array(similitudes).argsort()[-NUM_SIMILARES:]
+    # Devolvemos los 5 primeros indices
+    return np.array(similitudes).argsort()[:NUM_SIMILARES]
 
+'''
+@brief Función que dada una imagen pinta las más similares
+@param imagen Imagen de la que queremos obtener las más similares
+@param histo_vec Histograma como vectores
+@param pos Posición de la imagen preguntas
+'''
 def pintaRespuestas(imagen,histo_vec,pos):
+    # Obtenemos los índices de las imagenes más similares
     indices_similares = devuelveSimilares(pos,histo_vec)
     imagenes_similares=[]
+    # Para cada indice
     for ind in indices_similares:
+        # Cargamos la imagen
         img = cv2.imread("./imagenes/" + str(ind) + ".png",-1)
+        # La añadimos a la lista
         imagenes_similares.append(img)
+    # Imprimimos primero la imagen pregunta y luego las 5 mas similares
     pintaMI([imagen]+imagenes_similares)
 
 ################################################################################
@@ -316,7 +383,7 @@ def main():
     frame92 = cv2.imread("./imagenes/92.png",-1)
     pintaCorrespondencias(frame91,frame92)
 
-    # Aplicaco con las imagenes 1 y 4
+    # Aplicado con las imagenes 1 y 4
     frame1 = cv2.imread("./imagenes/1.png",-1)
     frame4 = cv2.imread("./imagenes/4.png",-1)
     pintaCorrespondencias(frame1,frame4)
@@ -333,6 +400,6 @@ def main():
     pintaRespuestas(frame91,histogramas_vec,91)
     print("Frame200")
     pintaRespuestas(frame200,histogramas_vec,200)
-    
+
 
 main()
