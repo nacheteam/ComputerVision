@@ -370,12 +370,35 @@ def pintaRespuestas(imagen,histo_vec,pos):
     # Imprimimos primero la imagen pregunta y luego las 5 mas similares
     pintaMI([imagen]+imagenes_similares)
 
+'''
+@brief Devuelve un modelo de indice invertido en el que para cada centroide, se
+obtiene en qué imagenes aparece.
+@param histogramas_vec Histogramas de todas las imágenes como vectores.
+@return Devuelve una lista de listas de apariciones de imágenes para cada centroide.
+'''
+def obtenerIndiceInvertido(histogramas_vec):
+    indice_invertido=[]
+    # Para cada centroide
+    for i in range(NUM_CENTROIDES):
+        #Inicializamos las apariciones de dicho centroide en cada imagen
+        apariciones = []
+        # Para cada histograma
+        for j in len(histogramas_vec):
+            # Si el histograma tiene la posición correspondiente al centroide mayor que 0
+            if histogramas_vec[j][i]>0:
+                # Añadimos el índice
+                apariciones.append(j)
+        # Añadimos la lista de indices para cada centroide
+        indice_invertido.append(apariciones)
+    return indice_invertido
+
+
 ################################################################################
 ##                                    MAIN                                    ##
 ################################################################################
 
 def main():
-
+    '''
     # Ejercicio 1
 
     # Aplicado con las imagenes 91 y 92
@@ -392,9 +415,8 @@ def main():
     frame1 = cv2.imread("./imagenes/1.png",-1)
     frame4 = cv2.imread("./imagenes/4.png",-1)
     pintaCorrespondencias(frame1,frame4)
-
-
     '''
+
     histogramas_vec = crearModeloHistogramas()
     frame1 = cv2.imread("./imagenes/1.png",-1)
     frame91 = cv2.imread("./imagenes/91.png",-1)
@@ -405,6 +427,5 @@ def main():
     pintaRespuestas(frame91,histogramas_vec,91)
     print("Frame200")
     pintaRespuestas(frame200,histogramas_vec,200)
-    '''
 
 main()
