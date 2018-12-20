@@ -403,7 +403,6 @@ def obtenerIndiceInvertido(histogramas_vec):
 ################################################################################
 
 def main():
-    '''
     # Ejercicio 1
 
     # Aplicado con las imagenes 91 y 92
@@ -420,6 +419,11 @@ def main():
     frame1 = cv2.imread("./imagenes/1.png",-1)
     frame4 = cv2.imread("./imagenes/4.png",-1)
     pintaCorrespondencias(frame1,frame4)
+
+    # Aplicado con las imagenes 132 y 133
+    frame142 = cv2.imread("./imagenes/142.png",-1)
+    frame143 = cv2.imread("./imagenes/143.png",-1)
+    pintaCorrespondencias(frame142,frame143)
     '''
     # Ejercicio 2
 
@@ -441,6 +445,6 @@ def main():
 
     # Obtenemos la estructura de indice invertido para las imagenes con los centroides.
     print(obtenerIndiceInvertido(histogramas_vec))
-
+    '''
 
 main()

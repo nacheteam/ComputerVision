@@ -120,5 +120,33 @@ Cabe decir que esta detección puede variar enormemente como en el siguiente cas
 
 En este caso podemos ver que la detección es mucho peor pero analicemos por qué. Realmente si observamos cada uno de los keypoints como se relacionan con la imagen de la derecha vemos que el emparejamiento de los mismos es razonable salvo dos de ellos, pero este emparejamiento es muy pobre porque no hemos obtenido suficientes puntos de interés en la región como para obtener un emparejamiento sólido como en los dos primeros casos.
 
+\vspace{10px}
+
+Ahora bien, podemos tomar también dos imágenes de una escena que compartan una figura como por ejemplo la mujer que se enseña en las imágenes siguientes:
+
+\begin{figure}[H]
+  \centering
+    \begin{subfigure}{0.45\textwidth}
+      \includegraphics[scale=0.33]{./Imagenes/142.png}
+    \end{subfigure}
+    \begin{subfigure}{0.45\textwidth}
+      \includegraphics[scale=0.33]{./Imagenes/143.png}
+    \end{subfigure}
+    \caption{Imágenes 142 y 143}
+\end{figure}
+
+Veamos que la detección en este caso no es satisfactoria cuando tomamos el polígono sobre la figura de la mujer.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[scale=0.35]{./Imagenes/Ejercicio1-4.png}
+  \caption{Emparejamiento con las imágenes 142 y 143}
+\end{figure}
+
+Como podemos observar nosotros estamos viendo que la mujer que aparece en la imagen de la izquierda es la misma que en la parte de la derecha pero la detección asigna los puntos de forma completamente errónea con respecto a la figura de la misma. Este fallo viene sobre todo dado porque el fondo de las imágenes es completamente distinto y por tanto, los puntos de interés tomados (que hacen el contraste en este caso de la mujer con el fondo) se ven completamente irrelevantes con respecto a la correlación que hace de los mismos.
+
+\vspace{10px}
+
+Por lo tanto podemos concluir que el uso de esta aproximación a la recuperación de regiones de interés a partir de descriptores de una región es en general útil pero conociendo las limitaciones, tanto de la obtención de un número de puntos de interés demasiado bajo como de el emparejamiento erróneo que pueda realizar la misma con otra imagen en la que sí comparten una región pero el fondo o la iluminación han cambiado y no se perciben las regiones como similares.
 
 \end{document}
