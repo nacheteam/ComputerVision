@@ -392,6 +392,26 @@ def obtenerIndiceInvertido(histogramas_vec):
         indice_invertido.append(apariciones)
     return indice_invertido
 
+'''
+@brief Función que dado el histograma y una posición pinta las imágenes que se asocian al
+centroide pos.
+@param histogramas_vec Histogramas de las imágenes como vectores
+@param pos Posición del descriptor del que queremos obtener las imágenes
+'''
+def pintaInvertido(histogramas_vec,pos):
+    # Obtenemos el modelo de indice invertido
+    indice = obtenerIndiceInvertido(histogramas_vec)
+    # Obtenemos una muestra de 5 imágenes aleatorias asociadas al descriptor pos
+    imagenes = random.sample(indice[pos],5)
+
+    # Leemos las imagenes y las almacenamos en una lista
+    imgs = []
+    for imagen in imagenes:
+        im = cv2.imread("./imagenes/" + str(imagen) + ".png",-1)
+        imgs.append(im)
+    # Pinta las imagenes
+    pintaMI(imgs)
+
 ################################################################################
 ##                              EJERCICIO 3                                   ##
 ################################################################################
@@ -492,8 +512,10 @@ def main():
     pintaRespuestas(frame200,histogramas_vec,200)
 
     # Obtenemos la estructura de indice invertido para las imagenes con los centroides.
-    print(obtenerIndiceInvertido(histogramas_vec))
-
+    print("Recupera 5 imágenes aleatorias del descriptor 5")
+    pintaInvertido(histogramas_vec,5)
+    print("Recupera 5 imágenes aleatorias del descriptor 222")
+    pintaInvertido(histogramas_vec,222)
 
     # Ejercicio 3
     pintaMinimos()
