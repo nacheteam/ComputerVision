@@ -396,6 +396,53 @@ def obtenerIndiceInvertido(histogramas_vec):
 ##                              EJERCICIO 3                                   ##
 ################################################################################
 
+'''
+@brief Función que obtiene una lista de listas de minimos. En general obtiene
+5 elementos aleatorios de kmeanscenters2000 y obtiene los 10 mas cercanos de descriptorsAndpatches2000.
+@param n_aleatorios Cuantos elementos aleatorios queremos obtener de kmeanscenters2000
+@param n_min El número de elementos que queremos obtener con distancia mínima
+@return Devuelve una lista que tiene en cada posición una lista con los índices de mínima distancia
+'''
+def obtenMinimos(n_aleatorios,n_min):
+    # Lee el fichero
+    dic = loadDictionary("./kmeanscenters2000.pkl")[2]
+    # Tomo n_aleatorios elementos de forma aleatoria de los descriptores
+    aleatorios = random.sample(list(dic),n_aleatorios)
+
+    # Lee el fichero
+    desc = loadAux("./descriptorsAndpatches2000.pkl", True)[0]
+    minimos = []
+
+    # Para cada aleatorio
+    for aleatorio in aleatorios:
+        distancias = []
+        # Para cada descriptor
+        for i in range(len(desc)):
+            # Obtenemos las distancias
+            distancias.append(np.sum(np.power(aleatorio-desc[i],2)))
+        # Calculamos los n_min primeros elementos con distancia mínima a aleatorio
+        minimos.append(np.array(distancias).argsort()[:n_min][::-1])
+    return minimos
+
+'''
+@brief Función que pinta los parches con mínima distancia calculados por obtenMinimos.
+Los pinta en escala de grises
+'''
+def pintaMinimos():
+    # Lee el fichero
+    dic = loadAux("./descriptorsAndpatches2000.pkl",True)
+    # Obtenemos 5 elementos aleatorios y le calculamos los 10 parches más cercanos
+    minimos = obtenMinimos(5,10)
+
+    # Para cada minimo
+    for min in minimos:
+        imagenes = []
+        # Para cada parche de mínima distancia
+        for m in min:
+            # Convierte a escala de grises y adjunta a imagenes
+            imagenes.append(cv2.cvtColor(dic[1][m],cv2.COLOR_RGB2GRAY))
+        # Pinta las imagenes
+        pintaMI(imagenes)
 
 
 ################################################################################
@@ -403,6 +450,7 @@ def obtenerIndiceInvertido(histogramas_vec):
 ################################################################################
 
 def main():
+    '''
     # Ejercicio 1
 
     # Aplicado con las imagenes 91 y 92
@@ -424,7 +472,7 @@ def main():
     frame142 = cv2.imread("./imagenes/142.png",-1)
     frame143 = cv2.imread("./imagenes/143.png",-1)
     pintaCorrespondencias(frame142,frame143)
-    '''
+
     # Ejercicio 2
 
     # Obtenemos los histogramas como vectores
@@ -446,5 +494,7 @@ def main():
     # Obtenemos la estructura de indice invertido para las imagenes con los centroides.
     print(obtenerIndiceInvertido(histogramas_vec))
     '''
+
+    pintaMinimos()
 
 main()
