@@ -347,7 +347,7 @@ def devuelveSimilares(pos,histogramas_vec):
             similitudes.append(np.sum(np.power(histogramas_vec[i]-histogramas_vec[pos],2)))
         # Si la posición es la de la pregunta le asignamos distancia infinita
         else:
-            similitudes.append(-1)
+            similitudes.append(float('inf'))
     # Devolvemos los 5 primeros indices
     return np.array(similitudes).argsort()[:NUM_SIMILARES][::-1]
 
