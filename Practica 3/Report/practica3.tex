@@ -149,4 +149,13 @@ Como podemos observar nosotros estamos viendo que la mujer que aparece en la ima
 
 Por lo tanto podemos concluir que el uso de esta aproximación a la recuperación de regiones de interés a partir de descriptores de una región es en general útil pero conociendo las limitaciones, tanto de la obtención de un número de puntos de interés demasiado bajo como de el emparejamiento erróneo que pueda realizar la misma con otra imagen en la que sí comparten una región pero el fondo o la iluminación han cambiado y no se perciben las regiones como similares.
 
+\section{Ejercicio 2}
+Recuperación de Imágenes
+\begin{itemize}
+  \item Implementar un modelo de índice invertido+bolsa de palabras para las imágenes dadas en imagenesIR.rar usando el vocabulario dado en kmeanscenters2000.pkl
+  \item Verificar que el modelo construido para cada imagen permite recuperar imágenes de la misma escena cuando la comparamos al resto de imágenes de la base de datos.
+  \item Elegir dos imágenes-pregunta en las que se ponga de manifiesto que el modelo usado es realmente muy efectivo para extraer sus semejantes y elegir otra imagen-pregunta en la que se muestre que el modelo puede realmente fallar. Para ello muestre las cinco imágenes más semejantes de cada una de las imágenes-pregunta seleccionadas usando como medida de distancia el producto escalar normalizado de sus vectores de bolsa de palabras.
+  \item Explicar qué conclusiones obtiene de este experimento.
+\end{itemize}
+
 \end{document}
