@@ -51,9 +51,11 @@ Emparejamiento de descriptores.
 
 Las parejas que he escogido han sido dos para ejemplificar el buen comportamiento cuando las imágenes son similares entre sí y otra en la que el reconocimiento no es tan bueno.
 
+\vspace{10px}
+
 Las parejas escogidas son:
 
-\begin{figure}[!h]
+\begin{figure}[H]
   \centering
     \begin{subfigure}{0.45\textwidth}
       \includegraphics[scale=0.33]{./Imagenes/1.png}
@@ -64,7 +66,7 @@ Las parejas escogidas son:
     \caption{Imágenes 1 y 4}
 \end{figure}
 
-\begin{figure}[!h]
+\begin{figure}[H]
   \centering
     \begin{subfigure}{0.45\textwidth}
       \includegraphics[scale=0.33]{./Imagenes/23.png}
@@ -75,7 +77,7 @@ Las parejas escogidas son:
     \caption{Imágenes 23 y 24}
 \end{figure}
 
-\begin{figure}[!h]
+\begin{figure}[H]
   \centering
     \begin{subfigure}{0.45\textwidth}
       \includegraphics[scale=0.33]{./Imagenes/91.png}
@@ -88,15 +90,17 @@ Las parejas escogidas son:
 
 La forma de proceder es, mostrar la imagen para que se pueda seleccionar la región de la misma que se desee. Esta región es diferenciada del resto mediante una máscara. La construcción de dicha máscara se hace tomando los puntos que determinan el polígono de la región y, mediante la función fillConvexPoly se rellena esta área a blanco, esto es $(255,255,255)$. Tras esto sólo tenemos que crear una matriz de ceros del mismo tamaño que la imagen y, en dichos puntos poner el valor 1. Con esto tendríamos una máscara que podemos aplicar a la función detectAndCompute para hallar los keypoints y descriptores sólo de la región que engloba el polígono.
 
+\vspace{10px}
+
 Hay que tener en cuenta que la detección puede ser buena si realmente hay un parecido importante entre la región que hemos seleccionado y alguna región de la imagen con la que queremos emparejar. Por ejemplo veamos los dos primeros ejemplos y analicémoslos.
 
-\begin{figure}[!h]
+\begin{figure}[H]
   \centering
   \includegraphics[scale=0.35]{./Imagenes/Ejercicio1-1.png}
   \caption{Emparejamiento con las imágenes 91 y 92}
 \end{figure}
 
-\begin{figure}[!h]
+\begin{figure}[H]
   \centering
   \includegraphics[scale=0.35]{./Imagenes/Ejercicio1-2.png}
   \caption{Emparejamiento con las imágenes 23 y 24}
@@ -104,13 +108,17 @@ Hay que tener en cuenta que la detección puede ser buena si realmente hay un pa
 
 Como podemos ver claramente en estas dos imágenes el emparejamiento es muy bueno puesto que los parecidos entre las dos es muy alto. Es prácticamente la misma cara con la misma escena y el mismo fondo, por lo que no sólo se empareja la cara o la figura de la persona, si no, también el fondo como en el segundo de los casos con el cuadro que se encuentra tras la persona.
 
+\vspace{10px}
+
 Cabe decir que esta detección puede variar enormemente como en el siguiente caso paradigmático.
 
-\begin{figure}[!h]
+\begin{figure}[H]
   \centering
   \includegraphics[scale=0.35]{./Imagenes/Ejercicio1-3.png}
   \caption{Emparejamiento con las imágenes 1 y 4}
 \end{figure}
+
+En este caso podemos ver que la detección es mucho peor pero analicemos por qué. Realmente si observamos cada uno de los keypoints como se relacionan con la imagen de la derecha vemos que el emparejamiento de los mismos es razonable salvo dos de ellos, pero este emparejamiento es muy pobre porque no hemos obtenido suficientes puntos de interés en la región como para obtener un emparejamiento sólido como en los dos primeros casos.
 
 
 \end{document}

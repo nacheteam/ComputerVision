@@ -1,5 +1,5 @@
 # Fdb version 3
-["pdflatex"] 1545337952 "practica3.tex" "practica3.pdf" "practica3" 1545337952
+["pdflatex"] 1545338526 "practica3.tex" "practica3.pdf" "practica3" 1545338527
   "/etc/texmf/web2c/texmf.cnf" 1533908992 475 c0e671620eb5563b2130f56340a5fde8 ""
   "/usr/share/texlive/texmf-dist/fonts/map/fontname/texfonts.map" 1511824771 3332 103109f5612ad95229751940c61aada0 ""
   "/usr/share/texlive/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex7.tfm" 1480098698 1004 54797486969f23fa377b128694d548df ""
@@ -92,13 +92,13 @@
   "Imagenes/Ejercicio1-1.png" 1545317804 691274 392fb86d0aef9c71bcaef770d5dba287 ""
   "Imagenes/Ejercicio1-2.png" 1545319190 533677 6e04f53b858f1b10e7212092fe5a1641 ""
   "Imagenes/Ejercicio1-3.png" 1545317870 569011 7f2f28b864292ce843f738204a1dfb2a ""
-  "practica3.aux" 1545337952 1677 841a37ebae6cf6088686c0b7126c64dd ""
-  "practica3.out" 1545337952 46 c82fca9fb21ea7a111965d117f633e62 ""
-  "practica3.tex" 1545337952 4854 77599bbce639f7688ba226ba8716375f ""
-  "practica3.toc" 1545337952 89 8f63ac2282c99ac438f519f34ccbec96 ""
+  "practica3.aux" 1545338526 1677 585de75a95432a67acd230debbf44dc3 ""
+  "practica3.out" 1545338526 46 c82fca9fb21ea7a111965d117f633e62 ""
+  "practica3.tex" 1545338526 5333 eb03e0274e8ac16c34b798d514856232 ""
+  "practica3.toc" 1545338526 89 8f63ac2282c99ac438f519f34ccbec96 ""
   (generated)
-  "practica3.aux"
-  "practica3.toc"
-  "practica3.pdf"
-  "practica3.log"
   "practica3.out"
+  "practica3.toc"
+  "practica3.log"
+  "practica3.pdf"
+  "practica3.aux"
