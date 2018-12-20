@@ -276,7 +276,7 @@ def obtenerHistograma(sift,img,centroides):
     # Obtenemos los descriptores
     _, des = sift.detectAndCompute(img,None)
     histograma = {}
-    #des_sample = random.sample(list(des),200) if 200<len(des) else des
+    #des_sample = random.sample(list(des),50) if 50<len(des) else des
     print("Tamaño del descriptor: " + str(len(des)))
     # Para cada descriptor
     for d in des:
@@ -383,7 +383,7 @@ def obtenerIndiceInvertido(histogramas_vec):
         #Inicializamos las apariciones de dicho centroide en cada imagen
         apariciones = []
         # Para cada histograma
-        for j in len(histogramas_vec):
+        for j in range(len(histogramas_vec)):
             # Si el histograma tiene la posición correspondiente al centroide mayor que 0
             if histogramas_vec[j][i]>0:
                 # Añadimos el índice
@@ -426,6 +426,8 @@ def main():
     frame1 = cv2.imread("./imagenes/1.png",-1)
     frame91 = cv2.imread("./imagenes/91.png",-1)
     frame200 = cv2.imread("./imagenes/200.png",-1)
+
+    #Vemos las imagenes mas similares para estas
     print("Las 5 imágenes más similares para la imagen 1")
     pintaRespuestas(frame1,histogramas_vec,1)
     print("Las 5 imágenes más similares para la imagen 91")
@@ -433,6 +435,7 @@ def main():
     print("Las 5 imágenes más similares para la imagen 200")
     pintaRespuestas(frame200,histogramas_vec,200)
 
+    # Obtenemos la estructura de indice invertido para las imagenes con los centroides.
     print(obtenerIndiceInvertido(histogramas_vec))
 
 main()
