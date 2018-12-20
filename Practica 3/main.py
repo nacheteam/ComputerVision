@@ -2,6 +2,8 @@
 import numpy as np
 import cv2
 import pickle
+import random
+random.seed(123456789)
 
 NUM_IMAGENES = 440
 NUM_CENTROIDES = 2000
@@ -231,12 +233,11 @@ def pintaCorrespondencias(img1,img2):
 ##                              EJERCICIO 2                                   ##
 ################################################################################
 
-# No hago la raiz cuadrada para no saturar
 def distanciaEuclidea(v1,v2s):
-    return np.sum(np.power(np.array(v1)-np.array(v2s),2),axis=1)
+    return np.sqrt(np.sum(np.power(np.array(v1)-np.array(v2s),2),axis=1))
 
 def normaEuclidea(v):
-    return np.sum(np.array(v)*np.array(v))
+    return np.sqrt(np.sum(np.array(v)*np.array(v)))
 
 def convierteAVectorNormalizado(histograma):
     vec = []
@@ -250,7 +251,8 @@ def convierteAVectorNormalizado(histograma):
 def obtenerHistograma(sift,img,centroides):
     _, des = sift.detectAndCompute(img,None)
     histograma = {}
-
+    #des_sample = random.sample(list(des),200) if 200<len(des) else des
+    print("Tamaño del descriptor: " + str(len(des)))
     for d in des:
         distancias = distanciaEuclidea(d,centroides)
         min = np.argmin(distancias)
@@ -261,7 +263,7 @@ def obtenerHistograma(sift,img,centroides):
     return histograma
 
 def crearModeloHistogramas():
-    sift = cv2.xfeatures2d.SIFT_create()
+    sift = cv2.xfeatures2d.SIFT_create(contrastThreshold=0.07)
     dic = loadDictionary("./kmeanscenters2000.pkl")
     imagenes = []
     for i in range(NUM_IMAGENES+1):
@@ -271,10 +273,11 @@ def crearModeloHistogramas():
 
     contador = 0
     for img in imagenes:
-        print(contador)
+        print("Creando modelo de histogramas " + str(contador) + "/" + str(len(imagenes)))
         contador+=1
         histogramas.append(obtenerHistograma(sift,img,dic[2]))
-    return histogramas
+    histogramas_vec=convierteHistogramasVectores(histogramas)
+    return histogramas_vec
 
 def convierteHistogramasVectores(histogramas):
     histogramas_vec = []
@@ -286,10 +289,19 @@ def devuelveSimilares(pos,histogramas_vec):
     similitudes = []
     for i in range(len(histogramas_vec)):
         if pos!=i:
-            similitudes.append(np.sum(np.multiply(histogramas_vec[i],histogramas_vec[pos])))
+            # Estoy usando la distancia euclidea, puede que sea el producto escalar
+            similitudes.append(np.sum(np.power(histogramas_vec[i]-histogramas_vec[pos],2)))
         else:
-            similitudes.append(0)
-    return arr.argsort()[-NUM_SIMILARES:][::-1]
+            similitudes.append(float('inf'))
+    return np.array(similitudes).argsort()[-NUM_SIMILARES:]
+
+def pintaRespuestas(imagen,histo_vec,pos):
+    indices_similares = devuelveSimilares(pos,histo_vec)
+    imagenes_similares=[]
+    for ind in indices_similares:
+        img = cv2.imread("./imagenes/" + str(ind) + ".png",-1)
+        imagenes_similares.append(img)
+    pintaMI([imagen]+imagenes_similares)
 
 ################################################################################
 ##                                    MAIN                                    ##
@@ -310,6 +322,17 @@ def main():
     pintaCorrespondencias(frame1,frame4)
     '''
 
-    print(crearModeloHistogramas())
+
+    histogramas_vec = crearModeloHistogramas()
+    frame1 = cv2.imread("./imagenes/1.png",-1)
+    frame91 = cv2.imread("./imagenes/91.png",-1)
+    frame200 = cv2.imread("./imagenes/200.png",-1)
+    print("Frame1")
+    pintaRespuestas(frame1,histogramas_vec,1)
+    print("Frame91")
+    pintaRespuestas(frame91,histogramas_vec,91)
+    print("Frame200")
+    pintaRespuestas(frame200,histogramas_vec,200)
+    
 
 main()
