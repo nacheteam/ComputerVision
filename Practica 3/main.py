@@ -417,15 +417,22 @@ def main():
     pintaCorrespondencias(frame1,frame4)
     '''
 
+    # Ejercicio 2
+
+    # Obtenemos los histogramas como vectores
     histogramas_vec = crearModeloHistogramas()
+
+    #Tomamos las imagenes
     frame1 = cv2.imread("./imagenes/1.png",-1)
     frame91 = cv2.imread("./imagenes/91.png",-1)
     frame200 = cv2.imread("./imagenes/200.png",-1)
-    print("Frame1")
+    print("Las 5 imágenes más similares para la imagen 1")
     pintaRespuestas(frame1,histogramas_vec,1)
-    print("Frame91")
+    print("Las 5 imágenes más similares para la imagen 91")
     pintaRespuestas(frame91,histogramas_vec,91)
-    print("Frame200")
+    print("Las 5 imágenes más similares para la imagen 200")
     pintaRespuestas(frame200,histogramas_vec,200)
+
+    print(obtenerIndiceInvertido(histogramas_vec))
 
 main()
