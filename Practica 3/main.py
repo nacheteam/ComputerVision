@@ -3,6 +3,7 @@ import numpy as np
 import cv2
 import pickle
 import random
+import cProfile
 random.seed(123456789)
 
 NUM_IMAGENES = 440
@@ -276,19 +277,22 @@ def obtenerHistograma(sift,img,centroides):
     # Obtenemos los descriptores
     _, des = sift.detectAndCompute(img,None)
     histograma = {}
-    #des_sample = random.sample(list(des),50) if 50<len(des) else des
+    #des_sample = random.sample(list(des),200) if 200<len(des) else des
     print("Tamaño del descriptor: " + str(len(des)))
-    # Para cada descriptor
-    for d in des:
-        # Calculamos las distancias de el descriptor a todos los centroides
-        distancias = distanciaEuclidea(d,centroides)
-        # Obtenemos el indice del minimo
-        min = np.argmin(distancias)
-        # Si no está en el histograma lo ponemos a uno, si está sumamos uno
-        if not str(min) in histograma:
-            histograma[str(min)] = 1
+
+
+    # Se crea el objeto BFMatcher con norma L2
+    brute_force = cv2.BFMatcher(cv2.NORM_L2,crossCheck=False)
+    # Se obtiene el elemento mas cercan para cada descriptor
+    matches = brute_force.match(des,centroides)
+
+    for m in matches:
+        indice_centroide = m.trainIdx
+        if not str(indice_centroide) in histograma:
+            histograma[str(indice_centroide)] = 1
         else:
-            histograma[str(min)]+=1
+            histograma[str(indice_centroide)]+=1
+
     return histograma
 
 '''
@@ -297,7 +301,7 @@ def obtenerHistograma(sift,img,centroides):
 '''
 def crearModeloHistogramas():
     # Creo el objeto SIFT
-    sift = cv2.xfeatures2d.SIFT_create()
+    sift = cv2.xfeatures2d.SIFT_create(contrastThreshold=0.01,edgeThreshold=6,sigma=1.6)
     # Cargamos los centroides
     dic = loadDictionary("./kmeanscenters2000.pkl")
     # Hacemos un vector con todas las imagenes en orden
@@ -344,12 +348,13 @@ def devuelveSimilares(pos,histogramas_vec):
         # Si la posición no es la de la pregunta, hacemos la distancia euclídea
         if pos!=i:
             # Uso la distancia euclidea TODO: Cambiarlo a producto escalar
-            similitudes.append(np.sum(np.power(histogramas_vec[i]-histogramas_vec[pos],2)))
+            similitudes.append(np.dot(histogramas_vec[i],histogramas_vec[pos]))
+            #similitudes.append(np.sum(np.power(histogramas_vec[i]-histogramas_vec[pos],2)))
         # Si la posición es la de la pregunta le asignamos distancia infinita
         else:
-            similitudes.append(float('inf'))
+            similitudes.append(-1)
     # Devolvemos los 5 primeros indices
-    return np.array(similitudes).argsort()[:NUM_SIMILARES][::-1]
+    return np.array(similitudes).argsort()[::-1][:NUM_SIMILARES]
 
 '''
 @brief Función que dada una imagen pinta las más similares
@@ -402,7 +407,7 @@ def pintaInvertido(histogramas_vec,pos):
     # Obtenemos el modelo de indice invertido
     indice = obtenerIndiceInvertido(histogramas_vec)
     # Obtenemos una muestra de 5 imágenes aleatorias asociadas al descriptor pos
-    imagenes = random.sample(indice[pos],5)
+    imagenes = random.sample(indice[pos],5) if len(indice[pos])>5 else indice[pos]
 
     # Leemos las imagenes y las almacenamos en una lista
     imgs = []
@@ -439,7 +444,7 @@ def obtenMinimos(n_aleatorios,n_min):
         # Para cada descriptor
         for i in range(len(desc)):
             # Obtenemos las distancias
-            distancias.append(np.sum(np.power(aleatorio-desc[i],2)))
+            distancias.append(np.dot(aleatorio,desc[i]))
         # Calculamos los n_min primeros elementos con distancia mínima a aleatorio
         minimos.append(np.array(distancias).argsort()[:n_min][::-1])
     return minimos
