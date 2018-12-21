@@ -458,6 +458,8 @@ def obtenMinimosYMaximo(num_parches,n_min):
         for match in matches[ind]:
             res.append(match.trainIdx)
         resultado.append(res)
+
+    #Obtenemos el elemento de máxima distancia y lo añadimos
     indice_maximo = np.array(media_distancias).argsort()[::-1][0]
     res = []
     for match in matches[indice_maximo]:
