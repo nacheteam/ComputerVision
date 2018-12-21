@@ -168,9 +168,81 @@ Si queremos elaborar un modelo de índice invertido tenemos que pensar que ahora
 
 \vspace{10px}
 
-Para el estudio de la similitud de dos imágenes vamos a emplear la siguiente medida de similitud:
+Para el estudio de la similitud de dos imágenes vamos a emplear la siguiente medida:
 
-$$$$
+$$<u,v> = |u|\cdot |v|\cdot \cos{\theta}$$
+
+Lo que estamos empleando no es más que el producto escalar de dichos vectores. Hay que tener en cuenta que los histogramas que he mencionado anteriormente pueden verse también como vectores, donde tienen en cada posición un cero si dicho centroide no es el más cercano para ningún descriptor o un número mayor que cero que representa cuántas veces ha sido el más cercano para algún descriptor de la imagen. Estos vectores normalizados son los que vamos a emplear para estudiar si dos imágenes son similares.
+
+\vspace{10px}
+
+Como he dicho los vectores están normalizados, por lo que la norma de los mismos es 1 y por tanto nuestra medida de similitud nos queda:
+
+$$<u,v> = \cos{\theta}$$
+
+O lo que es lo mismo, un valor entre -1 y 1. En nuestro caso queremos que los vectores sean lo más parecidos entre sí, esto es que el ángulo que formen sea lo más cercano a cero y se traduce por tanto en que el producto escalar esté lo más próximo a 1.
+
+\vspace{10px}
+
+Una vez tenemos todo este modelo de similitudes, veamos los resultados obtenidos con las siguientes imágenes pregunta:
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[scale=0.135]{./Imagenes/Ejercicio2-1.png}
+  \caption{Imagen pregunta 15}
+	\label{Ejercicio2-1}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[scale=0.135]{./Imagenes/Ejercicio2-2.png}
+  \caption{Imagen pregunta 209}
+	\label{Ejercicio2-2}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[scale=0.135]{./Imagenes/Ejercicio2-3.png}
+  \caption{Imagen pregunta 1}
+	\label{Ejercicio2-3}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[scale=0.135]{./Imagenes/Ejercicio2-4.png}
+  \caption{Imagen pregunta 91}
+	\label{Ejercicio2-4}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[scale=0.135]{./Imagenes/Ejercicio2-5.png}
+  \caption{Imagen pregunta 200}
+	\label{Ejercicio2-5}
+\end{figure}
+
+En estas imágenes cabe destacar que la primera de la tira es la propia imagen-pregunta y las 5 restantes son las emparejadas con la misma.
+
+\vspace{10px}
+
+Si observamos los resultados tenemos por ejemplo la imagen \ref{Ejercicio2-1} en la que las 5 imágenes obtenidas con más similitud son casi iguales, es decir, el emparejamiento es muy bueno. Si observamos el segundo de los casos en la imagen \ref{Ejercicio2-2} vemos que acierta en 3 de las 5 imágenes que ha tomado como las más similares y por tanto el resultado es bueno también. Si continuamos observando ya podemos percibir que en el reso de los casos el emparejamiento no es nada bueno como por ejemplo en las imágenes \ref{Ejercicio2-3} y \ref{Ejercicio2-4} en las que acierta en una o dos imágenes de las similares y por último el caso de la imagen \ref{Ejercicio2-5} en el que sólo la primera de las imágenes similares tiene algún parecido con la imagen-pregunta.
+
+\vspace{10px}
+
+Si analizamos más profundamente por qué hemos obtenido estos resultados podemos ver que, si tenemos imágenes con los mismos personajes, vestidos de igual forma y con un fondo igual o parecido entonces la similitud es muy alta. Si por contra por ejemplo tenemos a un mismo personaje con la misma ropa pero con dos fondos radicalmente diferentes como por ejemplo la imagen 208:
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[scale=0.35]{./Imagenes/208.png}
+  \caption{Imagen 208}
+	\label{208}
+\end{figure}
+
+Esta imagen es claramente parecida a las que corresponden a la tira de imágenes \ref{Ejercicio2-2}, pero como podemos ver el fondo de esta imagen es radicalmente diferente al de la imagen pregunta, por lo que, aún siendo una foto que pertenece a la misma escena y debería ser de las más similares con respecto a la imagen-pregunta, no la estamos detectando como tal.
+
+\vspace{10px}
+
+Las conclusiones que podemos obtener de este experimento es que los resultados que obtengamos en cuanto a imágenes similares son altamente dependientes del número de descriptores obtenidos y de que las imágenes compartan un fondo parecido y unas figuras similares, si alguno de estos dos hechos varía entonces no obtendremos la similitud que buscamos. Esto es, si tenemos una imagen con un fondo similar pero con personajes distintos entonces no serán similares según este modelo y distancia o si tenemos imágenes con figuras similares o iguales pero un fondo diferente tampoco detectaremos a estas imagenes.
 
 \section{Ejercicio 3}
 Visualización del vocabulario
