@@ -254,4 +254,50 @@ Visualización del vocabulario
 
 \subsection*{\underline{Solución}}
 
+Para resolver esto he desarrollado una función que toma los descriptores y parches del fichero descriptorsAndpatches2000.pkl y los centroides de kmeanscenters2000.pkl. Para cada centroide vemos cuales son los 10 descriptores de descriptorsAndpatches2000.pkl que están más cerca y tomamos sus regiones asociadas. De esta forma para cada uno de los centroides tendremos 10 regiones asociadas de mínima distancia. Ahora ordenamos este emparejamiento según la media de las distancias, esto es, obtendremos esta lista de centroides y parches ordenadas según distancia media de menor a mayor. De esta forma vamos a obtener en la primera posición los 10 parches asociados a un descriptor cuya distancia media es mínima en nuestro conjunto.
+
+\vspace{10px}
+
+Para obtener un resultado global e interpretable tomamos no sólo los elementos de mínima distancia si no también el de máxima distancia. Observemos los parches de los 3 primeros centroides con distancia mínima:
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[scale=1.1]{./Imagenes/Ejercicio3-1.png}
+  \caption{Parches del centroide de mínima distancia}
+	\label{Ejercicio3-1}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[scale=1.1]{./Imagenes/Ejercicio3-2.png}
+  \caption{Parches del segundo centroide de mínima distancia}
+	\label{Ejercicio3-2}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[scale=1.1]{./Imagenes/Ejercicio3-3.png}
+  \caption{Parches del tercer centroide de mínima distancia}
+	\label{Ejercicio3-3}
+\end{figure}
+
+Como podemos observar estos son los 3 conjuntos de 10 parches más parecidos entre sí. Si los observamos vemos que realmente tienen un parecido. Como mucho podríamos citar que en la segunda y tercera tira hay un elemento en el centro y al final respectivamente que destacan como bastante diferentes con respecto al resto, pero por el resto de imágenes no encontramos una diferencia muy grande.
+
+\vspace{10px}
+
+Observemos ahora el cconjunto de 10 parches con mayor distancia entre ellos.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[scale=1.1]{./Imagenes/Ejercicio3-4.png}
+  \caption{Parches del centroide de máxima distancia distancia}
+	\label{Ejercicio3-4}
+\end{figure}
+
+Estos 10 parches son los que mayor distancia media tienen entre sí. Como podemos ver realmente no hay una diferencia entre ellos enorme Quizás esta tira ha sido penalizada más en cuanto a la distancia porque alterna imágenes más claras y oscuras que en el resto (con tonos de gris claro más pronunciados y negros más pronunciados que el resto de imágenes). Aún así podemos ver que los parches escogidos no se diferencian entre sí al enlazarlos según el vocabulario que hemos obtenido.
+
+\vspace{10px}
+
+Este hecho no puede decirnos más que para los parches escogidos el vocabulario funciona razonablemente bien, lo que no quiere decir que si cambiásemos el conjunto de parches entonces seguiría funcionando igual de bien.
+
 \end{document}

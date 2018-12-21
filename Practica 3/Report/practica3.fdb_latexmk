@@ -1,5 +1,5 @@
 # Fdb version 3
-["pdflatex"] 1545410944 "practica3.tex" "practica3.pdf" "practica3" 1545410946
+["pdflatex"] 1545414394 "practica3.tex" "practica3.pdf" "practica3" 1545414396
   "/etc/texmf/web2c/texmf.cnf" 1533908992 475 c0e671620eb5563b2130f56340a5fde8 ""
   "/usr/share/texlive/texmf-dist/fonts/map/fontname/texfonts.map" 1511824771 3332 103109f5612ad95229751940c61aada0 ""
   "/usr/share/texlive/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex7.tfm" 1480098698 1004 54797486969f23fa377b128694d548df ""
@@ -102,13 +102,17 @@
   "Imagenes/Ejercicio2-3.png" 1545388920 1631529 d12886c1fa64ef5a06fcac0ebd66473d ""
   "Imagenes/Ejercicio2-4.png" 1545388932 1791969 8b5938830499dd5cb4a086c41799fb64 ""
   "Imagenes/Ejercicio2-5.png" 1545388941 1451506 b70af21b8f0dba8fe23da6fb244d5288 ""
-  "practica3.aux" 1545410946 3384 827933735fc450f23315f482facd0381 ""
-  "practica3.out" 1545410946 138 c37e2a769a7bd631925245363132fe1f ""
-  "practica3.tex" 1545410944 14606 54c86b8afdf788c118971eb4c75e27d9 ""
-  "practica3.toc" 1545410946 221 59b4cb48905dde1f2faae52c9c9ea3b2 ""
+  "Imagenes/Ejercicio3-1.png" 1545413175 11071 5c787d41c1264406c54425eea367b5b1 ""
+  "Imagenes/Ejercicio3-2.png" 1545413198 13841 76274bc1d350055f91395b91f5eaff2f ""
+  "Imagenes/Ejercicio3-3.png" 1545413222 11978 5aa33599c63200b19c664faaf573686b ""
+  "Imagenes/Ejercicio3-4.png" 1545414229 11232 2028b04bf6b3deab0aa2c94bf3462411 ""
+  "practica3.aux" 1545414396 4484 b4b51e30e5ac737331e07af8eb0529e7 ""
+  "practica3.out" 1545414396 138 c37e2a769a7bd631925245363132fe1f ""
+  "practica3.tex" 1545414394 17556 14adf9f4a1b202a7a4c52e84056f1566 ""
+  "practica3.toc" 1545414396 221 59b4cb48905dde1f2faae52c9c9ea3b2 ""
   (generated)
-  "practica3.out"
-  "practica3.toc"
   "practica3.log"
-  "practica3.aux"
+  "practica3.toc"
   "practica3.pdf"
+  "practica3.aux"
+  "practica3.out"
