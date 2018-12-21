@@ -1,4 +1,4 @@
 \babel@toc {spanish}{}
 \contentsline {section}{\numberline {1}Ejercicio 1}{2}{section.1}
 \contentsline {section}{\numberline {2}Ejercicio 2}{6}{section.2}
-\contentsline {section}{\numberline {3}Ejercicio 3}{6}{section.3}
+\contentsline {section}{\numberline {3}Ejercicio 3}{7}{section.3}

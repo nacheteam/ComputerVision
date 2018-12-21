@@ -160,6 +160,18 @@ Recuperación de Imágenes
 
 \subsection*{\underline{Solución}}
 
+El primer paso en la realización del ejercicio es obtener la frecuencia de aparición de cada centroide en cada imagen. Para ello lo que tenemos que hacer es, dada una imagen, calcularle los descriptores y calcular para cada uno de ellos cuál es el elemento de kmeanscenters2000.pkl que está más cercano. Esta intormación la he guardado en un diccionario de Python de forma que la clave sería el índice correspondiente al centroide y el valor el número de veces que aparece dicho centroide. Con esta información para cada una de las imágenes tendremos un vector de histogramas.
+
+\vspace{10px}
+
+Si queremos elaborar un modelo de índice invertido tenemos que pensar que ahora queremos guardar para cada centroide en qué imágenes aparece. Para obtener esto tenemos que ir recorriendo la estructura de histogramas y para cada centroide comprobar si aparece en el histograma correspondiente a dicha imagen. De esta forma acabamos con una estructura en la que para cada índice de centroides tenemos los índices correspondientes a las imágenes en las que al menos un descriptor tiene a dicho centroide como el más cercano.
+
+\vspace{10px}
+
+Para el estudio de la similitud de dos imágenes vamos a emplear la siguiente medida de similitud:
+
+$$$$
+
 \section{Ejercicio 3}
 Visualización del vocabulario
 \begin{itemize}
