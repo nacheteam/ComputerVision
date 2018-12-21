@@ -4,7 +4,7 @@ import cv2
 import pickle
 import random
 import cProfile
-random.seed(123)
+random.seed(123456789)
 
 NUM_IMAGENES = 440
 NUM_CENTROIDES = 2000
