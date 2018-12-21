@@ -421,14 +421,15 @@ def pintaInvertido(histogramas_vec,pos):
 ##                              EJERCICIO 3                                   ##
 ################################################################################
 
-def obtenMinimos(num_parches,n_min):
+def obtenMinimosYMaximo(num_parches,n_min):
     # TODO: MODIFICAR LA DOCUMENTACION
     '''
-    @brief Función que obtiene una lista de listas de minimos. En general obtiene
+    @brief Función que obtiene una lista de listas de minimos y un máximo. En general obtiene
     5 elementos aleatorios de kmeanscenters2000 y obtiene los 10 mas cercanos de descriptorsAndpatches2000.
     @param num_parches Cuantos parches queremos obtener por cada ocurrencia
     @param n_min El número de elementos que queremos obtener con distancia mínima
     @return Devuelve una lista que tiene en cada posición una lista con los índices de mínima distancia
+    y el último elemento es el de mayor distancia
     '''
     # Lee el fichero
     dic = loadDictionary("./kmeanscenters2000.pkl")[2]
@@ -451,13 +452,18 @@ def obtenMinimos(num_parches,n_min):
         media_distancias.append(dis)
 
     # Me quedo con los primeros elementos, es decir, los que menor media tienen.
-    minimos = []
+    resultado = []
     for ind in np.array(media_distancias).argsort()[::-1][:num_parches]:
-        min = []
+        res = []
         for match in matches[ind]:
-            min.append(match.trainIdx)
-        minimos.append(min)
-    return minimos
+            res.append(match.trainIdx)
+        resultado.append(res)
+    indice_maximo = np.array(media_distancias).argsort()[::-1][0]
+    res = []
+    for match in matches[ind]:
+        res.append(match.trainIdx)
+    resultado.append(res)
+    return resultado
 
 def pintaMinimos():
     '''
@@ -467,7 +473,7 @@ def pintaMinimos():
     # Lee el fichero
     dic = loadAux("./descriptorsAndpatches2000.pkl",True)
     # Obtenemos 5 elementos aleatorios y le calculamos los 10 parches más cercanos
-    minimos = obtenMinimos(3,10)
+    minimos = obtenMinimosYMaximo(3,10)
 
     # Para cada minimo
     for min in minimos:
@@ -485,7 +491,7 @@ def pintaMinimos():
 ################################################################################
 
 def main():
-
+    '''
     # Ejercicio 1
 
     # Aplicado con las imagenes 91 y 92
@@ -543,7 +549,7 @@ def main():
     pintaInvertido(histogramas_vec,76)
     print("Recupera 5 imágenes aleatorias del descriptor 1300")
     pintaInvertido(histogramas_vec,1300)
-    
+    '''
 
     # Ejercicio 3
     pintaMinimos()
