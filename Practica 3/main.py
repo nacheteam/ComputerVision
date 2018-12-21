@@ -485,7 +485,7 @@ def pintaMinimos():
 ################################################################################
 
 def main():
-    '''
+    
     # Ejercicio 1
 
     # Aplicado con las imagenes 91 y 92
@@ -507,7 +507,7 @@ def main():
     frame142 = cv2.imread("./imagenes/142.png",-1)
     frame143 = cv2.imread("./imagenes/143.png",-1)
     pintaCorrespondencias(frame142,frame143)
-
+    
     # Ejercicio 2
 
     # Obtenemos los histogramas como vectores
@@ -543,9 +543,10 @@ def main():
     pintaInvertido(histogramas_vec,76)
     print("Recupera 5 imágenes aleatorias del descriptor 1300")
     pintaInvertido(histogramas_vec,1300)
-    '''
 
+    
     # Ejercicio 3
     pintaMinimos()
+    
 
 main()
