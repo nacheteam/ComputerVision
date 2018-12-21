@@ -505,10 +505,16 @@ def main():
 
     #Tomamos las imagenes
     frame1 = cv2.imread("./imagenes/1.png",-1)
+    frame15 = cv2.imread("./imagenes/15.png",-1)
     frame91 = cv2.imread("./imagenes/91.png",-1)
+    frame209 = cv2.imread("./imagenes/209.png",-1)
     frame200 = cv2.imread("./imagenes/200.png",-1)
 
     #Vemos las imagenes mas similares para estas
+    print("Las 5 imágenes más similares para la imagen 15")
+    pintaRespuestas(frame15,histogramas_vec,15)
+    print("Las 5 imágenes más similares para la imagen 209")
+    pintaRespuestas(frame209,histogramas_vec,209)
     print("Las 5 imágenes más similares para la imagen 1")
     pintaRespuestas(frame1,histogramas_vec,1)
     print("Las 5 imágenes más similares para la imagen 91")
@@ -521,6 +527,12 @@ def main():
     pintaInvertido(histogramas_vec,5)
     print("Recupera 5 imágenes aleatorias del descriptor 222")
     pintaInvertido(histogramas_vec,222)
+    print("Recupera 5 imágenes aleatorias del descriptor 100")
+    pintaInvertido(histogramas_vec,100)
+    print("Recupera 5 imágenes aleatorias del descriptor 76")
+    pintaInvertido(histogramas_vec,76)
+    print("Recupera 5 imágenes aleatorias del descriptor 1300")
+    pintaInvertido(histogramas_vec,1300)
 
     # Ejercicio 3
     pintaMinimos()
