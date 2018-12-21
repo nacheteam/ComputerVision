@@ -4,7 +4,7 @@ import cv2
 import pickle
 import random
 import cProfile
-random.seed(123456789)
+random.seed(123)
 
 NUM_IMAGENES = 440
 NUM_CENTROIDES = 2000
@@ -113,29 +113,27 @@ def loadAux(filename, flagPatches):
 ##                         FUNCIONES AUXILIARES                               ##
 ################################################################################
 
-'''
-@brief La función toma una matriz de formato (x,y,3) y pinta la imagen asociada.
-@param im Matriz que representa la imagen.
-'''
-
 def pintaI(im):
+    '''
+    @brief La función toma una matriz de formato (x,y,3) y pinta la imagen asociada.
+    @param im Matriz que representa la imagen.
+    '''
     cv2.namedWindow('Imagen', cv2.WINDOW_NORMAL)
     cv2.imshow('Imagen',im)
     cv2.waitKey(0)
     cv2.destroyAllWindows()
-
-'''
-@brief La función toma una secuencia de imágenes y las
-       concatena para poder imprimirlas en una sola ventana.
-@param vim Secuencia de direcciones absolutas a las imágenes a dibujar. Deben
-       tener la misma altura.
-'''
 
 # Si las imágenes tienen formatos de color distintos no se podrían unir con hconcat puesto que en cada
 # posición de la matriz una tendria una tripleta y la otra un sólo valor. Este problema se solventa con la función
 # cvtColor que nos convierte una imagen en escala de grises a RGB.
 
 def pintaMI(vim):
+    '''
+    @brief La función toma una secuencia de imágenes y las
+           concatena para poder imprimirlas en una sola ventana.
+    @param vim Secuencia de direcciones absolutas a las imágenes a dibujar. Deben
+           tener la misma altura.
+    '''
     imagenes = []
     max_h = 0
     for im in vim:
@@ -159,13 +157,13 @@ def pintaMI(vim):
 ##                              EJERCICIO 1                                   ##
 ################################################################################
 
-'''
-@brief Función que obtiene una máscara con unos dentro del polígono
-@param img Imagen de la que va a obtenerse la máscara
-@param puntos_poly Lista de tuplas que respresentan puntos en la imagen img y que delimitan un polígono
-@return Devuelve una matriz que representa una máscara
-'''
 def creaMascara(img,puntos_poly):
+    '''
+    @brief Función que obtiene una máscara con unos dentro del polígono
+    @param img Imagen de la que va a obtenerse la máscara
+    @param puntos_poly Lista de tuplas que respresentan puntos en la imagen img y que delimitan un polígono
+    @return Devuelve una matriz que representa una máscara
+    '''
     # Tomamos las dimensiones
     (n,m,k) = img.shape
     # Rellenamos la imagen a ceros y con blancos la región
@@ -180,18 +178,18 @@ def creaMascara(img,puntos_poly):
                 mascara[i][j]=1
     return mascara
 
-'''
-@brief La función obtiene la imagen con las ocurrencias de los descriptores entre img1 y img2
-las correspondencias Lowe-Average-2NN
-@param img1 Imagen con la que se quiere establecer una correspondencia entre descriptores
-@param img2 Imagen con la que se quiere establecer una correspondencia entre descriptores
-@param kp_sift1 Puntos de interés de la imagen 1 usando SIFT
-@param kp_sift2 Puntos de interés de la imagen 2 usando SIFT
-@param des1 Descriptores de la imagen 1 de los puntos de interés kp_sift1
-@param des2 Descriptores de la imagen 2 de los puntos de interés kp_sift2
-@return Imagen con los matches
-'''
 def obtenerImagenLoweAverage2NNMatching(img1,img2,kp_sift1,kp_sift2,des1,des2):
+    '''
+    @brief La función obtiene la imagen con las ocurrencias de los descriptores entre img1 y img2
+    las correspondencias Lowe-Average-2NN
+    @param img1 Imagen con la que se quiere establecer una correspondencia entre descriptores
+    @param img2 Imagen con la que se quiere establecer una correspondencia entre descriptores
+    @param kp_sift1 Puntos de interés de la imagen 1 usando SIFT
+    @param kp_sift2 Puntos de interés de la imagen 2 usando SIFT
+    @param des1 Descriptores de la imagen 1 de los puntos de interés kp_sift1
+    @param des2 Descriptores de la imagen 2 de los puntos de interés kp_sift2
+    @return Imagen con los matches
+    '''
     # Se crea el objeto BFMatcher con la norma L2 y con el crossCheck a False puesto que no es necesario
     brute_force = cv2.BFMatcher(cv2.NORM_L2,crossCheck=False)
     # Se encuentran las correspondencias con k=2
@@ -211,12 +209,13 @@ def obtenerImagenLoweAverage2NNMatching(img1,img2,kp_sift1,kp_sift2,des1,des2):
     res = cv2.drawMatchesKnn(img1,kp_sift1,img2,kp_sift2,buenos,outImg,flags=2)
     return res
 
-'''
-@brief Función que pinta la imagen con las correspondencias en una región
-@param img1 Imagen
-@param img2 Imagen
-'''
+
 def pintaCorrespondencias(img1,img2):
+    '''
+    @brief Función que pinta la imagen con las correspondencias en una región
+    @param img1 Imagen
+    @param img2 Imagen
+    '''
     # Se obtine la región mediante la interacción del usuario
     puntos1 = extractRegion(img1)
     # Creamos la máscara
@@ -234,30 +233,31 @@ def pintaCorrespondencias(img1,img2):
 ##                              EJERCICIO 2                                   ##
 ################################################################################
 
-'''
-@brief Función que obtiene la distancia euclídea entre un vector y una lista de vectores
-@param v1 Vector
-@param v2s Lista de vectores
-@return Vector con la distancia euclídea del vector v1 a cada uno de la lista v2s
-'''
 def distanciaEuclidea(v1,v2s):
+    '''
+    @brief Función que obtiene la distancia euclídea entre un vector y una lista de vectores
+    @param v1 Vector
+    @param v2s Lista de vectores
+    @return Vector con la distancia euclídea del vector v1 a cada uno de la lista v2s
+    '''
     return np.sqrt(np.sum(np.power(np.array(v1)-np.array(v2s),2),axis=1))
 
-'''
-@brief Función que obtiene la norma euclídea de un vector
-@param v Vector del que se quiere obtener la norma euclídea
-@return Devuelve la norma euclídea del vector v
-'''
 def normaEuclidea(v):
+    '''
+    @brief Función que obtiene la norma euclídea de un vector
+    @param v Vector del que se quiere obtener la norma euclídea
+    @return Devuelve la norma euclídea del vector v
+    '''
     return np.sqrt(np.sum(np.array(v)*np.array(v)))
 
-'''
-@brief Función que convierte un histograma a un vector normalizado
-@param histograma Histograma con las ocurrencias de cada centroide
-@return Devuelve un vector que tiene en cada posición un 0 si no hay ocurrencias
-del centroide o el número de ocurrencias del mismo. Este vector está normalizado.
-'''
+
 def convierteAVectorNormalizado(histograma):
+    '''
+    @brief Función que convierte un histograma a un vector normalizado
+    @param histograma Histograma con las ocurrencias de cada centroide
+    @return Devuelve un vector que tiene en cada posición un 0 si no hay ocurrencias
+    del centroide o el número de ocurrencias del mismo. Este vector está normalizado.
+    '''
     vec = []
     for i in range(NUM_CENTROIDES):
         if str(i) in histograma:
@@ -266,14 +266,14 @@ def convierteAVectorNormalizado(histograma):
             vec.append(0)
     return vec/normaEuclidea(vec)
 
-'''
-@brief Función que obtiene el histograma de una imagen dada
-@param sift Objeto de tipo SIFT que se usa para obtener los descriptores
-@param img Imagen de la que se quiere obtener el histograma
-@param centroides Lista de centroides para sacar los mas cercanos y el número de ocurrencias de los mismos.
-@return Devuelve un objeto de tipo diccionario con el histograma
-'''
 def obtenerHistograma(sift,img,centroides):
+    '''
+    @brief Función que obtiene el histograma de una imagen dada
+    @param sift Objeto de tipo SIFT que se usa para obtener los descriptores
+    @param img Imagen de la que se quiere obtener el histograma
+    @param centroides Lista de centroides para sacar los mas cercanos y el número de ocurrencias de los mismos.
+    @return Devuelve un objeto de tipo diccionario con el histograma
+    '''
     # Obtenemos los descriptores
     _, des = sift.detectAndCompute(img,None)
     histograma = {}
@@ -295,11 +295,11 @@ def obtenerHistograma(sift,img,centroides):
 
     return histograma
 
-'''
-@brief Función que obtiene todos los histogramas como vectores de todas las imágenes
-@return Devuelve una lista de vectores que representan los histogramas
-'''
 def crearModeloHistogramas():
+    '''
+    @brief Función que obtiene todos los histogramas como vectores de todas las imágenes
+    @return Devuelve una lista de vectores que representan los histogramas
+    '''
     # Creo el objeto SIFT
     sift = cv2.xfeatures2d.SIFT_create(contrastThreshold=0.01,edgeThreshold=6,sigma=1.6)
     # Cargamos los centroides
@@ -322,12 +322,12 @@ def crearModeloHistogramas():
     histogramas_vec=convierteHistogramasVectores(histogramas)
     return histogramas_vec
 
-'''
-@brief Función que convierte una lista de histogramas en una lista de vectores
-@param histogramas Lista de histogramas
-@return Devuelve una lista de vectores asociados a los histogramas
-'''
 def convierteHistogramasVectores(histogramas):
+    '''
+    @brief Función que convierte una lista de histogramas en una lista de vectores
+    @param histogramas Lista de histogramas
+    @return Devuelve una lista de vectores asociados a los histogramas
+    '''
     histogramas_vec = []
     # Para cada histograma
     for i in range(len(histogramas)):
@@ -335,13 +335,13 @@ def convierteHistogramasVectores(histogramas):
         histogramas_vec.append(convierteAVectorNormalizado(histogramas[i]))
     return histogramas_vec
 
-'''
-@brief Función que devuelve los indices de las imágenes más similares a una dada
-@param pos Posición de la imagen pregunta
-@param histogramas_vec Histogramas de las imágenes como vectores
-@return Lista con los índices de las imágenes más similares a la dada
-'''
 def devuelveSimilares(pos,histogramas_vec):
+    '''
+    @brief Función que devuelve los indices de las imágenes más similares a una dada
+    @param pos Posición de la imagen pregunta
+    @param histogramas_vec Histogramas de las imágenes como vectores
+    @return Lista con los índices de las imágenes más similares a la dada
+    '''
     similitudes = []
     #Para cada histograma
     for i in range(len(histogramas_vec)):
@@ -356,13 +356,13 @@ def devuelveSimilares(pos,histogramas_vec):
     # Devolvemos los 5 primeros indices
     return np.array(similitudes).argsort()[::-1][:NUM_SIMILARES]
 
-'''
-@brief Función que dada una imagen pinta las más similares
-@param imagen Imagen de la que queremos obtener las más similares
-@param histo_vec Histograma como vectores
-@param pos Posición de la imagen preguntas
-'''
 def pintaRespuestas(imagen,histo_vec,pos):
+    '''
+    @brief Función que dada una imagen pinta las más similares
+    @param imagen Imagen de la que queremos obtener las más similares
+    @param histo_vec Histograma como vectores
+    @param pos Posición de la imagen preguntas
+    '''
     # Obtenemos los índices de las imagenes más similares
     indices_similares = devuelveSimilares(pos,histo_vec)
     imagenes_similares=[]
@@ -375,13 +375,13 @@ def pintaRespuestas(imagen,histo_vec,pos):
     # Imprimimos primero la imagen pregunta y luego las 5 mas similares
     pintaMI([imagen]+imagenes_similares)
 
-'''
-@brief Devuelve un modelo de indice invertido en el que para cada centroide, se
-obtiene en qué imagenes aparece.
-@param histogramas_vec Histogramas de todas las imágenes como vectores.
-@return Devuelve una lista de listas de apariciones de imágenes para cada centroide.
-'''
 def obtenerIndiceInvertido(histogramas_vec):
+    '''
+    @brief Devuelve un modelo de indice invertido en el que para cada centroide, se
+    obtiene en qué imagenes aparece.
+    @param histogramas_vec Histogramas de todas las imágenes como vectores.
+    @return Devuelve una lista de listas de apariciones de imágenes para cada centroide.
+    '''
     indice_invertido=[]
     # Para cada centroide
     for i in range(NUM_CENTROIDES):
@@ -397,13 +397,13 @@ def obtenerIndiceInvertido(histogramas_vec):
         indice_invertido.append(apariciones)
     return indice_invertido
 
-'''
-@brief Función que dado el histograma y una posición pinta las imágenes que se asocian al
-centroide pos.
-@param histogramas_vec Histogramas de las imágenes como vectores
-@param pos Posición del descriptor del que queremos obtener las imágenes
-'''
 def pintaInvertido(histogramas_vec,pos):
+    '''
+    @brief Función que dado el histograma y una posición pinta las imágenes que se asocian al
+    centroide pos.
+    @param histogramas_vec Histogramas de las imágenes como vectores
+    @param pos Posición del descriptor del que queremos obtener las imágenes
+    '''
     # Obtenemos el modelo de indice invertido
     indice = obtenerIndiceInvertido(histogramas_vec)
     # Obtenemos una muestra de 5 imágenes aleatorias asociadas al descriptor pos
@@ -421,14 +421,14 @@ def pintaInvertido(histogramas_vec,pos):
 ##                              EJERCICIO 3                                   ##
 ################################################################################
 
-'''
-@brief Función que obtiene una lista de listas de minimos. En general obtiene
-5 elementos aleatorios de kmeanscenters2000 y obtiene los 10 mas cercanos de descriptorsAndpatches2000.
-@param n_aleatorios Cuantos elementos aleatorios queremos obtener de kmeanscenters2000
-@param n_min El número de elementos que queremos obtener con distancia mínima
-@return Devuelve una lista que tiene en cada posición una lista con los índices de mínima distancia
-'''
 def obtenMinimos(n_aleatorios,n_min):
+    '''
+    @brief Función que obtiene una lista de listas de minimos. En general obtiene
+    5 elementos aleatorios de kmeanscenters2000 y obtiene los 10 mas cercanos de descriptorsAndpatches2000.
+    @param n_aleatorios Cuantos elementos aleatorios queremos obtener de kmeanscenters2000
+    @param n_min El número de elementos que queremos obtener con distancia mínima
+    @return Devuelve una lista que tiene en cada posición una lista con los índices de mínima distancia
+    '''
     # Lee el fichero
     dic = loadDictionary("./kmeanscenters2000.pkl")[2]
     # Tomo n_aleatorios elementos de forma aleatoria de los descriptores
@@ -449,11 +449,11 @@ def obtenMinimos(n_aleatorios,n_min):
         minimos.append(np.array(distancias).argsort()[:n_min][::-1])
     return minimos
 
-'''
-@brief Función que pinta los parches con mínima distancia calculados por obtenMinimos.
-Los pinta en escala de grises
-'''
 def pintaMinimos():
+    '''
+    @brief Función que pinta los parches con mínima distancia calculados por obtenMinimos.
+    Los pinta en escala de grises
+    '''
     # Lee el fichero
     dic = loadAux("./descriptorsAndpatches2000.pkl",True)
     # Obtenemos 5 elementos aleatorios y le calculamos los 10 parches más cercanos
