@@ -460,7 +460,7 @@ def obtenMinimosYMaximo(num_parches,n_min):
         resultado.append(res)
     indice_maximo = np.array(media_distancias).argsort()[::-1][0]
     res = []
-    for match in matches[ind]:
+    for match in matches[indice_maximo]:
         res.append(match.trainIdx)
     resultado.append(res)
     return resultado
