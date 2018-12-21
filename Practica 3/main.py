@@ -421,32 +421,42 @@ def pintaInvertido(histogramas_vec,pos):
 ##                              EJERCICIO 3                                   ##
 ################################################################################
 
-def obtenMinimos(n_aleatorios,n_min):
+def obtenMinimos(num_parches,n_min):
+    # TODO: MODIFICAR LA DOCUMENTACION
     '''
     @brief Función que obtiene una lista de listas de minimos. En general obtiene
     5 elementos aleatorios de kmeanscenters2000 y obtiene los 10 mas cercanos de descriptorsAndpatches2000.
-    @param n_aleatorios Cuantos elementos aleatorios queremos obtener de kmeanscenters2000
+    @param num_parches Cuantos parches queremos obtener por cada ocurrencia
     @param n_min El número de elementos que queremos obtener con distancia mínima
     @return Devuelve una lista que tiene en cada posición una lista con los índices de mínima distancia
     '''
     # Lee el fichero
     dic = loadDictionary("./kmeanscenters2000.pkl")[2]
-    # Tomo n_aleatorios elementos de forma aleatoria de los descriptores
-    aleatorios = random.sample(list(dic),n_aleatorios)
 
     # Lee el fichero
     desc = loadAux("./descriptorsAndpatches2000.pkl", True)[0]
-    minimos = []
 
-    # Para cada aleatorio
-    for aleatorio in aleatorios:
-        distancias = []
-        # Para cada descriptor
-        for i in range(len(desc)):
-            # Obtenemos las distancias
-            distancias.append(np.dot(aleatorio,desc[i]))
-        # Calculamos los n_min primeros elementos con distancia mínima a aleatorio
-        minimos.append(np.array(distancias).argsort()[:n_min][::-1])
+    # Se crea el objeto BFMatcher con la norma L2 y con el crossCheck a False puesto que no es necesario
+    brute_force = cv2.BFMatcher(cv2.NORM_L2,crossCheck=False)
+    # Se encuentran las correspondencias con k=10
+    matches = brute_force.knnMatch(dic,desc,k=10)
+
+    media_distancias = []
+
+    # Calculo media de las distancias
+    for match in matches:
+        dis = 0
+        for m in match:
+            dis+=m.distance/n_min
+        media_distancias.append(dis)
+
+    # Me quedo con los primeros elementos, es decir, los que menor media tienen.
+    minimos = []
+    for ind in np.array(media_distancias).argsort()[::-1][:num_parches]:
+        min = []
+        for match in matches[ind]:
+            min.append(match.trainIdx)
+        minimos.append(min)
     return minimos
 
 def pintaMinimos():
@@ -457,7 +467,7 @@ def pintaMinimos():
     # Lee el fichero
     dic = loadAux("./descriptorsAndpatches2000.pkl",True)
     # Obtenemos 5 elementos aleatorios y le calculamos los 10 parches más cercanos
-    minimos = obtenMinimos(5,10)
+    minimos = obtenMinimos(3,10)
 
     # Para cada minimo
     for min in minimos:
@@ -475,7 +485,7 @@ def pintaMinimos():
 ################################################################################
 
 def main():
-
+    '''
     # Ejercicio 1
 
     # Aplicado con las imagenes 91 y 92
@@ -533,6 +543,7 @@ def main():
     pintaInvertido(histogramas_vec,76)
     print("Recupera 5 imágenes aleatorias del descriptor 1300")
     pintaInvertido(histogramas_vec,1300)
+    '''
 
     # Ejercicio 3
     pintaMinimos()
