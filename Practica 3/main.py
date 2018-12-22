@@ -175,7 +175,7 @@ def creaMascara(img,puntos_poly):
     for i in range(n):
         for j in range(m):
             if img_region[i][j][0]==255 and img_region[i][j][1]==255 and img_region[i][j][2]==255:
-                mascara[i][j]=1
+                mascara[i][j]=255
     return mascara
 
 def obtenerImagenLoweAverage2NNMatching(img1,img2,kp_sift1,kp_sift2,des1,des2):
@@ -220,6 +220,7 @@ def pintaCorrespondencias(img1,img2):
     puntos1 = extractRegion(img1)
     # Creamos la máscara
     mascara1 = creaMascara(img1,puntos1)
+    pintaI(mascara1)
     sift = cv2.xfeatures2d.SIFT_create()
     # Obtenemos los keypoints y descriptores con la máscara en el caso necesario
     kp1, des1 = sift.detectAndCompute(img1,mascara1)
@@ -493,7 +494,7 @@ def pintaMinimos():
 ################################################################################
 
 def main():
-    '''
+
     # Ejercicio 1
 
     # Aplicado con las imagenes 91 y 92
@@ -551,7 +552,7 @@ def main():
     pintaInvertido(histogramas_vec,76)
     print("Recupera 5 imágenes aleatorias del descriptor 1300")
     pintaInvertido(histogramas_vec,1300)
-    '''
+
 
     # Ejercicio 3
     pintaMinimos()
