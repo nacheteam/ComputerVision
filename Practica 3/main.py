@@ -210,14 +210,16 @@ def obtenerImagenLoweAverage2NNMatching(img1,img2,kp_sift1,kp_sift2,des1,des2):
     return res
 
 
-def pintaCorrespondencias(img1,img2):
+def pintaCorrespondencias(img1,img2,puntos1):
     '''
     @brief Función que pinta la imagen con las correspondencias en una región
     @param img1 Imagen
     @param img2 Imagen
+    @param puntos1 Puntos que definen el polígono
     '''
     # Se obtine la región mediante la interacción del usuario
-    puntos1 = extractRegion(img1)
+    #puntos1 = extractRegion(img1)
+
     # Creamos la máscara
     mascara1 = creaMascara(img1,puntos1)
     pintaI(mascara1)
@@ -435,7 +437,7 @@ def obtenMinimosYMaximo(num_parches,n_min):
     # Lee el fichero
     dic = loadDictionary("./kmeanscenters2000.pkl")[2]
 
-    # Lee el fichero
+    # Lee el ficheropuntos1
     desc = loadAux("./descriptorsAndpatches2000.pkl", True)[0]
 
     # Se crea el objeto BFMatcher con la norma L2 y con el crossCheck a False puesto que no es necesario
@@ -498,26 +500,30 @@ def main():
     # Ejercicio 1
 
     # Aplicado con las imagenes 91 y 92
+    print("Correspondencias y máscara entre las imágenes 91 y 92")
     frame91 = cv2.imread("./imagenes/91.png",-1)
     frame92 = cv2.imread("./imagenes/92.png",-1)
-    pintaCorrespondencias(frame91,frame92)
+    pintaCorrespondencias(frame91,frame92,[(289, 47), (276, 352), (601, 346), (598, 45), (289, 49), (289, 47)])
 
     #Aplicado con las imagenes 23 y 24
+    print("Correspondencias y máscara entre las imágenes 23 y 24")
     frame23 = cv2.imread("./imagenes/23.png",-1)
     frame24 = cv2.imread("./imagenes/24.png",-1)
-    pintaCorrespondencias(frame23,frame24)
+    pintaCorrespondencias(frame23,frame24,[(71, 60), (68, 338), (409, 336), (399, 53), (69, 59), (71, 60)])
 
     # Aplicado con las imagenes 1 y 4
+    print("Correspondencias y máscara entre las imágenes 1 y 4")
     frame1 = cv2.imread("./imagenes/1.png",-1)
     frame4 = cv2.imread("./imagenes/4.png",-1)
-    pintaCorrespondencias(frame1,frame4)
+    pintaCorrespondencias(frame1,frame4,[(355, 74), (363, 376), (633, 380), (613, 68), (356, 77), (355, 74)])
 
     # Aplicado con las imagenes 132 y 133
+    print("Correspondencias y máscara entre las imágenes 142 y 143")
     frame142 = cv2.imread("./imagenes/142.png",-1)
     frame143 = cv2.imread("./imagenes/143.png",-1)
-    pintaCorrespondencias(frame142,frame143)
+    pintaCorrespondencias(frame142,frame143,[(138, 138), (144, 436), (312, 442), (309, 123), (136, 138), (138, 138)])
 
-    # Ejercicio 2
+    # Ejercicio 2puntos1
 
     # Obtenemos los histogramas como vectores
     histogramas_vec = crearModeloHistogramas()
@@ -542,6 +548,7 @@ def main():
     pintaRespuestas(frame200,histogramas_vec,200)
 
     # Obtenemos la estructura de indice invertido para las imagenes con los centroides.
+    '''
     print("Recupera 5 imágenes aleatorias del descriptor 5")
     pintaInvertido(histogramas_vec,5)
     print("Recupera 5 imágenes aleatorias del descriptor 222")
@@ -552,7 +559,7 @@ def main():
     pintaInvertido(histogramas_vec,76)
     print("Recupera 5 imágenes aleatorias del descriptor 1300")
     pintaInvertido(histogramas_vec,1300)
-
+    '''
 
     # Ejercicio 3
     pintaMinimos()
