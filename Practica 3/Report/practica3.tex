@@ -88,7 +88,7 @@ Las parejas escogidas son:
     \caption{Imágenes 91 y 92}
 \end{figure}
 
-La forma de proceder es, mostrar la imagen para que se pueda seleccionar la región de la misma que se desee. Esta región es diferenciada del resto mediante una máscara. La construcción de dicha máscara se hace tomando los puntos que determinan el polígono de la región y, mediante la función fillConvexPoly se rellena esta área a blanco, esto es $(255,255,255)$. Tras esto sólo tenemos que crear una matriz de ceros del mismo tamaño que la imagen y, en dichos puntos poner el valor 1. Con esto tendríamos una máscara que podemos aplicar a la función detectAndCompute para hallar los keypoints y descriptores sólo de la región que engloba el polígono.
+La forma de proceder es, mostrar la imagen para que se pueda seleccionar la región de la misma que se desee. Esta región es diferenciada del resto mediante una máscara. La construcción de dicha máscara se hace tomando los puntos que determinan el polígono de la región y, mediante la función fillConvexPoly se rellena esta área a blanco, esto es $(255,255,255)$. Tras esto sólo tenemos que crear una matriz de ceros del mismo tamaño que la imagen y, en dichos puntos poner el valor 255. Con esto tendríamos una máscara que podemos aplicar a la función detectAndCompute para hallar los keypoints y descriptores sólo de la región que engloba el polígono.
 
 \vspace{10px}
 
@@ -96,14 +96,26 @@ Hay que tener en cuenta que la detección puede ser buena si realmente hay un pa
 
 \begin{figure}[H]
   \centering
-  \includegraphics[scale=0.35]{./Imagenes/Ejercicio1-1.png}
-  \caption{Emparejamiento con las imágenes 91 y 92}
+	\includegraphics[scale=0.35]{./Imagenes/Ejercicio1-1.png}
+	\caption{Emparejamiento con las imágenes 91 y 92}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.3]{./Imagenes/Ejercicio1-mascara1.png}
+	\caption{Zona seleccionada para las imágenes 91 y 92}
 \end{figure}
 
 \begin{figure}[H]
   \centering
   \includegraphics[scale=0.35]{./Imagenes/Ejercicio1-2.png}
   \caption{Emparejamiento con las imágenes 23 y 24}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.3]{./Imagenes/Ejercicio1-mascara2.png}
+	\caption{Zona seleccionada para las imágenes 23 y 24}
 \end{figure}
 
 Como podemos ver claramente en estas dos imágenes el emparejamiento es muy bueno puesto que los parecidos entre las dos es muy alto. Es prácticamente la misma cara con la misma escena y el mismo fondo, por lo que no sólo se empareja la cara o la figura de la persona, si no, también el fondo como en el segundo de los casos con el cuadro que se encuentra tras la persona.
@@ -116,6 +128,12 @@ Cabe decir que esta detección puede variar enormemente como en el siguiente cas
   \centering
   \includegraphics[scale=0.35]{./Imagenes/Ejercicio1-3.png}
   \caption{Emparejamiento con las imágenes 1 y 4}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.3]{./Imagenes/Ejercicio1-mascara3.png}
+	\caption{Zona seleccionada para las imágenes 1 y 4}
 \end{figure}
 
 En este caso podemos ver que la detección es mucho peor pero analicemos por qué. Realmente si observamos cada uno de los keypoints como se relacionan con la imagen de la derecha vemos que el emparejamiento de los mismos es razonable salvo dos de ellos, pero este emparejamiento es muy pobre porque no hemos obtenido suficientes puntos de interés en la región como para obtener un emparejamiento sólido como en los dos primeros casos.
@@ -143,6 +161,12 @@ Veamos que la detección en este caso no es satisfactoria cuando tomamos el pol�
   \caption{Emparejamiento con las imágenes 142 y 143}
 \end{figure}
 
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.3]{./Imagenes/Ejercicio1-mascara4.png}
+	\caption{Zona seleccionada para las imágenes 142 y 143}
+\end{figure}
+
 Como podemos observar nosotros estamos viendo que la mujer que aparece en la imagen de la izquierda es la misma que en la parte de la derecha pero la detección asigna los puntos de forma completamente errónea con respecto a la figura de la misma. Este fallo viene sobre todo dado porque el fondo de las imágenes es completamente distinto y por tanto, los puntos de interés tomados (que hacen el contraste en este caso de la mujer con el fondo) se ven completamente irrelevantes con respecto a la correlación que hace de los mismos.
 
 \vspace{10px}
@@ -160,7 +184,7 @@ Recuperación de Imágenes
 
 \subsection*{\underline{Solución}}
 
-El primer paso en la realización del ejercicio es obtener la frecuencia de aparición de cada centroide en cada imagen. Para ello lo que tenemos que hacer es, dada una imagen, calcularle los descriptores y calcular para cada uno de ellos cuál es el elemento de kmeanscenters2000.pkl que está más cercano. Esta intormación la he guardado en un diccionario de Python de forma que la clave sería el índice correspondiente al centroide y el valor el número de veces que aparece dicho centroide. Con esta información para cada una de las imágenes tendremos un vector de histogramas.
+El primer paso en la realización del ejercicio es obtener la frecuencia de aparición de cada centroide en cada imagen. Para ello lo que tenemos que hacer es, dada una imagen, calcularle los descriptores y calcular para cada uno de ellos cuál es el elemento de kmeanscenters2000.pkl que está más cercano. Esta información la he guardado en un diccionario de Python de forma que la clave sería el índice correspondiente al centroide y el valor el número de veces que aparece dicho centroide. Con esta información para cada una de las imágenes tendremos un vector de histogramas.
 
 \vspace{10px}
 
@@ -172,7 +196,7 @@ Para el estudio de la similitud de dos imágenes vamos a emplear la siguiente me
 
 $$<u,v> = |u|\cdot |v|\cdot \cos{\theta}$$
 
-Lo que estamos empleando no es más que el producto escalar de dichos vectores. Hay que tener en cuenta que los histogramas que he mencionado anteriormente pueden verse también como vectores, donde tienen en cada posición un cero si dicho centroide no es el más cercano para ningún descriptor o un número mayor que cero que representa cuántas veces ha sido el más cercano para algún descriptor de la imagen. Estos vectores normalizados son los que vamos a emplear para estudiar si dos imágenes son similares.
+Lo que estamos empleando no es más que el producto escalar de dichos vectores. Hay que tener en cuenta que los histogramas que he mencionado anteriormente pueden verse también como vectores, donde tienen en cada posición un cero si dicho centroide no es el más cercano para ningún descriptor o un número mayor que cero que representa cuántas veces ha sido el más cercano para los descriptores de la imagen. Estos vectores normalizados son los que vamos a emplear para estudiar si dos imágenes son similares.
 
 \vspace{10px}
 
@@ -225,11 +249,11 @@ En estas imágenes cabe destacar que la primera de la tira es la propia imagen-p
 
 \vspace{10px}
 
-Si observamos los resultados tenemos por ejemplo la imagen \ref{Ejercicio2-1} en la que las 5 imágenes obtenidas con más similitud son casi iguales, es decir, el emparejamiento es muy bueno. Si observamos el segundo de los casos en la imagen \ref{Ejercicio2-2} vemos que acierta en 3 de las 5 imágenes que ha tomado como las más similares y por tanto el resultado es bueno también. Si continuamos observando ya podemos percibir que en el reso de los casos el emparejamiento no es nada bueno como por ejemplo en las imágenes \ref{Ejercicio2-3} y \ref{Ejercicio2-4} en las que acierta en una o dos imágenes de las similares y por último el caso de la imagen \ref{Ejercicio2-5} en el que sólo la primera de las imágenes similares tiene algún parecido con la imagen-pregunta.
+Si observamos los resultados tenemos por ejemplo la imagen \ref{Ejercicio2-1} en la que las 5 imágenes obtenidas con más similitud son casi iguales, es decir, el emparejamiento es muy bueno. Si observamos el segundo de los casos en la imagen \ref{Ejercicio2-2} vemos que acierta en 3 de las 5 imágenes que ha tomado como las más similares y por tanto el resultado es bueno también. Si continuamos observando ya podemos percibir que en el resto de los casos el emparejamiento no es nada bueno como por ejemplo en las imágenes \ref{Ejercicio2-3} y \ref{Ejercicio2-4} en las que acierta en una o dos imágenes de las similares y por último el caso de la imagen \ref{Ejercicio2-5} en el que sólo la primera de las imágenes similares tiene algún parecido con la imagen-pregunta.
 
 \vspace{10px}
 
-Si analizamos más profundamente por qué hemos obtenido estos resultados podemos ver que, si tenemos imágenes con los mismos personajes, vestidos de igual forma y con un fondo igual o parecido entonces la similitud es muy alta. Si por contra por ejemplo tenemos a un mismo personaje con la misma ropa pero con dos fondos radicalmente diferentes como por ejemplo la imagen 208:
+Si analizamos más profundamente por qué hemos obtenido estos resultados podemos ver que, si tenemos imágenes con los mismos personajes, vestidos de igual forma y con un fondo igual o parecido entonces la similitud es muy alta. Si por contra por ejemplo tenemos a un mismo personaje con la misma ropa pero con dos fondos radicalmente diferentes como por ejemplo la imagen 208 entonces la similitud es más baja:
 
 \begin{figure}[H]
   \centering
@@ -242,12 +266,12 @@ Esta imagen es claramente parecida a las que corresponden a la tira de imágenes
 
 \vspace{10px}
 
-Las conclusiones que podemos obtener de este experimento es que los resultados que obtengamos en cuanto a imágenes similares son altamente dependientes del número de descriptores obtenidos y de que las imágenes compartan un fondo parecido y unas figuras similares, si alguno de estos dos hechos varía entonces no obtendremos la similitud que buscamos. Esto es, si tenemos una imagen con un fondo similar pero con personajes distintos entonces no serán similares según este modelo y distancia o si tenemos imágenes con figuras similares o iguales pero un fondo diferente tampoco detectaremos a estas imagenes.
+Las conclusiones que podemos obtener de este experimento es que los resultados que obtengamos en cuanto a imágenes similares son altamente dependientes del número de descriptores obtenidos y de que las imágenes compartan un fondo parecido y unas figuras similares, si alguno de estos dos hechos varía entonces no obtendremos la similitud que buscamos. Esto es, si tenemos una imagen con un fondo similar pero con personajes distintos entonces no serán similares según este modelo y distancia o si tenemos imágenes con figuras similares o iguales pero un fondo diferente tampoco detectaremos a estas imágenes.
 
 \section{Ejercicio 3}
 Visualización del vocabulario
 \begin{itemize}
-  \item Usando las imágenes dadas en imagenesIR.rar se han extraído 600 regiones de cada imagen de forma directa y se han re-escalado en parches de 24x24 píxeles. A partir de ellas se ha contruido un vocabulario de 5000 palabras usando k-means. Los ficheros con los datos son descriptorsAndpatches2000.pkl (descriptores de las regiones y los parches extraídos) y kmeanscenters2000.pkl  (vocabulario extraído).
+  \item Usando las imágenes dadas en imagenesIR.rar se han extraído 600 regiones de cada imagen de forma directa y se han re-escalado en parches de 24x24 píxeles. A partir de ellas se ha construido un vocabulario de 5000 palabras usando k-means. Los ficheros con los datos son descriptorsAndpatches2000.pkl (descriptores de las regiones y los parches extraídos) y kmeanscenters2000.pkl  (vocabulario extraído).
   \item Elegir al menos dos palabras visuales diferentes y visualizar las regiones imagen de los 10 parches más cercanos de cada palabra visual, de forma que se muestre el contenido visual que codifican (mejor en niveles de gris)
   \item Explicar si lo que se ha obtenido es realmente lo esperado en términos de cercanía visual de los parches.
 \end{itemize}
@@ -285,7 +309,7 @@ Como podemos observar estos son los 3 conjuntos de 10 parches más parecidos ent
 
 \vspace{10px}
 
-Observemos ahora el cconjunto de 10 parches con mayor distancia entre ellos.
+Observemos ahora el conjunto de 10 parches con mayor distancia entre ellos.
 
 \begin{figure}[H]
   \centering

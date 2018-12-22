@@ -1,5 +1,5 @@
 # Fdb version 3
-["pdflatex"] 1545414394 "practica3.tex" "practica3.pdf" "practica3" 1545414396
+["pdflatex"] 1545501617 "practica3.tex" "practica3.pdf" "practica3" 1545502851
   "/etc/texmf/web2c/texmf.cnf" 1533908992 475 c0e671620eb5563b2130f56340a5fde8 ""
   "/usr/share/texlive/texmf-dist/fonts/map/fontname/texfonts.map" 1511824771 3332 103109f5612ad95229751940c61aada0 ""
   "/usr/share/texlive/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex7.tfm" 1480098698 1004 54797486969f23fa377b128694d548df ""
@@ -97,6 +97,10 @@
   "Imagenes/Ejercicio1-2.png" 1545319190 533677 6e04f53b858f1b10e7212092fe5a1641 ""
   "Imagenes/Ejercicio1-3.png" 1545317870 569011 7f2f28b864292ce843f738204a1dfb2a ""
   "Imagenes/Ejercicio1-4.png" 1545339188 598180 467c147bf3f6e914f0ec9fcd4b56e4e4 ""
+  "Imagenes/Ejercicio1-mascara1.png" 1545500873 6369 177b322005ccd30b7c04bf3e05fbd5e1 ""
+  "Imagenes/Ejercicio1-mascara2.png" 1545500896 6186 ea7b2915afcfd815372d4aec2f8d891d ""
+  "Imagenes/Ejercicio1-mascara3.png" 1545500915 6209 893677959c03087f54e09c3d1138cbb5 ""
+  "Imagenes/Ejercicio1-mascara4.png" 1545500959 6196 ed048e054293f6f8b269ee1b58d207a3 ""
   "Imagenes/Ejercicio2-1.png" 1545388900 1268360 a663f68c3a0f9e95b292f5e691b29bbf ""
   "Imagenes/Ejercicio2-2.png" 1545388910 1490434 a9d9e2e357005c2ed42d09783f4df8d3 ""
   "Imagenes/Ejercicio2-3.png" 1545388920 1631529 d12886c1fa64ef5a06fcac0ebd66473d ""
@@ -106,10 +110,10 @@
   "Imagenes/Ejercicio3-2.png" 1545413198 13841 76274bc1d350055f91395b91f5eaff2f ""
   "Imagenes/Ejercicio3-3.png" 1545413222 11978 5aa33599c63200b19c664faaf573686b ""
   "Imagenes/Ejercicio3-4.png" 1545414229 11232 2028b04bf6b3deab0aa2c94bf3462411 ""
-  "practica3.aux" 1545414396 4484 b4b51e30e5ac737331e07af8eb0529e7 ""
-  "practica3.out" 1545414396 138 c37e2a769a7bd631925245363132fe1f ""
-  "practica3.tex" 1545414394 17556 14adf9f4a1b202a7a4c52e84056f1566 ""
-  "practica3.toc" 1545414396 221 59b4cb48905dde1f2faae52c9c9ea3b2 ""
+  "practica3.aux" 1545501619 5112 8346705c47f38da2862d2e6b8cb49a83 ""
+  "practica3.out" 1545501619 138 c37e2a769a7bd631925245363132fe1f ""
+  "practica3.tex" 1545502851 18252 3e5c8af7d9a5bad46a097ba9348738bc ""
+  "practica3.toc" 1545501619 222 5ddd08767772c3e15cf3c255dc3fdf10 ""
   (generated)
   "practica3.log"
   "practica3.toc"
